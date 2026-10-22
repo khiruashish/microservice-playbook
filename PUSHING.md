@@ -105,8 +105,10 @@ edit_uri: edit/main/docs/
 
 - The `code` job runs `mvn -B -ntp verify` over every module. The Spring code in the chapters and labs was checked by
   import against the libraries' sources, **not compiled**, because Maven Central wasn't reachable where the handbook
-  was written (see the Code Lab overview). Expect the first run to surface some compile errors to fix. Until then, you
-  can let the site deploy anyway by deleting the line `needs: code` from the `docs` job.
+  was written (see the Code Lab overview). The first run on GitHub did fail at `mvn -B -ntp verify`. So the `docs` job
+  doesn't wait for the `code` job, and the site publishes while the compile errors are fixed. Open the failed
+  **Compile & test code** run under **Actions** to see which modules fail. Once that job is green, add `needs: code`
+  back to the `docs` job.
 - `python tools/handbook.py --check` fails the build if the nav or roadmap are out of date: run
   `python3 tools/handbook.py` locally and commit the result.
 
