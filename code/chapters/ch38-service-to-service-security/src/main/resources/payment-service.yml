@@ -1,0 +1,31 @@
+# payment-service: mutual TLS with its SPIFFE SVID, written to /run/spiffe by spiffe-helper (spire/helper.conf)
+server:
+  port: 8443
+  ssl:
+    bundle: svid
+    client-auth: need                      # no client certificate, no connection
+spring:
+  application:
+    name: payment-service
+  ssl:
+    bundle:
+      pem:
+        svid:
+          reload-on-update: true           # SPIRE rotates the SVID at half its lifetime; Tomcat picks up the new files
+          keystore:
+            certificate: file:/run/spiffe/svid.pem
+            private-key: file:/run/spiffe/svid_key.pem
+          truststore:
+            certificate: file:/run/spiffe/svid_bundle.pem   # the foodfleet.internal trust bundle from SPIRE
+          options:
+            enabled-protocols: TLSv1.3
+      watch:
+        file:
+          quiet-period: 2s                 # default 10s; spiffe-helper writes the three files within milliseconds
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OAUTH_ISSUER:https://id.foodfleet.internal/realms/foodfleet}
+          audiences: payment-service
+          jws-algorithms: RS256, ES256

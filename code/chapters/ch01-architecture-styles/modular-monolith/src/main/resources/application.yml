@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: foodfleet-modular-monolith
+  threads:
+    virtual:
+      enabled: true                  # async listeners and request handling on virtual threads
+  mvc:
+    problemdetails:
+      enabled: true
+  datasource:
+    # H2 keeps chapter 1 runnable with zero setup. FoodFleet uses PostgreSQL with Testcontainers.
+    url: jdbc:h2:mem:foodfleet;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+  sql:
+    init:
+      mode: always
+  modulith:
+    events:
+      jdbc:
+        schema-initialization:
+          enabled: true              # creates EVENT_PUBLICATION (use Flyway in production)
+      republish-outstanding-events-on-restart: true
+
+server:
+  port: 8080
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,modulith
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+foodfleet:
+  kitchen:
+    mode: in-process                 # switch to "remote" with the kitchen-remote profile
+    max-active-tickets: 20

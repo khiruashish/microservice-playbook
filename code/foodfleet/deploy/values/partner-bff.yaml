@@ -1,0 +1,9 @@
+# Generated from foodfleet.yaml by generate.py. minReplicas 2: not on any journey's required path
+# namespace: partner-bff
+name: partner-bff
+team: Restaurant Partner
+image:
+  digest: sha256:073cce29364c94f72fca4a4ab4fd96dc8ffd7e1cc74b905c37fd3b47f8d7a843
+autoscaling:
+  minReplicas: 2
+  maxReplicas: 6

@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: catalog-cache
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/catalog}
+    username: ${DATABASE_USER:catalog}
+    password: ${DATABASE_PASSWORD:catalog}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 200ms             # a cache slower than the database is worse than no cache
+  cache:
+    type: redis
+    redis:
+      time-to-live: 10m
+      key-prefix: "catalog:"
+  threads:
+    virtual:
+      enabled: true
+cache:
+  top-restaurants:
+    soft-ttl: 30s                # served fresh for 30 s, then served stale while one instance refreshes
+    hard-ttl: 1h                 # how long a stale value may be served if refreshing keeps failing
+views:
+  flush-interval: 1s

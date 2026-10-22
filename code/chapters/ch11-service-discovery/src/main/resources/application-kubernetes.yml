@@ -1,0 +1,7 @@
+# Platform discovery: let Kubernetes do it. The Service name resolves (cluster DNS) to a virtual IP;
+# kube-proxy spreads connections over ready pods. No registry, no client-side load balancer.
+spring:
+  http:
+    serviceclient:
+      kitchen-service:
+        base-url: http://kitchen-service.foodfleet.svc.cluster.local:8080   # http://, not lb://: no client-side balancing

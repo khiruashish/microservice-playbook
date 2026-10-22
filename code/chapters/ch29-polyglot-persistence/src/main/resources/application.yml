@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: catalog-and-riders
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/catalog}
+    username: ${DATABASE_USER:catalog}
+    password: ${DATABASE_PASSWORD:catalog}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 500ms               # a slow cache must not hold request threads
+  threads:
+    virtual:
+      enabled: true
+catalog:
+  projector:
+    poll-interval: 20ms            # outbox -> Redis price cache (the experiment: lag p50 3-4 ms at this interval)
+riders:
+  live:
+    max-silence: 30s               # riders silent this long leave the live set
+    prune-interval: 5s
+  history:
+    retention-days: 7
+    flush-interval: 1s

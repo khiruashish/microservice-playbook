@@ -1,0 +1,42 @@
+# Admission control (Kyverno 1.19): FoodFleet pods run only images signed by FoodFleet's release workflow, with
+# SLSA provenance from that workflow at a release tag. Tags are replaced by the verified digest (mutateDigest), so
+# the kubelet pulls exactly what was verified.
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: foodfleet-signed-images
+spec:
+  webhookConfiguration:
+    failurePolicy: Fail
+  rules:
+    - name: signed-by-release-workflow
+      match:
+        any:
+          - resources:
+              kinds: [Pod]
+              namespaces: [orders, payments, delivery, cde]
+      verifyImages:
+        - imageReferences: ["ghcr.io/foodfleet/*"]
+          failureAction: Enforce
+          mutateDigest: true
+          verifyDigest: true
+          required: true
+          attestors:
+            - entries:
+                - keyless:
+                    issuer: https://token.actions.githubusercontent.com
+                    subjectRegExp: '^https://github\.com/foodfleet/[a-z-]+/\.github/workflows/release\.yml@refs/tags/v[0-9.]+$'
+                    rekor:
+                      url: https://rekor.sigstore.dev
+          attestations:
+            - type: https://slsa.dev/provenance/v1
+              attestors:
+                - entries:
+                    - keyless:
+                        issuer: https://token.actions.githubusercontent.com
+                        subjectRegExp: '^https://github\.com/actions/attest-build-provenance/.*'
+              conditions:
+                - all:
+                    - key: "{{ buildDefinition.externalParameters.workflow.repository }}"
+                      operator: Equals
+                      value: "https://github.com/foodfleet/{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"

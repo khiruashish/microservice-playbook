@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: order-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OAUTH_ISSUER:http://localhost:9000}   # discovery, JWKS and the "iss" check
+          audiences: order-service                            # tokens for other APIs are rejected
+          jws-algorithms: RS256, ES256                        # the allowlist; the token doesn't choose
+server:
+  port: 8081

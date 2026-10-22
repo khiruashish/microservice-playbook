@@ -1,0 +1,15 @@
+# Generated from foodfleet.yaml by generate.py. minReplicas 3: on a journey's required path, one per zone (ADR-054, ADR-056); 1.5 GiB: ~20,000 streams in about 1 GB per instance; grace 75 s: streams drain over 60 s (ADR-026)
+# namespace: tracking-gateway
+name: tracking-gateway
+team: Logistics
+image:
+  digest: sha256:8465bc547c0b788620af97f46d60dccebac393ca1bff68e0f467161dcb1fb2f3
+autoscaling:
+  minReplicas: 3
+  maxReplicas: 12
+resources:
+  cpu: '1'
+  memory: 1536Mi
+shutdown:
+  preStopSeconds: 5
+  gracePeriodSeconds: 75

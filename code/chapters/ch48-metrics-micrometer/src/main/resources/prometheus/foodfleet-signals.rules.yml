@@ -1,0 +1,41 @@
+# RED (requests), USE (resources) and the four golden signals for every FoodFleet service, from Micrometer's
+# standard meters. Recording rules keep dashboards and alerts on a few pre-aggregated series per service.
+groups:
+  - name: red
+    interval: 15s
+    rules:
+      - record: job_uri:http_server_requests:rate1m                     # Rate
+        expr: sum by (job, uri) (rate(http_server_requests_seconds_count[1m]))
+      - record: job_uri:http_server_requests_errors:ratio_rate1m        # Errors
+        expr: |
+          sum by (job, uri) (rate(http_server_requests_seconds_count{outcome="SERVER_ERROR"}[1m]))
+            /
+          sum by (job, uri) (rate(http_server_requests_seconds_count[1m]))
+      - record: job_uri:http_server_requests_seconds:p99_1m            # Duration, summed across pods
+        expr: histogram_quantile(0.99, sum by (job, uri, le) (rate(http_server_requests_seconds_bucket[1m])))
+      - record: job_uri:http_server_requests_within_250ms:ratio_rate1m # the SLO bucket, exactly
+        expr: |
+          sum by (job, uri) (rate(http_server_requests_seconds_bucket{le="0.25"}[1m]))
+            /
+          sum by (job, uri) (rate(http_server_requests_seconds_count[1m]))
+  - name: use
+    interval: 15s
+    rules:
+      - record: job_pod:process_cpu_usage:avg1m                         # Utilisation
+        expr: avg by (job, pod) (avg_over_time(process_cpu_usage[1m]))
+      - record: job_pod:jvm_memory_used_heap:ratio                      # Utilisation
+        expr: |
+          sum by (job, pod) (jvm_memory_used_bytes{area="heap"})
+            /
+          sum by (job, pod) (jvm_memory_max_bytes{area="heap"} > 0)
+      - record: job_pod:executor_queued:max1m                           # Saturation
+        expr: max by (job, pod) (max_over_time(executor_queued_tasks[1m]))
+      - record: job_pod:jvm_gc_pause_seconds:rate1m                     # Saturation (time not serving)
+        expr: sum by (job, pod) (rate(jvm_gc_pause_seconds_sum[1m]))
+      - record: job_pod:hikaricp_pending:max1m                          # Saturation of the database pool
+        expr: max by (job, pod) (max_over_time(hikaricp_connections_pending[1m]))
+  - name: business
+    interval: 15s
+    rules:
+      - record: payment_method_outcome:foodfleet_orders:rate1m
+        expr: sum by (payment_method, outcome) (rate(foodfleet_orders_total[1m]))

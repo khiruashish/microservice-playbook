@@ -1,0 +1,14 @@
+# build output
+site/
+target/
+build/
+**/verify/build/
+__pycache__/
+*.pyc
+.mk-check.yml
+# local environments
+.venv/
+.idea/
+.vscode/
+*.iml
+.DS_Store

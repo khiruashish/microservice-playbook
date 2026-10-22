@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 59 — Cloud-Native on AWS, Azure & GCP.
+    identity/    TokenVerifier (RS256 JWTs checked offline against an issuer's JWKS: what a cloud token service does)
+                 and TrustPolicy (a role trusting one audience and named service accounts)
+    retry/       the AWS SDK v2 retry modes (none, legacy, standard, adaptive) with RetryQuota and ClientRateLimiter
+    serverless/  FunctionPool (a day of requests replayed against keep-warm instances), Traffic, CostModel
+    resources/   k8s/workload-identity.yaml (a service account and a pod with a projected token for the cloud)
+  verify/run.sh exchanges real k3s service-account tokens, runs SDK-style clients against a throttled API, and
+  measures a JVM cold start for the functions-or-containers model.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch59-cloud-native-platforms</artifactId>
+    <name>Ch59 :: Cloud-Native on AWS, Azure &amp; GCP</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 73 — ADRs, Fitness Functions & Tech Radar.
+    adr/       DecisionLog: reads Nygard (adr-tools), MADR and this handbook's ADRs; the log's own checks, L1 to L7
+    fitness/   Bytecode (ClassFile API), Radar (Build Your Own Radar CSV), Probe (a release in its own JVM, open load),
+               FitnessFunction and Functions (order-service's five functions, each traced to an ADR)
+  src/main/resources/orders: order-service's sources, which verify/tools/Lab changes release by release;
+  radar/: FoodFleet's technology radar. verify/run.sh lints three decision logs, runs the release train and the noise test.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>ch73-adrs-fitness-functions</artifactId>
+    <name>Ch73 :: ADRs, Fitness Functions &amp; Tech Radar</name>
+    <build>
+        <resources>
+            <!-- order-service's sources are data for the release train, not part of this module's classes -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>orders/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

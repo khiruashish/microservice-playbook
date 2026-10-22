@@ -1,0 +1,16 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "menu-search",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/menu-search"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "menu",
+    "system": "foodfleet"
+  }
+}

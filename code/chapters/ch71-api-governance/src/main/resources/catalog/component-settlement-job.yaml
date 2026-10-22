@@ -1,0 +1,19 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "settlement-job",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/settlement-job"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "john.doe",
+    "system": "foodfleet",
+    "consumesApis": [
+      "payment-service"
+    ]
+  }
+}

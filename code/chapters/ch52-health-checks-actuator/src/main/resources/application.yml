@@ -1,0 +1,38 @@
+# order-service: health probes and a locked-down Actuator (Spring Boot 4.1.1).
+server:
+  port: 8080
+  shutdown: graceful                      # the default since Boot 3.4: finish in-flight requests on SIGTERM
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 20s       # stay below the pod's terminationGracePeriodSeconds (30 s)
+
+management:
+  server:
+    port: 8081                            # Actuator on its own port: not in the Service, not in the Ingress
+  endpoints:
+    access:
+      default: none                       # every endpoint off unless listed below
+    web:
+      exposure:
+        include: health, info, prometheus
+  endpoint:
+    health:
+      access: read-only
+      show-details: when-authorized       # details (database, disk) only for ACTUATOR_ADMIN
+      roles: ACTUATOR_ADMIN
+      probes:
+        enabled: true                     # /actuator/health/liveness and /readiness (also /livez, /readyz with add-additional-paths)
+        add-additional-paths: true
+      group:
+        liveness:
+          include: livenessState          # the application's own state only
+        readiness:
+          include: readinessState         # not the database: one shared dependency would take every pod out
+    info:
+      access: read-only
+    prometheus:
+      access: read-only
+    env:
+      show-values: never                  # the default; never "always"
+    heapdump:
+      access: none                        # the default in Boot 4: a heap dump holds every secret in memory

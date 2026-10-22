@@ -1,0 +1,27 @@
+# order-service (Spring Boot 4.1.1): all three signals leave through OpenTelemetry to the gateway collector.
+spring:
+  application:
+    name: order-service
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0            # Boot's default is 0.1; FoodFleet samples in the collector, after the fact
+  opentelemetry:
+    resource-attributes:
+      "[service.version]": ${APP_VERSION:dev}             # brackets keep the dots in the key
+      "[service.instance.id]": ${POD_NAME:local}
+      "[deployment.environment.name]": ${ENVIRONMENT:local}
+    tracing:
+      export:
+        otlp:
+          endpoint: http://otel-collector.observability.svc:4318/v1/traces
+    logging:
+      export:
+        otlp:
+          endpoint: http://otel-collector.observability.svc:4318/v1/logs
+
+logging:
+  structured:
+    format:
+      console: ecs                # JSON with trace.id and span.id; one line per event

@@ -1,0 +1,63 @@
+openapi: 3.1.0
+info:
+  title: FoodFleet Order API
+  version: 1.4.0          # minor = additive changes; a breaking change is /v2 or a new media type
+  description: Read access to a customer's order. Published by order-service; consumers listed in x-consumers.
+  x-consumers: [mobile-app, web-app, notification-service, analytics, support-console]
+servers:
+  - url: https://api.foodfleet.dev
+paths:
+  /orders/{id}:
+    get:
+      operationId: getOrder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, pattern: '^o-[0-9]+$' }
+      responses:
+        '200':
+          description: The order
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+        '404':
+          description: No such order
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+components:
+  schemas:
+    Order:
+      type: object
+      required: [id, status, totalPaise, placedAt, restaurant]
+      properties:
+        id: { type: string }
+        status:
+          type: string
+          description: >
+            Clients must accept values not listed here (new stages are added over time) and
+            treat them as "in progress".
+          enum: [PLACED, ACCEPTED, PREPARING, READY_FOR_PICKUP, PICKED_UP, DELIVERED, CANCELLED]
+        etaMinutes:
+          type: [integer, 'null']
+          description: Minutes until delivery. Absent once delivered or cancelled.
+        riderName:
+          type: [string, 'null']
+          description: Absent until a rider is assigned.
+        totalPaise: { type: integer, format: int64 }
+        placedAt: { type: string, format: date-time }
+        restaurant:
+          type: object
+          required: [id, name]
+          properties:
+            id: { type: string }
+            name: { type: string }
+    Problem:
+      type: object
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        instance: { type: string }

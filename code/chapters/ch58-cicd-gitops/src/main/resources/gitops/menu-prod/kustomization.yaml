@@ -1,0 +1,10 @@
+# The environment repository's view of menu-service in prod: the only source of truth for what runs there. The CI
+# pipeline changes it by pull request (a new digest); the GitOps controller applies it, and puts it back if the
+# cluster drifts.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: gitops
+resources:
+  - deployment.yaml
+  - service.yaml
+  - flags.yaml

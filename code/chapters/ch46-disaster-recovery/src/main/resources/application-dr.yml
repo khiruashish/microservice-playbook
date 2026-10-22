@@ -1,0 +1,12 @@
+# order-service's database connection for failover: every host in the URL, connect only to the one that accepts writes,
+# and bounded waits everywhere (pgJDBC's defaults: socketTimeout 0, i.e. wait for ever; hostRecheckSeconds 10).
+spring:
+  datasource:
+    url: >-
+      jdbc:postgresql://orders-db-a.internal:5432,orders-db-b.internal:5432,orders-db-c.internal:5432/orders
+      ?targetServerType=primary&hostRecheckSeconds=2&connectTimeout=2&loginTimeout=3&socketTimeout=10
+    hikari:
+      connection-timeout: 3000        # ms a request waits for a connection before failing
+      validation-timeout: 1000
+      max-lifetime: 300000            # recycle connections so none outlives a failover by long
+      keepalive-time: 30000

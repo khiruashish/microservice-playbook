@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: customer-graph
+  graphql:
+    http:
+      path: /graphql
+    graphiql:
+      enabled: ${GRAPHIQL_ENABLED:false}            # on in dev only
+    schema:
+      introspection:
+        enabled: ${GRAPHQL_INTROSPECTION:false}      # off in production; clients use generated types
+      printer:
+        enabled: false
+  threads:
+    virtual:
+      enabled: true

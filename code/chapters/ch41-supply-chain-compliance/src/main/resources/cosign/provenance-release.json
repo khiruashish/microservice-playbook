@@ -1,0 +1,15 @@
+{
+  "buildDefinition": {
+    "buildType": "https://actions.github.io/buildtypes/workflow/v1",
+    "externalParameters": {
+      "workflow": {"ref": "refs/tags/v1.4.0", "repository": "https://github.com/foodfleet/order-service", "path": ".github/workflows/release.yml"}
+    },
+    "resolvedDependencies": [
+      {"uri": "git+https://github.com/foodfleet/order-service@refs/tags/v1.4.0", "digest": {"gitCommit": "9f2c1e4b7a0d3c5e8f1a2b3c4d5e6f708192a3b4"}}
+    ]
+  },
+  "runDetails": {
+    "builder": {"id": "https://github.com/foodfleet/order-service/.github/workflows/release.yml@refs/tags/v1.4.0"},
+    "metadata": {"invocationId": "https://github.com/foodfleet/order-service/actions/runs/1234567890/attempts/1"}
+  }
+}

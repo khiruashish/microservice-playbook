@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: eta-service
+  threads:
+    virtual:
+      enabled: true                    # Tomcat requests, @Async, scheduling all run on virtual threads
+  mvc:
+    problemdetails:
+      enabled: true                    # framework errors (400 for a bad API version, ...) as RFC 9457
+    apiversion:
+      use:
+        header: API-Version
+      default: 1.0                     # old app installs send no header: they keep getting v1
+      supported: 1.0,2.0               # anything else is a 400
+  jackson:
+    default-property-inclusion: non_null
+  http:
+    serviceclient:
+      kitchen:                         # @ImportHttpServices(group = "kitchen")
+        base-url: ${KITCHEN_SERVICE_URL:http://localhost:8091}
+        connect-timeout: 200ms
+        read-timeout: 400ms
+      dispatch:                        # @ImportHttpServices(group = "dispatch")
+        base-url: ${DISPATCH_SERVICE_URL:http://localhost:8092}
+        connect-timeout: 200ms
+        read-timeout: 150ms            # 3 attempts (1 + 2 retries) still fit inside the 800 ms budget
+
+server:
+  port: ${PORT:8088}
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+foodfleet:
+  eta:
+    fallback-travel-minutes: 20
+    budget: 800ms
+  debug:
+    thread-kind-header: false

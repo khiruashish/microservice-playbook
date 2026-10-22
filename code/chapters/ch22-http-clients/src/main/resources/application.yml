@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: tracking-service
+  threads:
+    virtual:
+      enabled: true                    # blocking RestClient calls park a virtual thread, not a platform one
+  http:
+    serviceclient:
+      order-history:                   # @ImportHttpServices(group = "order-history")
+        base-url: ${ORDER_HISTORY_URL:http://order-history-service}
+        connect-timeout: 500ms         # never the default: a dead host must fail fast
+        read-timeout: 2s               # below tracking-service's own SLO for the screen

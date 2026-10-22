@@ -1,0 +1,51 @@
+# Lab 12's local OpenTelemetry Collector (otelcol-contrib 0.162.0): everything the services send over OTLP is
+# written to files, and RED metrics are derived from the server spans, the way FoodFleet's gateway collector does.
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 127.0.0.1:4318
+
+processors:
+  resource/trim:
+    attributes:                              # the JVM command line can carry secrets (chapter 47)
+      - {key: process.command_args, action: delete}
+      - {key: process.command_line, action: delete}
+  batch:
+    timeout: 200ms
+
+connectors:
+  span_metrics:
+    metrics_flush_interval: 1s
+    histogram:
+      explicit:
+        buckets: [5ms, 10ms, 25ms, 50ms, 100ms, 250ms, 500ms, 1s]
+    dimensions:
+      - name: http.route
+      - name: http.response.status_code
+
+exporters:
+  file/traces:
+    path: ${env:LAB12_OUT}/traces.json
+  file/logs:
+    path: ${env:LAB12_OUT}/logs.json
+  file/metrics:
+    path: ${env:LAB12_OUT}/span-metrics.json
+
+service:
+  telemetry:
+    metrics:
+      level: none
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [resource/trim, batch]
+      exporters: [file/traces, span_metrics]
+    logs:
+      receivers: [otlp]
+      processors: [resource/trim, batch]
+      exporters: [file/logs]
+    metrics/red:
+      receivers: [span_metrics]
+      processors: [batch]
+      exporters: [file/metrics]

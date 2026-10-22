@@ -1,0 +1,17 @@
+# RED per service, from the http.server.request.duration histograms the instrumentation emits (seconds).
+# Labels kept: job (service.name) and http_route; everything with more values stays in traces and wide events.
+groups:
+  - name: foodfleet-red
+    interval: 15s
+    rules:
+      - record: job_route:http_server_requests:rate1m
+        expr: sum by (job, http_route) (rate(http_server_request_duration_seconds_count[1m]))
+      - record: job_route:http_server_errors:ratio_rate1m
+        expr: |
+          sum by (job, http_route) (rate(http_server_request_duration_seconds_count{http_response_status_code=~"5.."}[1m]))
+            /
+          sum by (job, http_route) (rate(http_server_request_duration_seconds_count[1m]))
+      - record: job_route:http_server_duration_seconds:p99_1m
+        expr: histogram_quantile(0.99, sum by (job, http_route, le) (rate(http_server_request_duration_seconds_bucket[1m])))
+      - record: job_instance:http_server_duration_seconds:p99_1m      # per pod: shows a bad canary
+        expr: histogram_quantile(0.99, sum by (job, instance, le) (rate(http_server_request_duration_seconds_bucket[1m])))

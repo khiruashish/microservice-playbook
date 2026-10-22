@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{name}}
+  labels: {app: {{name}}, team: {{team}}}
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: {{name}}}
+  template:
+    metadata:
+      labels: {app: {{name}}, team: {{team}}}
+    spec:
+      containers:
+        - name: {{name}}
+          image: foodfleet/{{name}}:{{version}}
+          imagePullPolicy: IfNotPresent
+          ports: [{containerPort: 8080}]
+          livenessProbe:
+            httpGet: {path: /actuator/health, port: 8080}
+          readinessProbe:
+            httpGet: {path: /actuator/health, port: 8080}
+          resources:
+            requests: {cpu: "1", memory: 2Gi}
+            limits: {cpu: "1", memory: 2Gi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{name}}
+spec:
+  selector: {app: {{name}}}
+  ports: [{port: 80, targetPort: 8080}]

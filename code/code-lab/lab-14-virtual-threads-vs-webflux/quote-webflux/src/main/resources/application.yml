@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: quote-webflux
+  http:
+    clients:
+      connect-timeout: 1s
+      read-timeout: 2s
+
+server:
+  port: 8096
+
+foodfleet:
+  downstream-url: http://localhost:8095

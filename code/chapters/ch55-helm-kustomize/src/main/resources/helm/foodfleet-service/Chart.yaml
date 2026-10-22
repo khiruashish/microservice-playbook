@@ -1,0 +1,6 @@
+apiVersion: v2
+name: foodfleet-service
+description: One chart for every FoodFleet Spring Boot service; each service is a values file.
+type: application
+version: 1.4.0          # the chart's version: bump when the templates change
+appVersion: "ch54"      # informational; the image is chosen in values, by digest outside dev

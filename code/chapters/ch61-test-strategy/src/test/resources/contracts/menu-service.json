@@ -1,0 +1,12 @@
+{
+  "consumer": "order-service",
+  "provider": "menu-service",
+  "interactions": [
+    {"description": "an available item", "request": {"method": "GET", "path": "/menu/7/items/paneer-tikka"},
+     "response": {"status": 200, "body": "{\"id\":\"paneer-tikka\",\"price\":\"129.50\",\"available\":true}"}},
+    {"description": "an item that is sold out", "request": {"method": "GET", "path": "/menu/7/items/kulfi"},
+     "response": {"status": 200, "body": "{\"id\":\"kulfi\",\"price\":\"79.00\",\"available\":false}"}},
+    {"description": "an item that doesn't exist", "request": {"method": "GET", "path": "/menu/7/items/pizza"},
+     "response": {"status": 404, "body": "{\"error\":\"not found\"}"}}
+  ]
+}

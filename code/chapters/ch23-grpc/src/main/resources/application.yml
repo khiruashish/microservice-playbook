@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: tracking-service
+  grpc:
+    server:
+      port: ${GRPC_PORT:9090}
+    client:
+      channel:
+        tracking:                                  # @ImportGrpcClients(target = "tracking")
+          target: ${TRACKING_GRPC_TARGET:static://localhost:9090}

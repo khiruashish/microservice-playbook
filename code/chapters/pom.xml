@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Aggregator for the runnable examples that accompany each concept chapter. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>handbook-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>chapters</artifactId>
+    <packaging>pom</packaging>
+    <name>Microservices Handbook :: Chapter Examples</name>
+
+    <modules>
+        <module>ch01-architecture-styles</module>
+        <module>ch02-principles</module>
+        <module>ch03-distributed-fundamentals</module>
+        <module>ch04-twelve-factor</module>
+        <module>ch05-domain-driven-design</module>
+        <module>ch06-service-decomposition</module>
+        <module>ch07-team-topologies</module>
+        <module>ch08-spring-boot-4</module>
+        <module>ch09-hexagonal-architecture</module>
+        <module>ch10-api-gateway-bff</module>
+        <module>ch11-service-discovery</module>
+        <module>ch12-database-per-service</module>
+        <module>ch13-cqrs-event-sourcing</module>
+        <module>ch14-saga</module>
+        <module>ch15-outbox-inbox-cdc</module>
+        <module>ch16-strangler-fig</module>
+        <module>ch17-sidecar-ambassador-adapter</module>
+        <module>ch18-resilience-patterns</module>
+        <module>ch19-event-driven-architecture</module>
+        <module>ch20-anti-patterns</module>
+        <module>ch21-rest-api</module>
+        <module>ch22-http-clients</module>
+        <module>ch23-grpc</module>
+        <module>ch24-graphql</module>
+        <module>ch25-messaging</module>
+        <module>ch26-websockets-sse</module>
+        <module>ch27-api-contracts</module>
+        <module>ch28-idempotency-correlation</module>
+        <module>ch29-polyglot-persistence</module>
+        <module>ch30-distributed-transactions</module>
+        <module>ch31-data-consistency</module>
+        <module>ch32-caching-strategies</module>
+        <module>ch33-database-scaling</module>
+        <module>ch34-reporting-analytics</module>
+        <module>ch35-security-fundamentals</module>
+        <module>ch36-oauth2-oidc-jwt</module>
+        <module>ch37-spring-security-7</module>
+        <module>ch38-service-to-service-security</module>
+        <module>ch39-secrets-management</module>
+        <module>ch40-api-security</module>
+        <module>ch41-supply-chain-compliance</module>
+        <module>ch42-failure-modes</module>
+        <module>ch43-resilience4j</module>
+        <module>ch44-timeouts-retries-backpressure</module>
+        <module>ch45-chaos-engineering</module>
+        <module>ch46-disaster-recovery</module>
+        <module>ch47-observability-fundamentals</module>
+        <module>ch48-metrics-micrometer</module>
+        <module>ch49-distributed-tracing-otel</module>
+        <module>ch50-structured-logging</module>
+        <module>ch51-slo-alerting</module>
+        <module>ch52-health-checks-actuator</module>
+        <module>ch53-containerization</module>
+        <module>ch54-kubernetes-for-spring</module>
+        <module>ch55-helm-kustomize</module>
+        <module>ch56-autoscaling</module>
+        <module>ch57-service-mesh</module>
+        <module>ch58-cicd-gitops</module>
+        <module>ch59-cloud-native-platforms</module>
+        <module>ch60-native-images-startup</module>
+        <module>ch61-test-strategy</module>
+        <module>ch62-unit-slice-integration-tests</module>
+        <module>ch63-contract-testing</module>
+        <module>ch64-component-e2e-testing</module>
+        <module>ch65-performance-chaos-arch-tests</module>
+        <module>ch66-latency-virtual-threads-reactive</module>
+        <module>ch67-jvm-tuning-containers</module>
+        <module>ch68-horizontal-scaling</module>
+        <module>ch69-kafka-throughput-tuning</module>
+        <module>ch70-finops</module>
+        <module>ch71-api-governance</module>
+        <module>ch72-platform-engineering</module>
+        <module>ch73-adrs-fitness-functions</module>
+        <module>ch74-maturity-migration-roadmap</module>
+        <module>ch75-multi-tenancy-multi-region-compliance</module>
+        <module>ch76-serverless-microservices</module>
+        <module>ch77-ai-native-microservices</module>
+    </modules>
+</project>

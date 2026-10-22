@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 24 — GraphQL: the customer app's graph in the mobile BFF.
+    mini/        a small GraphQL executor (parse, level-by-level execution, per-item vs batch
+                 resolvers, static cost) to make the N+1 problem and DataLoader visible
+    experiment/  the "My orders" screen four ways (REST, GraphQL N+1, GraphQL batched, BFF), and
+                 what nested queries cost
+    graph/       Spring for GraphQL: schema, @QueryMapping/@BatchMapping controller, depth and
+                 complexity limits, error mapping, header-to-context interceptor
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch24-graphql</artifactId>
+    <name>Ch24 :: GraphQL</name>
+
+    <dependencies>
+        <!-- Spring for GraphQL (graphql-java underneath), served over Spring MVC at POST /graphql -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-graphql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+
+        <!-- @GraphQlTest slice and GraphQlTester -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-graphql-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

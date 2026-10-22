@@ -1,0 +1,44 @@
+# FoodFleet's pipeline for a service, as a GitHub Actions workflow. CI builds once and never deploys: its last step is a
+# pull request to the environment repository with the new digest. The GitOps controller does the rest.
+name: menu-service
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  id-token: write          # keyless signing (chapter 41)
+  packages: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.push.outputs.digest }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1         # v7.0.1, pinned by SHA (chapter 41)
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6       # v6.0.1
+        with: {distribution: temurin, java-version: "25", cache: maven}
+      - name: Unit, slice and contract tests
+        run: ./mvnw -B verify
+      - name: Build and push the image once (Jib: no Docker daemon, reproducible layers)
+        id: push
+        run: |
+          ./mvnw -B -pl menu-service jib:build -Dimage=ghcr.io/foodfleet/menu-service:${GITHUB_SHA}
+          echo "digest=$(cat menu-service/target/jib-image.digest)" >> "$GITHUB_OUTPUT"
+      - name: SBOM, vulnerability scan, signature and provenance, all by digest
+        run: |
+          syft ghcr.io/foodfleet/menu-service@${{ steps.push.outputs.digest }} -o cyclonedx-json > sbom.json
+          grype sbom:sbom.json --fail-on high
+          cosign sign --yes ghcr.io/foodfleet/menu-service@${{ steps.push.outputs.digest }}
+          cosign attest --yes --type cyclonedx --predicate sbom.json ghcr.io/foodfleet/menu-service@${{ steps.push.outputs.digest }}
+  promote-to-dev:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1         # v7.0.1, pinned by SHA (chapter 41)
+        with: {repository: foodfleet/environments, token: "${{ secrets.ENV_REPO_TOKEN }}"}
+      - name: Write the digest, render every environment and run the promotion policy (chapter 55)
+        run: |
+          cd dev/menu-service && kustomize edit set image menu-service=ghcr.io/foodfleet/menu-service@${{ needs.build.outputs.digest }}
+          ./ci/render-and-check.sh
+      - name: Open the pull request (dev merges automatically; staging and prod need an approval)
+        run: gh pr create --title "menu-service ${{ needs.build.outputs.digest }} to dev" --body "Built from ${GITHUB_SHA}" --label auto-merge

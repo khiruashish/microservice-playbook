@@ -1,0 +1,4 @@
+# menu-service on the JVM: a jlink'd Java 25 runtime (with its default CDS archive) and the application's jars.
+FROM c60/jre:25
+COPY --chown=10001:10001 app/ /app/
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-cp", "/app/*", "StartupLab"]

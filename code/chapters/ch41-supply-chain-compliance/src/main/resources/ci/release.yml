@@ -1,0 +1,47 @@
+# order-service release pipeline (GitHub Actions). Every third-party action is pinned to a commit SHA: a tag can be
+# moved to malicious code, a SHA can't. Permissions are the minimum per job; id-token: write lets the job get a
+# short-lived OIDC token, which Sigstore exchanges for a signing certificate naming this workflow (no keys stored).
+name: release
+on:
+  push:
+    tags: ["v*"]
+permissions: {}
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write        # push the image
+      id-token: write        # keyless signing and provenance
+      attestations: write    # GitHub artifact attestations
+    env:
+      IMAGE: ghcr.io/foodfleet/order-service
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1         # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6       # v6.0.1
+        with:
+          distribution: temurin
+          java-version: "25"
+          cache: maven
+      # build, test, and write the SBOM into the jar (META-INF/sbom/application.cdx.json, served by /actuator/sbom)
+      - run: ./mvnw -B --no-transfer-progress verify
+      # the gate: fail on critical/high findings that have a fix, unless a dated waiver covers them
+      # (this chapter's Scanner + Gate against a mirror of the advisory database; OSV-Scanner, Trivy or Grype work too)
+      - run: ./mvnw -B -q -pl tools/sbom-gate exec:java -Dexec.args="target/classes/META-INF/sbom/application.cdx.json waivers.yml"
+      - id: image
+        run: |
+          ./mvnw -B -q spring-boot:build-image -DskipTests \
+            -Dspring-boot.build-image.imageName=$IMAGE:${GITHUB_REF_NAME} -Dspring-boot.build-image.publish=true
+          echo "digest=$(docker buildx imagetools inspect $IMAGE:${GITHUB_REF_NAME} --format '{{json .Manifest.Digest}}' | tr -d '"')" >> "$GITHUB_OUTPUT"
+      - uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+      # sign the digest, never the tag; keyless: the certificate names this workflow at this tag
+      - run: cosign sign --yes "$IMAGE@${{ steps.image.outputs.digest }}"
+      - run: cosign attest --yes --type cyclonedx --predicate target/classes/META-INF/sbom/application.cdx.json "$IMAGE@${{ steps.image.outputs.digest }}"
+      # SLSA provenance, generated and signed by GitHub's attestation action
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8   # v4.2.2
+        with:
+          subject-name: ${{ env.IMAGE }}
+          subject-digest: ${{ steps.image.outputs.digest }}
+          push-to-registry: true

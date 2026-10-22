@@ -1,0 +1,27 @@
+# FoodFleet's production services as their Helm values declare them: requests per pod (CPU cores, memory GiB) and replicas.
+# kind: api (CPU per request), cache (a large in-memory data set), batch (idle, then busy); usage factors come from the usage experiment.
+# service	team	kind	replicas	cpu	memGiB
+order-service	ordering	api	6	1	2
+cart-service	ordering	api	4	1	2
+checkout-bff	ordering	api	4	1	2
+order-history	ordering	cache	3	1	4
+menu-service	menu	api	6	1	2
+menu-search	menu	cache	4	2	8
+catalog-importer	menu	batch	1	2	4
+pricing-service	menu	api	3	1	2
+restaurant-portal	menu	api	2	1	2
+delivery-service	delivery	api	4	1	2
+eta-service	delivery	api	4	1	2
+rider-tracking	delivery	api	6	1	2
+dispatch-optimizer	delivery	batch	2	4	8
+geo-cache	delivery	cache	3	1	6
+payment-service	payments	api	4	1	2
+refund-service	payments	api	2	1	2
+ledger-service	payments	api	3	1	2
+settlement-job	payments	batch	1	2	4
+notification-service	growth	api	3	1	2
+promotions-service	growth	api	3	1	2
+recommendations	growth	cache	3	2	8
+analytics-ingest	growth	batch	2	2	4
+identity-service	platform	api	3	1	2
+api-gateway	platform	api	4	1	2

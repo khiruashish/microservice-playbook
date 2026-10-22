@@ -1,0 +1,11 @@
+# order-service: serve the SBOM that the CycloneDX plugin built into the jar, to the platform's inventory only.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, sbom
+  endpoint:
+    sbom:
+      access: read-only
+  server:
+    port: 9090                 # management on its own port, reachable from the platform network only

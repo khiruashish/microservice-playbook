@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 49 — Distributed Tracing with OpenTelemetry.
+    propagation/  MessageHeaders (inject and extract context for anything with string headers: outbox rows, queues)
+                  and TracedExecutors (context across thread hand-offs the agent doesn't cover)
+    baggage/      BaggagePolicy: an allow-list and size cap at the edge, no baggage to third parties
+    spans/        PaymentSpans: a manual span with conventional attributes, events, status and baggage copied in
+    resources/    application.yml (Spring Boot 4 tracing, propagation, baggage, Kafka observation) and the agent's settings
+  verify/run.sh runs FoodFleet's checkout under the OpenTelemetry Java agent 2.32.0 with NATS 2.15.1 and a Collector:
+  context across eleven thread hand-offs, messaging by push and pull, sampling and propagator mismatches, baggage.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch49-distributed-tracing-otel</artifactId>
+    <name>Ch49 :: Distributed Tracing with OpenTelemetry</name>
+
+    <dependencies>
+        <!-- the API only: the SDK comes from Spring Boot's tracing (micrometer-tracing-bridge-otel) or the Java agent -->
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,3 @@
+# Anti-pattern findings accepted for now (see Baseline). Each needs an owner and a ticket;
+# 'until=YYYY-MM-DD' makes the acceptance expire. Remove an entry when the finding is fixed.
+SHARED_DATABASE:customers  owner=growth ticket=FF-1412  # promotions reads customer tiers; moving to CustomerTierChanged events

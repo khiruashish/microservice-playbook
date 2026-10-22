@@ -1,0 +1,102 @@
+# FoodFleet, 2024: nine services by business capability ("decomposition B", chapter 6),
+# after the migration and the fixes in chapters 12-19.
+system foodfleet-2024-capabilities
+
+service ordering        team=orders    endpoints=18 loc=46000
+service customer        team=growth    endpoints=8  loc=12000
+service catalog         team=catalog   endpoints=16 loc=31000
+service kitchen         team=kitchen   endpoints=8  loc=19000
+service delivery-zones  team=logistics endpoints=4  loc=6100
+service delivery        team=logistics endpoints=9  loc=27000
+service promotions      team=growth    endpoints=6  loc=9500
+service notification    team=platform  endpoints=4  loc=7200
+service payment         team=payments  endpoints=11 loc=24000
+
+# place order: menu data is a local replica (ADR-019), so catalog is not on the order path
+call ordering -> customer        per-request=1 sync
+call ordering -> delivery-zones  per-request=1 sync
+call ordering -> promotions      per-request=1 sync
+call ordering -> payment         per-request=1 sync
+call ordering -> kitchen         per-request=1 async
+call ordering -> notification    per-request=1 async
+call ordering -> delivery        per-request=1 async
+# browse menu
+call catalog -> delivery-zones   per-request=1 sync
+
+table orders    owner=ordering
+table customers owner=customer readers=promotions
+table menu      owner=catalog
+table zones     owner=delivery-zones
+
+library foodfleet-platform kind=utility ordering=4.1.0 customer=4.1.0 catalog=4.1.0 kitchen=4.0.3 delivery-zones=4.1.0 delivery=4.1.0 promotions=4.1.0 notification=4.0.3 payment=4.1.0
+
+deploy 2024-09-02T00:00 payment
+deploy 2024-09-03T05:00 catalog
+deploy 2024-09-03T16:00 payment
+deploy 2024-09-04T01:00 delivery-zones
+deploy 2024-09-05T01:00 customer
+deploy 2024-09-06T02:00 notification
+deploy 2024-09-07T06:00 ordering
+deploy 2024-09-07T17:00 catalog
+deploy 2024-09-08T02:00 notification
+deploy 2024-09-09T02:00 delivery-zones
+deploy 2024-09-09T16:00 kitchen,payment
+deploy 2024-09-10T20:00 payment
+deploy 2024-09-11T15:00 delivery
+deploy 2024-09-12T14:00 catalog
+deploy 2024-09-13T10:00 customer
+deploy 2024-09-14T01:00 ordering
+deploy 2024-09-15T07:00 delivery
+deploy 2024-09-15T22:00 payment
+deploy 2024-09-17T01:00 customer
+deploy 2024-09-17T18:00 catalog,ordering
+deploy 2024-09-18T05:00 kitchen
+deploy 2024-09-19T10:00 notification
+deploy 2024-09-19T17:00 ordering
+deploy 2024-09-20T05:00 promotions
+deploy 2024-09-21T04:00 notification
+deploy 2024-09-22T08:00 payment
+deploy 2024-09-22T17:00 notification
+deploy 2024-09-23T18:00 customer
+deploy 2024-09-24T11:00 catalog
+deploy 2024-09-24T22:00 kitchen
+deploy 2024-09-25T07:00 ordering
+deploy 2024-09-26T02:00 payment
+deploy 2024-09-26T20:00 delivery-zones
+deploy 2024-09-27T22:00 payment
+deploy 2024-09-28T14:00 customer,ordering
+deploy 2024-09-29T12:00 payment
+deploy 2024-09-29T23:00 catalog
+deploy 2024-09-30T16:00 catalog
+deploy 2024-10-01T22:00 delivery-zones
+deploy 2024-10-02T09:00 payment
+deploy 2024-10-03T00:00 notification
+deploy 2024-10-03T08:00 customer
+deploy 2024-10-04T09:00 catalog
+deploy 2024-10-05T02:00 delivery-zones
+deploy 2024-10-06T07:00 ordering
+deploy 2024-10-06T13:00 delivery-zones,notification
+deploy 2024-10-07T17:00 notification
+deploy 2024-10-08T08:00 ordering
+deploy 2024-10-08T16:00 ordering
+deploy 2024-10-09T07:00 promotions
+deploy 2024-10-10T08:00 delivery-zones,promotions
+deploy 2024-10-11T12:00 customer,promotions
+deploy 2024-10-12T18:00 ordering
+deploy 2024-10-13T00:00 payment
+deploy 2024-10-13T08:00 ordering
+deploy 2024-10-14T13:00 customer
+deploy 2024-10-14T22:00 delivery
+deploy 2024-10-16T03:00 ordering
+deploy 2024-10-17T03:00 ordering
+deploy 2024-10-17T16:00 notification
+deploy 2024-10-18T09:00 payment
+deploy 2024-10-18T18:00 customer
+deploy 2024-10-19T08:00 notification
+deploy 2024-10-20T05:00 ordering
+deploy 2024-10-21T11:00 catalog,notification
+deploy 2024-10-22T11:00 payment
+deploy 2024-10-23T10:00 kitchen
+deploy 2024-10-24T01:00 ordering
+deploy 2024-10-24T18:00 notification
+deploy 2024-10-25T10:00 notification

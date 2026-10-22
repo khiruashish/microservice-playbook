@@ -1,0 +1,22 @@
+# A job someone added to copy order data to the data team's cluster in Europe, built from a laptop.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-export
+  namespace: analytics
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app.kubernetes.io/name: analytics-export}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: analytics-export
+        foodfleet.in/data-class: personal
+      annotations:
+        foodfleet.in/region: eu-west-1
+        foodfleet.in/retention-days: "3650"
+    spec:
+      containers:
+        - name: export
+          image: registry.foodfleet.in/analytics/export:latest

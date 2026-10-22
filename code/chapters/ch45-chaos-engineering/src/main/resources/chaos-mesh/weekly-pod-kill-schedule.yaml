@@ -1,0 +1,18 @@
+# Continuous verification: the pod-kill experiment every Tuesday at 11:00 in staging, never two at once.
+apiVersion: chaos-mesh.org/v1alpha1
+kind: Schedule
+metadata:
+  name: weekly-restaurant-pod-kill
+  namespace: foodfleet-staging
+spec:
+  schedule: "0 11 * * 2"
+  type: PodChaos
+  historyLimit: 8
+  concurrencyPolicy: Forbid
+  podChaos:
+    action: pod-kill
+    mode: one
+    selector:
+      namespaces: [foodfleet-staging]
+      labelSelectors:
+        app.kubernetes.io/name: restaurant-service

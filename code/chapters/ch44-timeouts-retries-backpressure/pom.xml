@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 44 — Timeouts, Retries, Backpressure & Load Shedding.
+    budget/   TimeoutBudget: a hop's timeout from what is left of the caller's deadline
+    limit/    AIMD adaptive concurrency limits (Netflix concurrency-limits), partitioned by request priority
+    hedge/    hedged reads with Resilience4j's Hedge, paid from a hedge budget
+    degrade/  Brownout: a dimmer for optional features
+    web/      order-service: an admission filter in front of everything, the menu page with optional recommendations
+  verify/run.sh measures timeouts, retries and hedging against a long tail, adaptive limits through a slowdown,
+  priority shedding, brownout during a spike, and stream backpressure with java.util.concurrent.Flow.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch44-timeouts-retries-backpressure</artifactId>
+    <name>Ch44 :: Timeouts, Retries, Backpressure &amp; Load Shedding</name>
+
+    <properties>
+        <concurrency-limits.version>0.5.4</concurrency-limits.version>
+        <resilience4j.version>2.4.0</resilience4j.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.netflix.concurrency-limits</groupId>
+            <artifactId>concurrency-limits-core</artifactId>
+            <version>${concurrency-limits.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-hedge</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

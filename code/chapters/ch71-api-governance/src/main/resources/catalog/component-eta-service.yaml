@@ -1,0 +1,19 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "eta-service",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/eta-service"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "delivery",
+    "system": "foodfleet",
+    "providesApis": [
+      "eta-api"
+    ]
+  }
+}

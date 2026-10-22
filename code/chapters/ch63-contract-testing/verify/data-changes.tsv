@@ -1,0 +1,6 @@
+# Changes to menu-service's data, not its API: no consumer should care. id	description	file	find	replace
+D1	a price changes: paneer tikka 129.50 -> 139.50	MenuService.java	new BigDecimal("129.50"), true, "MEDIUM"	new BigDecimal("139.50"), true, "MEDIUM"
+D2	an item is added to the menu	MenuService.java	"Frozen milk dessert", 240)));	"Frozen milk dessert", 240),\n                new Item("gulab-jamun", "Gulab Jamun", new BigDecimal("69.00"), true, "LOW", "Milk dumplings in syrup", 300)));
+D3	a description is rewritten	MenuService.java	"Cottage cheese, charred in the tandoor"	"Cottage cheese marinated in yoghurt, charred in the tandoor"
+D4	the menu comes in another order	MenuService.java	List<Item> page = items;	List<Item> page = items.reversed();
+D5	an item sells out	MenuService.java	new BigDecimal("189.00"), true,	new BigDecimal("189.00"), false,

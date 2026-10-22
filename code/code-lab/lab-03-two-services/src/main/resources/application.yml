@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: order-service
+  http:
+    serviceclient:
+      menu:                               # the group named in @ImportHttpServices
+        base-url: http://localhost:8080   # lab 01's menu-service; in Kubernetes, http://menu-service (ADR-011)
+        connect-timeout: 500ms
+        read-timeout: 1s                  # no default is safe for a remote call (ADR-022, ADR-042)
+  mvc:
+    problemdetails:
+      enabled: true
+  threads:
+    virtual:
+      enabled: true
+server:
+  port: 8090
+management:
+  server:
+    port: 8091

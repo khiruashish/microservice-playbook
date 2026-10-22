@@ -1,0 +1,19 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "payment-service",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/payment-service"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "payments",
+    "system": "foodfleet",
+    "providesApis": [
+      "payment-service"
+    ]
+  }
+}

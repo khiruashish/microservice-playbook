@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: edge-gateway
+  threads:
+    virtual:
+      enabled: true
+  mvc:
+    problemdetails:
+      enabled: true
+
+server:
+  port: ${PORT:8080}
+  shutdown: graceful
+  tomcat:
+    max-swallow-size: 1MB             # don't read huge bodies we're going to reject anyway
+  max-http-request-header-size: 16KB
+
+foodfleet:
+  edge:
+    backends:                          # Kubernetes: http://menu-service.foodfleet.svc.cluster.local, ...
+      menu: ${MENU_SERVICE_URL:http://localhost:8081}
+      ordering: ${ORDERING_SERVICE_URL:http://localhost:8086}
+      eta: ${ETA_SERVICE_URL:http://localhost:8088}
+      payment: ${PAYMENT_SERVICE_URL:http://localhost:8089}
+      mobile-bff: ${MOBILE_BFF_URL:http://localhost:8090}
+    place-order-rate-limit:
+      capacity: 5                      # a burst of 5 orders...
+      refill-per-minute: 10            # ...then one every 6 seconds per client
+      max-clients: 100000
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      menu-service:
+        sliding-window-size: 20
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+  timelimiter:
+    instances:
+      menu-service:
+        timeout-duration: 2s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true

@@ -1,0 +1,15 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "API",
+  "metadata": {
+    "name": "order-service"
+  },
+  "spec": {
+    "type": "openapi",
+    "lifecycle": "production",
+    "owner": "ordering",
+    "definition": {
+      "$text": "../openapi/order-service.json"
+    }
+  }
+}

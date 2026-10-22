@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 48 — Metrics with Micrometer.
+    metrics/       MetricsPolicy (common tags, identifiers never as tags, uri cap, bounded latency histograms with
+                   SLO buckets) and OrderMetrics (business meters registered once, tags from enums)
+    observation/   CheckoutObservation and Checkout: one Observation, low- and high-cardinality key values declared
+    config/        MetricsConfiguration: the policy as Spring Boot 4 beans
+    resources/     application.yml (Boot's metrics properties), Prometheus with RED, USE and business rules
+  verify/run.sh measures, on Micrometer 1.17.1 built from source, Spring Framework 7.0.9's HTTP conventions and
+  Prometheus 3.15.0: fleet percentiles, how long a spike is remembered, uri cardinality, recording cost, weak gauges.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch48-metrics-micrometer</artifactId>
+    <name>Ch48 :: Metrics with Micrometer</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: tracking-gateway
+  threads:
+    virtual:
+      enabled: true                 # a blocked thread per open stream is cheap on virtual threads
+  mvc:
+    async:
+      request-timeout: 30m          # SSE streams are long-lived async requests
+server:
+  tomcat:
+    max-connections: 25000          # default 8192: each open stream holds a connection
+    connection-timeout: 20s
+  # Shutdown is graceful by default, and open streams count as in-flight requests: they hold the
+  # shutdown for up to spring.lifecycle.timeout-per-shutdown-phase (30 s) unless closed first.

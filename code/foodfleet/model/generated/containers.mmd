@@ -1,0 +1,62 @@
+flowchart LR
+    subgraph clients["Clients"]
+        client_customer_app(["customer-app"])
+        client_partner_portal(["partner-portal"])
+        client_rider_app(["rider-app"])
+    end
+    subgraph g_edge["Edge"]
+        edge_gateway["edge-gateway<br/><small>Platform</small>"]
+        tracking_gateway["tracking-gateway<br/><small>Logistics</small>"]
+    end
+    subgraph g_bff["BFFs"]
+        customer_bff["customer-bff<br/><small>Checkout</small>"]
+        partner_bff["partner-bff<br/><small>Restaurant Partner</small>"]
+        rider_bff["rider-bff<br/><small>Logistics</small>"]
+    end
+    subgraph g_service["Services"]
+        order_service["order-service<br/><small>Checkout</small>"]
+        menu_service["menu-service<br/><small>Restaurant Partner</small>"]
+        kitchen_service["kitchen-service<br/><small>Restaurant Partner</small>"]
+        delivery_service["delivery-service<br/><small>Logistics</small>"]
+        zone_service["zone-service<br/><small>Logistics</small>"]
+        dispatch_optimizer["dispatch-optimizer<br/><small>Dispatch</small>"]
+        promotions_service["promotions-service<br/><small>Growth</small>"]
+        customer_service["customer-service<br/><small>Growth</small>"]
+        notification_service["notification-service<br/><small>Growth</small>"]
+        payment_service["payment-service<br/><small>Payments</small>"]
+        pricing_service["pricing-service<br/><small>Checkout</small>"]
+        eta_service["eta-service<br/><small>Logistics</small>"]
+        reporting_service["reporting-service<br/><small>Platform</small>"]
+    end
+    subgraph g_ai["AI: gateway and MCP servers"]
+        llm_gateway["llm-gateway<br/><small>Platform</small>"]
+        orders_mcp["orders-mcp<br/><small>Checkout</small>"]
+        menus_mcp["menus-mcp<br/><small>Restaurant Partner</small>"]
+    end
+    ext_provider[("payment provider")]
+    client_customer_app -->|GraphQL| edge_gateway
+    client_partner_portal -->|REST| edge_gateway
+    client_rider_app -->|REST| edge_gateway
+    client_customer_app -.->|SSE| tracking_gateway
+    client_rider_app -.->|WebSocket| tracking_gateway
+    edge_gateway -->|GraphQL| customer_bff
+    edge_gateway -->|REST| partner_bff
+    edge_gateway -->|REST| rider_bff
+    customer_bff -->|REST| menu_service
+    customer_bff -->|REST| zone_service
+    customer_bff ==>|gRPC| eta_service
+    customer_bff -->|REST| order_service
+    menu_service -->|REST| pricing_service
+    order_service -->|REST| pricing_service
+    order_service -->|REST| promotions_service
+    eta_service ==>|gRPC| kitchen_service
+    eta_service ==>|gRPC| dispatch_optimizer
+    tracking_gateway ==>|gRPC| eta_service
+    delivery_service ==>|gRPC| dispatch_optimizer
+    delivery_service -->|REST| zone_service
+    payment_service -->|REST| ext_provider
+    partner_bff -->|REST| menu_service
+    partner_bff -->|REST| kitchen_service
+    rider_bff -->|REST| delivery_service
+    orders_mcp -->|REST| order_service
+    menus_mcp -->|REST| menu_service

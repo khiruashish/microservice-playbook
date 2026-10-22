@@ -1,0 +1,19 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "notification-service",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/notification-service"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "growth",
+    "system": "foodfleet",
+    "consumesApis": [
+      "order-service"
+    ]
+  }
+}

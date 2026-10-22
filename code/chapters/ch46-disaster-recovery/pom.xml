@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 46 — Disaster Recovery & Multi-Region.
+    objectives/  Tier: RPO, RTO, replication and rehearsal interval per recovery tier
+    cell/        CellRouter (rendezvous hashing, pinning, draining) and ShuffleSharder
+    failover/    FailoverController (detect, fence, promote) and PrimaryLocator (client-side primary discovery)
+    resources/   PostgreSQL settings for a Tier 0 primary and its cross-region standby; order-service's failover datasource
+  verify/run.sh measures RPO by replication mode and distance, failover timelines, restores, and blast radius, on real
+  PostgreSQL 16 clusters.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch46-disaster-recovery</artifactId>
+    <name>Ch46 :: Disaster Recovery &amp; Multi-Region</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

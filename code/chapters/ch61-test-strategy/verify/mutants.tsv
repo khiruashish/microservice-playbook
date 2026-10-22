@@ -1,0 +1,21 @@
+# id	file	kind	description	find	replace
+P1	Pricing.java	logic	coupon cap removed	money(subtotal.multiply(COUPON_RATE)).min(COUPON_CAP)	money(subtotal.multiply(COUPON_RATE))
+P2	Pricing.java	logic	tax charged before the discount	money(subtotal.subtract(discount).multiply(GST))	money(subtotal.multiply(GST))
+P3	Pricing.java	logic	rounding half-up	RoundingMode.HALF_EVEN	RoundingMode.HALF_UP
+P4	Pricing.java	logic	minimum order exclusive	subtotal.compareTo(MINIMUM_ORDER) < 0	subtotal.compareTo(MINIMUM_ORDER) <= 0
+S1	OrderService.java	logic	no upper limit on quantity	i.quantity() < 1 || i.quantity() > 20	i.quantity() < 1
+S2	OrderService.java	logic	sold-out items accepted	if (!p.available()) {	if (false) {
+S3	OrderService.java	logic	coupon ignored	Pricing.price(lines, r.coupon())	Pricing.price(lines, null)
+R1	JdbcOrderRepository.java	sql	discount and tax swapped on insert	ps.setBigDecimal(5, o.discount());\n                    ps.setBigDecimal(6, o.tax());	ps.setBigDecimal(5, o.tax());\n                    ps.setBigDecimal(6, o.discount());
+R2	JdbcOrderRepository.java	sql	idempotency clause dropped	values (?, ?, ?, ?, ?, ?, ?, ?)\n                        on conflict (idempotency_key) do nothing	values (?, ?, ?, ?, ?, ?, ?, ?)
+R3	JdbcOrderRepository.java	sql	replay looked up by customer	select id from orders where idempotency_key = ?	select id from orders where customer_id = ? order by id
+R4	JdbcOrderRepository.java	sql	recent orders oldest first	order by created_at desc, id desc limit ?	order by created_at, id limit ?
+R5	JdbcOrderRepository.java	sql	restaurant id bound as text	ps.setInt(1, restaurantId);	ps.setString(1, String.valueOf(restaurantId));
+R6	JdbcOrderRepository.java	transaction	no transaction around header and lines	c.setAutoCommit(false);	c.setAutoCommit(true);
+R7	JdbcOrderRepository.java	sql	lines read in no particular order	from order_lines where order_id = ? order by item_id	from order_lines where order_id = ?
+A1	OrderApi.java	api	201 answered as 200	s.created() ? 201 : 200	200
+A2	OrderApi.java	api	JSON field renamed	\",\"total\":\"	\",\"totalAmount\":\"
+A3	OrderApi.java	api	validation errors answered 500	} catch (IllegalArgumentException e) {\n            respond(ex, 400,	} catch (IllegalArgumentException e) {\n            respond(ex, 500,
+C1	HttpMenuClient.java	client	wrong path to menu-service	"/items/"	"/item/"
+C2	HttpMenuClient.java	client	price parsed as a whole number	new BigDecimal(p.group(1))	new BigDecimal(p.group(1).replaceAll("\\..*", ""))
+C3	HttpMenuClient.java	client	availability read from the wrong field	Boolean.parseBoolean(a.group(1))	r.statusCode() == 200

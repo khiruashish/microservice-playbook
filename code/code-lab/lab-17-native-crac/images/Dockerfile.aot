@@ -1,0 +1,16 @@
+# menu-service (lab 02's, any Boot 4 jar) with JDK 25's AOT cache, trained in the image build.
+# Training through real requests caches more than a refresh alone: chapter 60 measured 611-732 ms to the first 200
+# trained through HTTP, against 907-942 ms trained without it. This file shows the refresh-only form, which needs no
+# load generator in the build; put your smoke test in its place for the rest.
+FROM eclipse-temurin:25-jre AS train
+WORKDIR /app
+COPY target/menu-service.jar app.jar
+RUN java -Djarmode=tools -jar app.jar extract --destination extracted
+WORKDIR /app/extracted
+RUN java -XX:AOTCacheOutput=app.aot -Dspring.context.exit=onRefresh -jar app.jar
+
+FROM eclipse-temurin:25-jre
+COPY --from=train /app/extracted /app
+WORKDIR /app
+USER 10001
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-XX:AOTCache=app.aot", "-jar", "app.jar"]

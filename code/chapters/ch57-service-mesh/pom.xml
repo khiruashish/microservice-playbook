@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 57 — Service Mesh.
+    mesh/       SpiffeId (workload identities in URI SANs) and Sidecar (Envoy bootstrap configurations: an outbound
+                listener balancing each request across a headless Service's pods, with retries, outlier detection and
+                mTLS; an inbound listener that requires mTLS and admits only listed identities)
+  verify/run.sh validates every configuration with Envoy 1.39.4, then runs Envoy sidecars (native sidecar containers)
+  on a real cluster (k3s 1.37): per-request balancing after a scale-out, who can reach a service, a bad pod with
+  retries and outlier detection, and the latency and resources a sidecar costs.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch57-service-mesh</artifactId>
+    <name>Ch57 :: Service Mesh</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

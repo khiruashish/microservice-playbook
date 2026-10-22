@@ -1,0 +1,31 @@
+# Alertmanager 0.34: SLO pages wake the on-call engineer, SLO tickets go to the team's queue, and a page for an SLO
+# silences the ticket for the same SLO (the same problem, already being handled).
+route:
+  receiver: team-queue
+  group_by: [alertname, slo]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  routes:
+    - matchers: [severity="page"]
+      receiver: oncall-pager
+      repeat_interval: 1h
+    - matchers: [severity="ticket"]
+      receiver: team-queue
+      group_wait: 10m
+      repeat_interval: 24h
+
+inhibit_rules:
+  - source_matchers: [severity="page"]
+    target_matchers: [severity="ticket"]
+    equal: [slo, service]
+
+receivers:
+  - name: oncall-pager
+    webhook_configs:
+      - url: http://incident-bridge.monitoring.svc:8080/page      # forwards to the paging provider
+        send_resolved: true
+  - name: team-queue
+    webhook_configs:
+      - url: http://incident-bridge.monitoring.svc:8080/ticket    # opens or updates a ticket
+        send_resolved: true

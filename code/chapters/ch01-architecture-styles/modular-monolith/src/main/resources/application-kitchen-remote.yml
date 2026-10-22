@@ -1,0 +1,13 @@
+# Activate with: --spring.profiles.active=kitchen-remote
+# The order module now asks kitchen-service (port 8082) over HTTP instead of the kitchen module.
+foodfleet:
+  kitchen:
+    mode: remote
+
+spring:
+  http:
+    serviceclient:
+      kitchen:                       # matches @ImportHttpServices(group = "kitchen")
+        base-url: http://localhost:8082
+        connect-timeout: 500ms       # fail fast: the customer is waiting at checkout
+        read-timeout: 1s

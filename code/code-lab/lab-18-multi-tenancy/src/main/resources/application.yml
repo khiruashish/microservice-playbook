@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orders
+    username: orders_app                 # owns nothing, NOBYPASSRLS: row-level security applies to every query
+    password: ${ORDERS_APP_PASSWORD}
+  flyway:
+    user: orders_owner_login             # migrations run as the owner's login role, never as the application
+    password: ${ORDERS_OWNER_PASSWORD}
+    init-sqls: SET ROLE orders_owner
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/foodfleet
+          audiences: [order-service]
+
+server:
+  port: 8098

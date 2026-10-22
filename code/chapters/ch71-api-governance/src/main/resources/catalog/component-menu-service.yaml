@@ -1,0 +1,19 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "menu-service",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/menu-service"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "menu",
+    "system": "foodfleet",
+    "providesApis": [
+      "menu-service"
+    ]
+  }
+}

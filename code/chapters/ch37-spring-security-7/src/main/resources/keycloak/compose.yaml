@@ -1,0 +1,13 @@
+# Local Keycloak with FoodFleet's realm: docker compose -f src/main/resources/keycloak/compose.yaml up
+# Then: OAUTH_ISSUER=http://localhost:8180/realms/foodfleet for order-service.
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.6.3        # pin the version you have tested
+    command: ["start-dev", "--import-realm", "--http-port=8180"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?set KEYCLOAK_ADMIN_PASSWORD}
+    ports:
+      - "8180:8180"
+    volumes:
+      - ./foodfleet-realm.json:/opt/keycloak/data/import/foodfleet-realm.json:ro

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: menu-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: menu-service}
+  template:
+    metadata:
+      labels: {app: menu-service}
+    spec:
+      containers:
+        - name: app
+          image: menu-service
+          imagePullPolicy: IfNotPresent
+          ports: [{name: http, containerPort: 8080}]
+          env:
+            - {name: JAVA_TOOL_OPTIONS, value: "-XX:MaxRAMPercentage=75 -XX:+ExitOnOutOfMemoryError"}
+            - {name: POD_NAME, valueFrom: {fieldRef: {fieldPath: metadata.name}}}
+            - {name: DISCOUNT, valueFrom: {configMapKeyRef: {name: menu-service-config, key: discount}}}
+          resources:
+            requests: {cpu: 250m, memory: 384Mi}
+            limits: {memory: 384Mi}
+          readinessProbe: {httpGet: {path: /menu, port: http}, periodSeconds: 2}
+          volumeMounts: [{name: config, mountPath: /etc/menu-config}]
+      volumes:
+        - name: config
+          configMap: {name: menu-service-config}

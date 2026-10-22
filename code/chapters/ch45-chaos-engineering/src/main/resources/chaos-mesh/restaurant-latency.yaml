@@ -1,0 +1,20 @@
+# Experiment 1 of the menu game day: +3 s on responses from ONE restaurant-service pod for 30 s.
+# Hypothesis: 99% of menu requests succeed within 300 ms (order-service's 150 ms read timeout + retry elsewhere).
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: restaurant-latency
+  namespace: foodfleet
+spec:
+  action: delay
+  mode: one                       # blast radius: one pod, chosen at random
+  selector:
+    namespaces: [foodfleet]
+    labelSelectors:
+      app.kubernetes.io/name: restaurant-service
+  direction: to
+  delay:
+    latency: 3s
+    jitter: 100ms
+    correlation: "0"
+  duration: 30s

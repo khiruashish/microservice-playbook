@@ -1,0 +1,9 @@
+# Local development only: `mvn spring-boot:run -Dspring-boot.run.profiles=local`.
+# PostgreSQL comes from compose.yaml via Spring Boot's Docker Compose support, with no URL needed.
+# Logs stay JSON locally too: dev/prod parity (pipe through `jq` to read them).
+foodfleet:
+  zones:
+    city: Bengaluru
+    default-delivery-fee-paise: 3500
+    max-delivery-km: 7
+

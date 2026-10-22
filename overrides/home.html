@@ -1,0 +1,76 @@
+{% extends "main.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style>
+    /* The hero already carries the title on the landing page. */
+    .md-content__inner > h1:first-of-type { display: none; }
+    .md-content__inner > h2:first-of-type { margin-top: .4em; }
+  </style>
+{% endblock %}
+
+{% block tabs %}
+  {{ super() }}
+  <section class="mh-hero">
+    <div class="md-grid mh-hero__inner">
+      <div>
+        <span class="mh-hero__eyebrow">Java 25 · Spring Boot 4 · Spring Cloud 2025</span>
+        <h1>Microservices, from your <em>first service</em> to <em>principal architect</em>.</h1>
+        <p>
+          A production-grade handbook covering 77 chapters, 74 component and tool deep dives,
+          20 progressive labs and FoodFleet, a real-time food delivery platform built end to end
+          with Kafka, Kubernetes, OpenTelemetry and GitOps.
+        </p>
+        <div class="mh-hero__actions">
+          <a href="{{ 'foundations/ch01-architecture-styles/' | url }}" class="md-button md-button--primary">Start with Chapter 1</a>
+          <a href="{{ 'components-tools/' | url }}" class="md-button">Components &amp; Tools</a>
+          <a href="{{ 'interview-prep/' | url }}" class="md-button">Interview Prep</a>
+        </div>
+        <div class="mh-stats">
+          <div><strong>77</strong><span>chapters</span></div>
+          <div><strong>74</strong><span>tool deep dives</span></div>
+          <div><strong>20</strong><span>hands-on labs</span></div>
+          <div><strong>400+</strong><span>interview Q&amp;A</span></div>
+        </div>
+      </div>
+      <div class="mh-hero__diagram" aria-hidden="true">
+        <svg viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif" font-size="11">
+          <defs>
+            <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#ffb27a"/></marker>
+          </defs>
+          <rect x="130" y="10" width="100" height="34" rx="9" fill="#f2711c"/>
+          <text x="180" y="31" text-anchor="middle" fill="#fff" font-weight="700">API Gateway</text>
+          <g fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.35)">
+            <rect x="12" y="90" width="96" height="34" rx="9"/>
+            <rect x="132" y="90" width="96" height="34" rx="9"/>
+            <rect x="252" y="90" width="96" height="34" rx="9"/>
+            <rect x="12" y="212" width="96" height="34" rx="9"/>
+            <rect x="252" y="212" width="96" height="34" rx="9"/>
+          </g>
+          <rect x="72" y="152" width="216" height="30" rx="15" fill="rgba(15,157,138,.35)" stroke="#0f9d8a"/>
+          <g fill="#fff" text-anchor="middle">
+            <text x="60" y="111">Order</text>
+            <text x="180" y="111">Restaurant</text>
+            <text x="300" y="111">Delivery</text>
+            <text x="180" y="171" font-weight="700">Kafka · event backbone</text>
+            <text x="60" y="233">Payment</text>
+            <text x="300" y="233">Tracking</text>
+          </g>
+          <g stroke="#ffb27a" stroke-width="1.5" fill="none" marker-end="url(#a)">
+            <path d="M160 44 L70 88"/>
+            <path d="M180 44 L180 88"/>
+            <path d="M200 44 L290 88"/>
+            <path d="M60 124 L110 150"/>
+            <path d="M300 124 L250 150"/>
+            <path d="M110 182 L62 210"/>
+            <path d="M250 182 L298 210"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block content %}
+  {{ super() }}
+{% endblock %}

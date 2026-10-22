@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: ch03-refunds
+  threads:
+    virtual:
+      enabled: true
+  mvc:
+    problemdetails:
+      enabled: true
+
+server:
+  port: 8084
+  shutdown: graceful

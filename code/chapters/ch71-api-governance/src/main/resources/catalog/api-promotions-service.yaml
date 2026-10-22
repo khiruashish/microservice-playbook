@@ -1,0 +1,15 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "API",
+  "metadata": {
+    "name": "promotions-service"
+  },
+  "spec": {
+    "type": "openapi",
+    "lifecycle": "production",
+    "owner": "growth",
+    "definition": {
+      "$text": "../openapi/promotions-service.json"
+    }
+  }
+}

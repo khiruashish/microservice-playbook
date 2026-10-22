@@ -1,0 +1,15 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "API",
+  "metadata": {
+    "name": "delivery-service"
+  },
+  "spec": {
+    "type": "openapi",
+    "lifecycle": "production",
+    "owner": "delivery",
+    "definition": {
+      "$text": "../openapi/delivery-service.json"
+    }
+  }
+}

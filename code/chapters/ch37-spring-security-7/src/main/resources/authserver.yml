@@ -1,0 +1,34 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: foodfleet-auth
+  security:
+    oauth2:
+      authorizationserver:
+        issuer: http://localhost:9000
+        client:
+          customer-app:                              # the mobile app: public client, code + PKCE only
+            registration:
+              client-id: customer-app
+              client-authentication-methods: none
+              authorization-grant-types: authorization_code, refresh_token
+              redirect-uris: foodfleet://callback
+              scopes: openid, orders:read, orders:write, payments:capture
+            require-proof-key: true
+            require-authorization-consent: false
+            token:
+              access-token-time-to-live: 15m
+              refresh-token-time-to-live: 30d
+              reuse-refresh-tokens: false            # rotate refresh tokens: a stolen one is detected on reuse
+          order-service:                             # a service: client credentials and token exchange
+            registration:
+              client-id: order-service
+              client-secret: ${ORDER_SERVICE_CLIENT_SECRET}   # {bcrypt}... from the secret store (chapter 39)
+              client-authentication-methods: client_secret_basic
+              authorization-grant-types: client_credentials, urn:ietf:params:oauth:grant-type:token-exchange
+              scopes: menu:read, payments:capture
+            token:
+              access-token-time-to-live: 5m
+app:
+  dev-password: ${DEV_USER_PASSWORD}

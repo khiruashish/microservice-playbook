@@ -1,0 +1,63 @@
+// Order tracking API, version 1. Field numbers are the contract: never reuse or renumber them.
+syntax = "proto3";
+
+package foodfleet.tracking.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option java_package = "dev.foodfleet.ch23.grpc.proto";
+option java_multiple_files = true;
+
+service OrderTracking {
+  // Unary: the order's current status.
+  rpc GetStatus(GetStatusRequest) returns (OrderStatus);
+  // Server streaming: status changes and rider positions until the order is delivered.
+  rpc WatchOrder(WatchOrderRequest) returns (stream TrackingEvent);
+}
+
+message GetStatusRequest {
+  string order_id = 1;
+}
+
+message WatchOrderRequest {
+  string order_id = 1;
+}
+
+enum Stage {
+  STAGE_UNSPECIFIED = 0;   // proto3 enums start at 0; 0 must mean "not set"
+  PLACED = 1;
+  PREPARING = 2;
+  PICKED_UP = 3;
+  DELIVERED = 4;
+  CANCELLED = 5;
+}
+
+message GeoPoint {
+  double latitude = 1;
+  double longitude = 2;
+}
+
+message Rider {
+  string rider_id = 1;
+  string name = 2;
+  GeoPoint location = 3;
+}
+
+message OrderStatus {
+  string order_id = 1;
+  Stage stage = 2;
+  int32 eta_minutes = 3;
+  Rider rider = 4;
+  google.protobuf.Timestamp updated_at = 5;
+  string restaurant_name = 6;
+  reserved 7;              // was 'promo_banner', removed in 2024: never reuse 7
+}
+
+message TrackingEvent {
+  string order_id = 1;
+  oneof event {
+    OrderStatus status = 2;
+    GeoPoint rider_location = 3;
+  }
+  google.protobuf.Timestamp at = 4;
+}

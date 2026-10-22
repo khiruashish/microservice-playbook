@@ -1,0 +1,84 @@
+intent	question
+where_is_order	Where is my order?
+where_is_order	where is my order
+where_is_order	Where's my food right now?
+where_is_order	Can you tell me where my order is?
+where_is_order	Track my order please
+cancel_order	I want to cancel my order
+cancel_order	Cancel my order.
+cancel_order	Please cancel the order I just placed
+cancel_order	How do I cancel my order?
+keep_order	Please don't cancel my order
+keep_order	Do not cancel my order, I still want it
+keep_order	I changed my mind, keep my order
+refund_status	What is the status of my refund?
+refund_status	Has my refund been processed?
+refund_status	When will I get my refund?
+refund_status	refund status
+request_refund	I want a refund for my order
+request_refund	Can I get a refund for a missing item?
+request_refund	Please refund my order
+change_address	Can I change my delivery address?
+change_address	I need to update the delivery address on my order
+change_address	Change delivery address
+add_item	Can I add an item to my order?
+add_item	Please add a dessert to my order
+add_item	Add one more biryani to my order
+remove_item	Can I remove an item from my order?
+remove_item	Please remove the dessert from my order
+remove_item	Remove the extra biryani from my order
+restaurant_open	Is the restaurant open now?
+restaurant_open	Is this restaurant open right now?
+restaurant_open	Are they open at this hour?
+restaurant_closed_why	Why is the restaurant closed now?
+restaurant_closed_why	Why is this restaurant closed?
+veg_options	Do you have vegetarian options?
+veg_options	Show me vegetarian dishes
+veg_options	What vegetarian food is on the menu?
+nonveg_options	Do you have non-vegetarian options?
+nonveg_options	Show me non-vegetarian dishes
+nonveg_options	What chicken dishes are on the menu?
+delivery_fee	How much is the delivery fee?
+delivery_fee	What is the delivery charge?
+delivery_fee	Why is there a delivery fee on my order?
+free_delivery	How do I get free delivery?
+free_delivery	Is delivery free above a minimum order?
+late_order	My order is late
+late_order	Why is my order so late?
+late_order	The order has not arrived and it is past the delivery time
+wrong_item	I received the wrong item
+wrong_item	This is not what I ordered
+wrong_item	You sent me the wrong dish
+missing_item	An item is missing from my order
+missing_item	My order is missing the dessert
+missing_item	One dish is missing from the bag
+payment_failed	My payment failed
+payment_failed	Payment failed but money was deducted
+payment_failed	Why did my card payment fail?
+payment_methods	What payment methods do you accept?
+payment_methods	Can I pay with UPI?
+payment_methods	Do you take cash on delivery?
+coupon_invalid	My coupon code is not working
+coupon_invalid	Why is my promo code invalid?
+coupon_invalid	The coupon says it has expired
+coupon_find	Are there any coupons available?
+coupon_find	Show me offers for today
+coupon_find	What discounts can I use?
+allergy_info	Does this dish contain nuts?
+allergy_info	Is the paneer tikka gluten free?
+allergy_info	What are the allergens in the biryani?
+schedule_order	Can I schedule an order for later?
+schedule_order	I want to order for tomorrow lunch
+schedule_order	Schedule a delivery for 8 pm
+contact_rider	How do I contact my delivery partner?
+contact_rider	Can I call the rider?
+contact_rider	Give me the delivery partner's number
+rate_order	How do I rate my order?
+rate_order	I want to leave a review for the restaurant
+rate_order	Rate my last delivery
+delete_account	How do I delete my account?
+delete_account	Please delete my account and data
+delete_account	Remove my personal data
+change_phone	How do I change my phone number?
+change_phone	Update my mobile number
+change_phone	I have a new phone number

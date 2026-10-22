@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 26 — WebSockets & Server-Sent Events: live order tracking.
+    experiment/  short polling vs long polling vs SSE vs WebSocket over real sockets (bytes counted
+                 by a proxy, a minimal RFC 6455 server checked by the JDK WebSocket client); how many
+                 SSE streams a server holds on a 200-thread pool vs virtual threads; reconnect storms
+    tracking/    Spring: SSE stream for customers (SseEmitter, Last-Event-ID replay, jittered retry,
+                 heartbeats, load shedding) and a WebSocket endpoint for riders (handshake auth,
+                 validation, rate limiting, ConcurrentWebSocketSessionDecorator)
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch26-websockets-sse</artifactId>
+    <name>Ch26 :: WebSockets &amp; Server-Sent Events</name>
+
+    <dependencies>
+        <!-- Spring MVC (SSE via SseEmitter) + Spring WebSocket -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

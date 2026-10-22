@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: order-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    template:
+      observation-enabled: true        # off by default: without it, sends make no span and carry no traceparent
+    listener:
+      observation-enabled: true        # off by default: without it, the listener starts a new trace
+
+server:
+  port: 8092
+
+foodfleet:
+  menu:
+    base-url: http://localhost:8080
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0                 # keep everything; the Collector decides what to store (tail sampling)
+    propagation:
+      type: [w3c]
+  opentelemetry:
+    resource-attributes:
+      deployment.environment.name: lab
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces
+  otlp:
+    metrics:
+      export:
+        url: http://localhost:4318/v1/metrics
+        step: 10s
+  observations:
+    key-values:
+      region: ap-south-1               # a bounded tag on every observation
+
+logging:
+  structured:
+    format:
+      console: ecs                     # JSON lines; the MDC's traceId and spanId become fields of every line

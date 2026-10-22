@@ -1,0 +1,39 @@
+asyncapi: 3.0.0
+info:
+  title: FoodFleet order events
+  version: 2.1.0
+  description: >
+    Facts about orders, published by order-service through its outbox (chapter 15). Keyed by order id;
+    consumers must be idempotent (eventId) and tolerate unknown fields and event types.
+channels:
+  orderEvents:
+    address: order-events
+    messages:
+      orderStatusChanged:
+        $ref: '#/components/messages/OrderStatusChanged'
+operations:
+  publishOrderEvents:
+    action: send
+    channel:
+      $ref: '#/channels/orderEvents'
+    messages:
+      - $ref: '#/channels/orderEvents/messages/orderStatusChanged'
+components:
+  messages:
+    OrderStatusChanged:
+      name: OrderStatusChanged
+      contentType: application/json
+      headers:
+        type: object
+        properties:
+          eventType: { type: string, const: OrderStatusChanged }
+          schemaVersion: { type: integer, description: Incremented only for breaking changes }
+      payload:
+        type: object
+        required: [eventId, orderId, status, at]
+        properties:
+          eventId: { type: string, format: uuid }
+          orderId: { type: string }
+          status: { type: string, description: Open set; see the Order API's status }
+          restaurantId: { type: string }
+          at: { type: string, format: date-time }

@@ -1,0 +1,43 @@
+# Promote, wait or abort, as chapter 58's CanaryAnalysis decides: an error rate against an absolute limit, latency
+# relative to the stable version, and no verdict without enough requests. verify/analysis-test.yaml checks the queries.
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: menu-service-canary
+  namespace: menu-service
+spec:
+  metrics:
+    - name: error-rate
+      interval: 30s
+      failureLimit: 1                   # two failing measurements abort the rollout
+      inconclusiveLimit: 4              # too little traffic four times: pause for a person
+      successCondition: result[0] >= 0 && result[0] < 0.01
+      failureCondition: result[0] >= 0.01
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring.svc:9090
+          query: |
+            (
+              (sum(rate(istio_requests_total{reporter="destination", destination_service="menu-service-canary.menu-service.svc.cluster.local", response_code=~"5.."}[1m])) or on() vector(0))
+              /
+              sum(rate(istio_requests_total{reporter="destination", destination_service="menu-service-canary.menu-service.svc.cluster.local"}[1m]))
+            )
+            and on() sum(increase(istio_requests_total{reporter="destination", destination_service="menu-service-canary.menu-service.svc.cluster.local"}[1m])) >= 100
+            or on() vector(-1)
+    - name: p99-vs-stable
+      interval: 30s
+      failureLimit: 1
+      inconclusiveLimit: 4
+      successCondition: result[0] >= 0 && result[0] < 1.2
+      failureCondition: result[0] >= 1.2
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring.svc:9090
+          query: |
+            (
+              histogram_quantile(0.99, sum by (le) (rate(istio_request_duration_milliseconds_bucket{reporter="destination", destination_service="menu-service-canary.menu-service.svc.cluster.local"}[1m])))
+              /
+              histogram_quantile(0.99, sum by (le) (rate(istio_request_duration_milliseconds_bucket{reporter="destination", destination_service="menu-service-stable.menu-service.svc.cluster.local"}[1m])))
+            )
+            and on() sum(increase(istio_requests_total{reporter="destination", destination_service="menu-service-canary.menu-service.svc.cluster.local"}[1m])) >= 100
+            or on() vector(-1)

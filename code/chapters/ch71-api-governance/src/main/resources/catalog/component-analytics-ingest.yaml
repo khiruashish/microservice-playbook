@@ -1,0 +1,15 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "analytics-ingest",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/analytics-ingest"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "owner": "growth",
+    "system": "foodfleet"
+  }
+}

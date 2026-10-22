@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: menu-service
+  threads:
+    virtual:
+      enabled: true
+  mvc:
+    problemdetails:
+      enabled: true
+    apiversion:                       # Spring Boot 4 built-in API versioning
+      use:
+        header: API-Version
+      default: 1.0                    # requests without the header get v1
+      supported: 1.0,2.0              # anything else → 400
+  http:
+    serviceclient:
+      pricing:                        # group from @ImportHttpServices(group = "pricing")
+        base-url: ${PRICING_SERVICE_URL:http://localhost:8083}
+        connect-timeout: 200ms
+        read-timeout: 300ms
+
+server:
+  port: ${PORT:8081}                  # 12-factor: port binding from the environment
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+foodfleet:
+  pricing:
+    max-staleness: 5m                 # how long a last-known surge may be used during an outage

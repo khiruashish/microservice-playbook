@@ -1,0 +1,11 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Group",
+  "metadata": {
+    "name": "payments"
+  },
+  "spec": {
+    "type": "team",
+    "children": []
+  }
+}

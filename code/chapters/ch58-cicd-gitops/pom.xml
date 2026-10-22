@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 58 — CI/CD, GitOps & Progressive Delivery.
+    gitops/     Inventory (what a controller owns, and what to prune) and Reconciler (fetch, render, server-side
+                apply, revert drift, prune: the loop Argo CD and Flux run)
+    delivery/   CanaryAnalysis (promote, wait or abort from per-version error rates and latency)
+    resources/  gitops/menu-prod (an environment repository's view of a service), delivery/ (Traefik's Gateway API
+                provider, a weighted HTTPRoute), ci/pipeline.yaml (build once, sign, open a pull request)
+  verify/run.sh runs the reconciler against a Git repository and a real cluster (k3s 1.37 with Traefik 3.7):
+  commits, drift, deletions and pruning; canaries through HTTPRoute weights against a rolling update; and a
+  blue/green switch under new-connection and keep-alive load.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch58-cicd-gitops</artifactId>
+    <name>Ch58 :: CI/CD, GitOps &amp; Progressive Delivery</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

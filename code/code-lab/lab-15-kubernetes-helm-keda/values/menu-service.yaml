@@ -1,0 +1,12 @@
+# Lab 15: menu-service on the shared chart (code/foodfleet/deploy/foodfleet-service), sized for a one-node lab.
+# verify/run.sh adds image.repository and image.digest from the push to the local registry.
+name: menu-service
+team: Restaurant Partner
+resources:
+  cpu: 200m                  # a small request, so a little load is a lot of utilization
+  memory: 256Mi
+autoscaling:
+  minReplicas: 1             # FoodFleet's minimum for menu-service is 3, one per zone; the lab has one node
+  maxReplicas: 5
+  targetCPU: 60
+startupBudgetSeconds: 60

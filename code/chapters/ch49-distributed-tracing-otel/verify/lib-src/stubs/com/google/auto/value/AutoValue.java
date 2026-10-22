@@ -1,0 +1,1 @@
+package com.google.auto.value; import java.lang.annotation.*; @Retention(RetentionPolicy.CLASS) @Target(ElementType.TYPE) public @interface AutoValue { @Retention(RetentionPolicy.SOURCE) @Target(ElementType.TYPE) @interface Builder {} }

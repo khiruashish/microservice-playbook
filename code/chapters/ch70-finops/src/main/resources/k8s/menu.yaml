@@ -1,0 +1,55 @@
+# Chapter 70's spot experiment: menu-service as two Deployments behind one Service, one standing for on-demand nodes
+# and one for spot nodes (a nodeSelector or Karpenter NodePool would place them in a real cluster). ON_DEMAND and SPOT
+# are the replica counts.
+apiVersion: v1
+kind: Namespace
+metadata: {name: c70}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: menu-on-demand, namespace: c70}
+spec:
+  replicas: ON_DEMAND
+  selector: {matchLabels: {app: menu, capacity: on-demand}}
+  template:
+    metadata: {labels: {app: menu, capacity: on-demand}}
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: menu
+          image: foodfleet/finops:ch70
+          imagePullPolicy: Never
+          args: ["api"]
+          env: [{name: RENDER, value: "240"}]
+          readinessProbe: {httpGet: {path: /ready, port: 8080}, periodSeconds: 1, failureThreshold: 1}
+          resources:
+            requests: {cpu: 250m, memory: 256Mi}
+            limits: {cpu: 250m, memory: 256Mi}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: menu-spot, namespace: c70}
+spec:
+  replicas: SPOT
+  selector: {matchLabels: {app: menu, capacity: spot}}
+  template:
+    metadata: {labels: {app: menu, capacity: spot}}
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: menu
+          image: foodfleet/finops:ch70
+          imagePullPolicy: Never
+          args: ["api"]
+          env: [{name: RENDER, value: "240"}]
+          readinessProbe: {httpGet: {path: /ready, port: 8080}, periodSeconds: 1, failureThreshold: 1}
+          resources:
+            requests: {cpu: 250m, memory: 256Mi}
+            limits: {cpu: 250m, memory: 256Mi}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: menu, namespace: c70}
+spec:
+  selector: {app: menu}
+  ports: [{port: 80, targetPort: 8080}]

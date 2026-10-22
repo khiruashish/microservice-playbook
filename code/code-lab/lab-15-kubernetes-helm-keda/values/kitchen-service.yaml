@@ -1,0 +1,15 @@
+# Lab 15: kitchen-service scaled by KEDA on its consumer lag (ADR-056), with CPU as a backstop.
+name: kitchen-service
+team: Restaurant Partner
+image:
+  digest: sha256:866fcac05e2932f9afbbd3c0c1d050a04248c4ecf03860e4828cd461f15f90ba
+autoscaling:
+  minReplicas: 2
+  maxReplicas: 6             # the platform model's maximum; order-events has 24 partitions, so all 6 get work
+  targetCPU: 60
+  kafkaLag:
+    bootstrapServers: kafka.kafka.svc:9092
+    consumerGroup: kitchen-service
+    topic: foodfleet.ordering.order-events
+    lagPerReplica: 50        # each replica clears 50 waiting events within its processing budget
+grpc: true

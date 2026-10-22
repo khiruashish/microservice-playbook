@@ -1,0 +1,27 @@
+# Defaults for every FoodFleet JVM service. Each comment names the ADR that sets the value.
+name: ""                     # required
+team: ""                     # required: the owning team, for cost allocation (ADR-070) and paging
+image:
+  repository: registry.foodfleet.internal/foodfleet
+  digest: ""                 # required: services deploy by digest only (ADR-004, ADR-055)
+resources:                   # CPU request, no CPU limit; memory limit = request (ADR-054)
+  cpu: 500m
+  memory: 512Mi
+heapPercent: 75              # -XX:MaxRAMPercentage (ADR-053)
+aotCache: true               # JDK AOT cache trained in the image build (ADR-060)
+autoscaling:                 # CPU at 60% of requests, 300 s scale-down window, at most 50%/min down (ADR-056)
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPU: 60
+  target: Deployment         # Rollout when Argo Rollouts runs the service's canaries (lab 16)
+  kafkaLag: {}               # Kafka consumers: {bootstrapServers, consumerGroup, topic, lagPerReplica} renders a
+                             # KEDA ScaledObject on lag and CPU instead of the HPA (ADR-056)
+pdb:
+  maxUnavailable: 1          # ADR-054
+shutdown:
+  preStopSeconds: 5          # ADR-052
+  gracePeriodSeconds: 30     # ADR-052; long-lived streams need more (tracking-gateway, ADR-026)
+startupBudgetSeconds: 120    # ADR-052
+config: {}                   # values mounted as files in a watched directory, never subPath (ADR-054)
+grpc: false                  # true for gRPC providers: Spring gRPC's server on 9090 (ADR-023)
+monitoringNamespace: monitoring

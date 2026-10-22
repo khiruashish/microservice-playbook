@@ -1,0 +1,2 @@
+{"id":"o-9001","status":"PICKED_UP","etaMinutes":17,"riderName":"Suresh K","totalPaise":64000,"placedAt":"2026-10-06T13:02:11Z","restaurant":{"id":"r-11","name":"Meghana Foods"}}
+{"id":"o-9002","status":"PLACED","etaMinutes":null,"riderName":null,"totalPaise":18000,"placedAt":"2026-10-06T13:05:00Z","restaurant":{"id":"r-12","name":"Vidyarthi Bhavan"}}

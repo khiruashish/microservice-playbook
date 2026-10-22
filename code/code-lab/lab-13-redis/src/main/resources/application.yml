@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: menu-service
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 200ms              # a cache that answers slowly is worse than no cache: fail fast and read through
+      connect-timeout: 500ms
+
+server:
+  port: 8093

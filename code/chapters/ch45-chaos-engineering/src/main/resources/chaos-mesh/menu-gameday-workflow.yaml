@@ -1,0 +1,80 @@
+# The menu game day as a workflow: the fault and an SLO guard run in parallel; the guard aborts the whole workflow
+# (and Chaos Mesh rolls the fault back) after 3 failed checks in a row, the same rule as Experiment.abortAfter(3).
+apiVersion: chaos-mesh.org/v1alpha1
+kind: Workflow
+metadata:
+  name: menu-gameday
+  namespace: foodfleet
+spec:
+  entry: gameday
+  templates:
+    - name: gameday
+      templateType: Serial
+      deadline: 10m
+      children: [latency-with-guard, settle, pod-kill-with-guard]
+    - name: latency-with-guard
+      templateType: Parallel
+      children: [restaurant-latency, menu-slo-guard]
+    - name: restaurant-latency
+      templateType: NetworkChaos
+      deadline: 30s
+      networkChaos:
+        action: delay
+        mode: one
+        selector:
+          namespaces: [foodfleet]
+          labelSelectors:
+            app.kubernetes.io/name: restaurant-service
+        direction: to
+        delay:
+          latency: 3s
+    - name: menu-slo-guard
+      templateType: StatusCheck
+      deadline: 30s
+      abortWithStatusCheck: true
+      statusCheck:
+        mode: Continuous
+        type: HTTP
+        intervalSeconds: 1
+        timeoutSeconds: 1
+        failureThreshold: 3
+        successThreshold: 1
+        http:
+          # answers 200 while the last 1 s window meets the SLO (99% OK, p99 <= 300 ms), 503 otherwise
+          url: http://slo-probe.foodfleet.svc.cluster.local/menu
+          method: GET
+          criteria:
+            statusCode: "200"
+    - name: settle
+      templateType: Suspend
+      deadline: 2m
+    - name: pod-kill-with-guard
+      templateType: Parallel
+      children: [restaurant-pod-kill, menu-slo-guard-2]
+    - name: restaurant-pod-kill
+      templateType: PodChaos
+      deadline: 30s
+      podChaos:
+        action: pod-kill
+        mode: fixed-percent
+        value: "25"
+        selector:
+          namespaces: [foodfleet]
+          labelSelectors:
+            app.kubernetes.io/name: restaurant-service
+    - name: menu-slo-guard-2
+      templateType: StatusCheck
+      deadline: 30s
+      abortWithStatusCheck: true
+      statusCheck:
+        mode: Continuous
+        type: HTTP
+        intervalSeconds: 1
+        timeoutSeconds: 1
+        failureThreshold: 3
+        successThreshold: 1
+        http:
+          url: http://slo-probe.foodfleet.svc.cluster.local/menu
+          method: GET
+          criteria:
+            statusCode: "200"

@@ -1,0 +1,55 @@
+# Two Services over the same pods; Argo Rollouts points each at one version (by pod-template hash) and moves the
+# weights in the VirtualService's "primary" route. Callers keep calling menu-service.menu-service.svc.
+apiVersion: v1
+kind: Service
+metadata:
+  name: menu-service-stable
+  namespace: menu-service
+spec:
+  selector: {app: menu-service}
+  ports: [{name: http, port: 80, targetPort: http}]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: menu-service-canary
+  namespace: menu-service
+spec:
+  selector: {app: menu-service}
+  ports: [{name: http, port: 80, targetPort: http}]
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: menu-service
+  namespace: menu-service
+spec:
+  hosts: [menu-service.menu-service.svc.cluster.local]
+  http:
+    - name: primary
+      route:
+        - destination: {host: menu-service-stable.menu-service.svc.cluster.local}
+          weight: 100
+        - destination: {host: menu-service-canary.menu-service.svc.cluster.local}
+          weight: 0
+      timeout: 2s
+      retries:
+        attempts: 2
+        perTryTimeout: 800ms
+        retryOn: connect-failure,refused-stream,unavailable,503   # never on a timeout of a non-idempotent call
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: menu-service
+  namespace: menu-service
+spec:
+  host: "*.menu-service.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    outlierDetection:            # eject a pod that keeps failing (chapter 57: the default never ejected the bad pod)
+      consecutive5xxErrors: 5
+      interval: 10s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50

@@ -1,0 +1,58 @@
+{
+  "openapi": "3.1.0",
+  "info": {"title": "menu-service", "version": "1.4.0"},
+  "paths": {
+    "/restaurants/{restaurantId}/menu": {
+      "get": {
+        "operationId": "getMenu",
+        "parameters": [
+          {"name": "restaurantId", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {"description": "the menu", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Menu"}}}},
+          "404": {"description": "no such restaurant", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}}
+        }
+      }
+    },
+    "/restaurants/{restaurantId}/items/{itemId}": {
+      "get": {
+        "operationId": "getItem",
+        "parameters": [
+          {"name": "restaurantId", "in": "path", "required": true, "schema": {"type": "integer"}},
+          {"name": "itemId", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "responses": {
+          "200": {"description": "the item", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Item"}}}},
+          "404": {"description": "no such item", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}}
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Menu": {
+        "type": "object",
+        "required": ["restaurantId", "currency", "items"],
+        "properties": {
+          "restaurantId": {"type": "integer"},
+          "currency": {"type": "string"},
+          "items": {"type": "array", "items": {"$ref": "#/components/schemas/Item"}}
+        }
+      },
+      "Item": {
+        "type": "object",
+        "required": ["id", "name", "price", "available", "spice", "calories"],
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "price": {"type": "string", "description": "in rupees, two decimals"},
+          "available": {"type": "boolean"},
+          "spice": {"type": "string", "enum": ["LOW", "MEDIUM", "HIGH"]},
+          "description": {"type": "string"},
+          "calories": {"type": "integer"}
+        }
+      },
+      "Error": {"type": "object", "properties": {"error": {"type": "string"}}}
+    }
+  }
+}

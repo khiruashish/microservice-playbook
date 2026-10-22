@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 45 — Chaos Engineering.
+    chaos/       a small experiment runner in the shape of the Principles of Chaos Engineering (Experiment,
+                 Hypothesis, Window), and a Toxiproxy client with the faults FoodFleet injects (Toxic, Toxiproxy)
+    resources/   chaos-mesh/ (NetworkChaos, PodChaos, a Workflow with an SLO guard, a weekly Schedule) and litmus/
+                 (a ChaosEngine with HTTP and Prometheus probes), validated against the released CRDs
+  verify/run.sh injects real TCP faults with Toxiproxy 2.12.0 into real HTTP clients and services: a fault matrix,
+  blast radius and the abort guard, and a circuit-breaker hypothesis with Resilience4j 2.4.0.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch45-chaos-engineering</artifactId>
+    <name>Ch45 :: Chaos Engineering</name>
+
+    <!-- The experiment runner needs only the JDK; Toxiproxy runs as its own process (or container) in CI. -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

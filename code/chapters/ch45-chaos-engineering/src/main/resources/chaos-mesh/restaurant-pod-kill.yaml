@@ -1,0 +1,14 @@
+# Kill a quarter of restaurant-service's pods. Hypothesis: no menu request fails (readiness, retries, PDB).
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: restaurant-pod-kill
+  namespace: foodfleet
+spec:
+  action: pod-kill
+  mode: fixed-percent
+  value: "25"
+  selector:
+    namespaces: [foodfleet]
+    labelSelectors:
+      app.kubernetes.io/name: restaurant-service

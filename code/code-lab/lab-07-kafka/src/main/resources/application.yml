@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: kitchen-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/foodfleet?currentSchema=kitchen_service
+    username: kitchen_service
+    password: ${DB_PASSWORD:local-kitchen-service}
+  flyway:
+    schemas: kitchen_service
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all                                  # an acknowledged event is on every in-sync replica (ADR-069)
+      properties:
+        enable.idempotence: true
+        linger.ms: 20
+        compression.type: lz4
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false                  # the container commits after the listener returns
+    listener:
+      ack-mode: record
+foodfleet:
+  kafka:
+    retry:
+      max-elapsed: 31s                           # then the DLT, and a page for the owning team
+management:
+  server:
+    port: 8081

@@ -1,0 +1,11 @@
+# X. Dev/prod parity: the same PostgreSQL major version as production, not an in-memory substitute.
+# Spring Boot's Docker Compose support starts this on `spring-boot:run` and wires the connection.
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: zones
+      POSTGRES_USER: zones
+      POSTGRES_PASSWORD: local-only-password
+    ports:
+      - "5432"

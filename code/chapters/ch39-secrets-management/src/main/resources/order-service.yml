@@ -1,0 +1,36 @@
+# order-service: no secret in this file, the image or the environment.
+spring:
+  application:
+    name: order-service
+  config:
+    import:
+      - "optional:configtree:/run/secrets/order-service/"   # mounted Kubernetes Secret, read once at start-up
+      - "vault://"                                           # KV v2: secret/order-service/* as properties
+  cloud:
+    vault:
+      uri: https://openbao.platform.svc:8200
+      authentication: KUBERNETES
+      kubernetes:
+        role: order-service                                  # bound to namespace orders, service account order-service
+        kubernetes-path: kubernetes
+      kv:
+        enabled: true
+        backend: secret
+        default-context: order-service
+      database:
+        enabled: false        # renewable-only credentials would stop at max_ttl; DataSourceConfig rotates them
+      config:
+        lifecycle:
+          enabled: true
+          expiry-threshold: 2m                               # renew/rotate 2 minutes before a lease expires
+  datasource:
+    url: jdbc:postgresql://orders-db.orders.svc:5432/orders?sslmode=verify-full
+    hikari:
+      max-lifetime: 30m        # connections opened with old credentials are replaced within half the 1 h lease
+app:
+  database:
+    credentials-path: database/creds/order-service
+management:
+  endpoint:
+    env:
+      show-values: never      # the default; stated so nobody "fixes" it

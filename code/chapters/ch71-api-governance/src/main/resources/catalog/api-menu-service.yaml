@@ -1,0 +1,15 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "API",
+  "metadata": {
+    "name": "menu-service"
+  },
+  "spec": {
+    "type": "openapi",
+    "lifecycle": "production",
+    "owner": "platform",
+    "definition": {
+      "$text": "../openapi/menu-service.json"
+    }
+  }
+}

@@ -1,0 +1,53 @@
+# order-service on Kubernetes: probes on Spring Boot's health groups, a startup probe for slow starts, a drain before
+# shutdown, and the management port kept off the Service.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+  labels: {app: order-service}
+spec:
+  replicas: 3
+  strategy:
+    rollingUpdate: {maxUnavailable: 0, maxSurge: 1}
+  selector:
+    matchLabels: {app: order-service}
+  template:
+    metadata:
+      labels: {app: order-service}
+    spec:
+      terminationGracePeriodSeconds: 30          # preStop (5 s) + Spring's shutdown phase (20 s) + margin
+      containers:
+        - name: app
+          image: registry.foodfleet.internal/order-service:1.42.0
+          ports:
+            - {name: http, containerPort: 8080}
+            - {name: management, containerPort: 8081}
+          resources:
+            requests: {cpu: 500m, memory: 768Mi}
+            limits: {memory: 768Mi}
+          startupProbe:                          # up to 2 minutes to start; liveness waits for it
+            httpGet: {path: /actuator/health/liveness, port: management}
+            periodSeconds: 2
+            failureThreshold: 60
+          livenessProbe:                         # restart only when the application itself is broken
+            httpGet: {path: /actuator/health/liveness, port: management}
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          readinessProbe:                        # in or out of the Service's endpoints
+            httpGet: {path: /actuator/health/readiness, port: management}
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              sleep: {seconds: 5}                # keep serving while endpoints and load balancers catch up
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+spec:
+  selector: {app: order-service}
+  ports:
+    - {name: http, port: 80, targetPort: http}   # 8081 is not exposed

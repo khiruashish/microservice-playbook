@@ -1,0 +1,1 @@
+package org.springframework.util; public abstract class StringUtils { public static boolean hasText(CharSequence s){ return s != null && !s.toString().isBlank(); } public static boolean hasLength(CharSequence s){ return s != null && s.length() > 0; } }

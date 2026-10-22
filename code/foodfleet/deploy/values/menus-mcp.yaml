@@ -1,0 +1,9 @@
+# Generated from foodfleet.yaml by generate.py. minReplicas 2: not on any journey's required path
+# namespace: menus-mcp
+name: menus-mcp
+team: Restaurant Partner
+image:
+  digest: sha256:bdb8a44900c59537323e150687faf04233ffb102df5a3be0088c0001ff8eaa8a
+autoscaling:
+  minReplicas: 2
+  maxReplicas: 6

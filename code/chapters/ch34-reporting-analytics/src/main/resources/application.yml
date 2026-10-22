@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: reporting-service
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/reporting}   # the reporting service's own database
+    username: ${DATABASE_USER:reporting}
+    password: ${DATABASE_PASSWORD:reporting}
+    hikari:
+      maximum-pool-size: 8
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      auto-offset-reset: earliest                  # a new reporting store replays the topic from the start
+      enable-auto-commit: false
+      isolation-level: read_committed
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+        spring.json.value.default.type: dev.foodfleet.ch34.projection.OrderEvent
+        spring.json.use.type.headers: false
+  flyway:
+    init-sqls:
+      - SET lock_timeout = '2s'
+  threads:
+    virtual:
+      enabled: true
+app:
+  reporting:
+    zone: Asia/Kolkata                 # business days follow the city's clock, not UTC
+    freshness-objective: 5m            # reports older than this are flagged stale
+    monthly-refresh: 5m

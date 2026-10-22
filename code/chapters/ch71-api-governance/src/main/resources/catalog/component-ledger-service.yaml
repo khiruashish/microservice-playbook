@@ -1,0 +1,19 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "ledger-service",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/ledger-service"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "payments",
+    "system": "foodfleet",
+    "consumesApis": [
+      "payment-service"
+    ]
+  }
+}

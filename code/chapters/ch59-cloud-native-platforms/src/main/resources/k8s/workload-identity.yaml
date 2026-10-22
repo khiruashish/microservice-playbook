@@ -1,0 +1,30 @@
+# A pod with a token for the cloud's token service: audience sts.foodfleet.local (sts.amazonaws.com for EKS,
+# api://AzureADTokenExchange for AKS, the workload identity pool for GKE), ten minutes long, refreshed by the kubelet.
+# The cloud side trusts the cluster's issuer and this service account; there are no keys in Secrets.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: menu-service
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: identity-menu
+  labels: {app: identity}
+spec:
+  serviceAccountName: menu-service
+  terminationGracePeriodSeconds: 1
+  containers:
+    - name: app
+      image: foodfleet/identity:ch59
+      imagePullPolicy: Never
+      volumeMounts: [{name: sts-token, mountPath: /var/run/secrets/tokens, readOnly: true}]
+      readinessProbe: {httpGet: {path: /uptime, port: 8080}, periodSeconds: 1}
+  volumes:
+    - name: sts-token
+      projected:
+        sources:
+          - serviceAccountToken:
+              audience: sts.foodfleet.local
+              expirationSeconds: 600      # the minimum the API server accepts
+              path: sts-token

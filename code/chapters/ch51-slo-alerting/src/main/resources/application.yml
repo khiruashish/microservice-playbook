@@ -1,0 +1,20 @@
+# order-service: what the checkout SLOs need from Spring Boot 4.1.1's metrics.
+spring:
+  application:
+    name: order-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+  metrics:
+    distribution:
+      # a histogram bucket at exactly the latency objective: the SLI is then a count, not an estimate
+      slo:
+        http.server.requests: 300ms
+      # Micrometer's default buckets as well, for percentiles on dashboards (not for the SLO)
+      percentiles-histogram:
+        http.server.requests: true
+    tags:
+      region: ${REGION:ap-south-1}

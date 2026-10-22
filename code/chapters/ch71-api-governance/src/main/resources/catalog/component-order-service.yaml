@@ -1,0 +1,24 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "order-service",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/order-service"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "ordering",
+    "system": "foodfleet",
+    "providesApis": [
+      "order-service"
+    ],
+    "consumesApis": [
+      "menu-service",
+      "payment-service",
+      "delivery-service"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 55 — Helm, Kustomize & Environment Promotion.
+    promotion/  ImageRef (repository, tag, digest) and PromotionPolicy: outside dev every image pinned by digest,
+                production runs exactly what staging tested, and the pipeline's one edit to an overlay
+    resources/  helm/foodfleet-service (one chart, values per environment, config checksum annotation, a guard
+                against unpinned images) and kustomize/ (base plus dev, staging and prod overlays, a hashed
+                configMapGenerator)
+  verify/run.sh deploys menu-service with both on a real Kubernetes cluster (k3s 1.37) pulling from a local registry:
+  render and validate, field ownership on re-apply, config rollouts, a failing release, and tags moved under pods.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch55-helm-kustomize</artifactId>
+    <name>Ch55 :: Helm, Kustomize &amp; Environment Promotion</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

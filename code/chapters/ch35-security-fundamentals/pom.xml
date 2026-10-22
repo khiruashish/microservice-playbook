@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 35 — Security Fundamentals & Threat Modeling.
+    identity/     Caller, roles, a small HMAC-signed token (replaced by OAuth 2.1 / JWT in chapters 36-37)
+    orders/       object, property and function level authorization (OWASP API1, API3, API5), page limits (API4)
+    auth/         password storage (PBKDF2, 600,000 iterations) and login throttling (API2)
+    outbound/     server-side request forgery protection for webhooks (API7, API10)
+    threatmodel/  STRIDE per element, as code, checked in the build
+    web/          the Spring MVC adapter
+  The security code has no framework dependencies; verify/run.sh compiles and measures it with a JDK alone.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch35-security-fundamentals</artifactId>
+    <name>Ch35 :: Security Fundamentals &amp; Threat Modeling</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jackson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

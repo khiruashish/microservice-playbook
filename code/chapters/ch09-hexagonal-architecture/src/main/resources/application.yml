@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: payment-service
+  threads:
+    virtual:
+      enabled: true
+  mvc:
+    problemdetails:
+      enabled: true
+  datasource:
+    url: ${PAYMENT_DB_URL:jdbc:h2:mem:payments;DB_CLOSE_DELAY=-1}
+  sql:
+    init:
+      mode: embedded              # runs schema.sql for the in-memory H2 only; production uses Flyway (chapter 12)
+  http:
+    serviceclient:
+      psp:                        # used only when foodfleet.payment.gateway=psp
+        base-url: ${PSP_URL:https://sandbox.paykaro.example}
+        connect-timeout: 500ms
+        read-timeout: 5s          # providers can take seconds to answer an authorization
+
+server:
+  port: ${PORT:8089}
+  shutdown: graceful
+
+foodfleet:
+  payment:
+    gateway: ${PAYMENT_GATEWAY:fake}   # fake | psp: swapping a driven adapter is a configuration change

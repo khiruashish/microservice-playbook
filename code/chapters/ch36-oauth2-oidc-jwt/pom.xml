@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 36 — OAuth 2.1, OIDC & JWT.
+    json/         strict minimal JSON (claims, JWKS, OAuth responses)
+    jwt/          JWK, signing (the authorization server's side), verification (the resource server's side)
+    discovery/    OpenID Connect discovery and a JWKS cache with rate-limited refresh for key rotation
+    pkce/         RFC 7636 code verifier and S256 challenge
+    exchange/     RFC 8693 token exchange: the authorization server's policy and the calling service's client
+    authserver/   a small JDK-only authorization server for tests and measurements (not for production)
+    web/          order-service as a resource server, and its token exchange for payment-service
+  The protocol code has no framework dependencies; verify/run.sh compiles and measures it with a JDK alone.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch36-oauth2-oidc-jwt</artifactId>
+    <name>Ch36 :: OAuth 2.1, OIDC &amp; JWT</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jackson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

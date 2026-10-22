@@ -1,0 +1,20 @@
+# Owned by the tracking-service team: the fields their screen reads, nothing more. Extra fields in
+# the response are fine; removing or retyping these fails order-service's build.
+description: tracking-service shows an order's status, ETA and restaurant
+request:
+  method: GET
+  url: /orders/o-9001
+response:
+  status: 200
+  headers:
+    Content-Type: application/json
+  body:
+    id: o-9001
+    status: PICKED_UP
+    etaMinutes: 17
+    restaurant:
+      name: Meghana Foods
+  matchers:
+    body:
+      - path: $.etaMinutes
+        type: by_type

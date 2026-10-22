@@ -1,0 +1,9 @@
+# Generated from foodfleet.yaml by generate.py. minReplicas 2: not on any journey's required path
+# namespace: delivery-service
+name: delivery-service
+team: Logistics
+image:
+  digest: sha256:ddb49e36b5d8cc72a057a8d76cafba60ee00bbdd86ba88d45679aa10819978b3
+autoscaling:
+  minReplicas: 2
+  maxReplicas: 6

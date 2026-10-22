@@ -1,0 +1,81 @@
+# Chapter 68's cluster: PostgreSQL (for carts kept outside the service), the ledger (a shared dependency with fixed
+# capacity) and order-service, whose replicas, cart storage and Service affinity the experiments change.
+# REPLICAS, CARTS, AFFINITY and LEDGER_URL are replaced per experiment.
+apiVersion: v1
+kind: Namespace
+metadata: {name: c68}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: postgres, namespace: c68}
+spec:
+  selector: {matchLabels: {app: postgres}}
+  template:
+    metadata: {labels: {app: postgres}}
+    spec:
+      containers:
+        - name: postgres
+          image: c62/postgres:16
+          imagePullPolicy: Never
+          args: ["-c", "fsync=off"]
+          ports: [{containerPort: 5432}]
+          readinessProbe: {tcpSocket: {port: 5432}, periodSeconds: 1}
+          resources: {requests: {cpu: 50m, memory: 64Mi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: postgres, namespace: c68}
+spec: {selector: {app: postgres}, ports: [{port: 5432}]}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: ledger, namespace: c68}
+spec:
+  selector: {matchLabels: {app: ledger}}
+  template:
+    metadata: {labels: {app: ledger}}
+    spec:
+      containers:
+        - name: ledger
+          image: foodfleet/scale:ch68
+          imagePullPolicy: Never
+          args: ["ledger"]
+          env: [{name: PERMITS, value: "2"}, {name: HOLD_MS, value: "40"}]
+          readinessProbe: {httpGet: {path: /ready, port: 8080}, periodSeconds: 1}
+          resources: {requests: {cpu: 50m, memory: 96Mi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: ledger, namespace: c68}
+spec: {selector: {app: ledger}, ports: [{port: 80, targetPort: 8080}]}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: order, namespace: c68}
+spec:
+  replicas: REPLICAS
+  selector: {matchLabels: {app: order}}
+  template:
+    metadata: {labels: {app: order}}
+    spec:
+      containers:
+        - name: order
+          image: foodfleet/scale:ch68
+          imagePullPolicy: Never
+          args: ["order"]
+          env:
+            - {name: CARTS, value: "CARTS"}
+            - {name: DB_URL, value: "jdbc:postgresql://postgres.c68:5432/postgres"}
+            - {name: LEDGER_URL, value: "LEDGER_URL"}
+          readinessProbe: {httpGet: {path: /ready, port: 8080}, periodSeconds: 1}
+          resources:
+            requests: {cpu: 250m, memory: 128Mi}
+            limits: {cpu: 250m, memory: 256Mi}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: order, namespace: c68}
+spec:
+  selector: {app: order}
+  sessionAffinity: AFFINITY
+  ports: [{port: 80, targetPort: 8080}]

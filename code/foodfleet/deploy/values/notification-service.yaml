@@ -1,0 +1,9 @@
+# Generated from foodfleet.yaml by generate.py. minReplicas 2: not on any journey's required path
+# namespace: notification-service
+name: notification-service
+team: Growth
+image:
+  digest: sha256:e37bdbe28f775336c3f6cb20ea5e8a9abc2165af979c61da77f18a78cc8ef497
+autoscaling:
+  minReplicas: 2
+  maxReplicas: 6

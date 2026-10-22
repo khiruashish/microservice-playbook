@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+  - pairs: {app.kubernetes.io/name: menu-service}
+    includeSelectors: false
+resources:
+  - deployment.yaml
+  - service.yaml
+  - pdb.yaml
+configMapGenerator:
+  # the generated name ends in a hash of the content, and the Deployment's reference is rewritten to match:
+  # a config change is a new ConfigMap and a new pod template, so it rolls out
+  - name: menu-service-config
+    literals: [discount=10]
+images:
+  - name: menu-service
+    newName: docker.io/foodfleet/menu-service
+    newTag: ch54

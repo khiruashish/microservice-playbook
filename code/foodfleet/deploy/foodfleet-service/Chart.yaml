@@ -1,0 +1,5 @@
+apiVersion: v2
+name: foodfleet-service
+description: FoodFleet's shared service chart with the platform ADRs applied (52-57, 60). Teams own only a values file.
+type: application
+version: 1.0.0

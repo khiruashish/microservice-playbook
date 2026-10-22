@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: order-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OAUTH_ISSUER:http://localhost:8180/realms/foodfleet}  # discovery, keys and the iss check
+          audiences: order-service                    # tokens for other APIs are rejected (ADR-036)
+          jws-algorithms: RS256, ES256                # an allowlist: the token doesn't get to choose
+  http:
+    serviceclient:
+      menu:
+        base-url: http://localhost:8080
+        connect-timeout: 500ms
+        read-timeout: 1s
+server:
+  port: 8090
+management:
+  server:
+    port: 8091

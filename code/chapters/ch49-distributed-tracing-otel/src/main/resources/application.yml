@@ -1,0 +1,28 @@
+# order-service tracing in Spring Boot 4.1.1 (Micrometer Tracing with the OpenTelemetry bridge).
+spring:
+  application:
+    name: order-service
+  kafka:
+    template:
+      observation-enabled: true        # off by default: without it, sends make no spans and carry no traceparent
+    listener:
+      observation-enabled: true        # off by default: without it, listeners don't continue the producer's trace
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0                 # Boot's default is 0.1; the gateway collector samples (chapter 47)
+    propagation:
+      produce: [w3c]                   # what we send
+      consume: [w3c, b3, b3_multi]     # what we accept (Boot's default: all three)
+    baggage:
+      remote-fields: [tenant]          # also sent as their own header; NOT an allow-list: with W3C propagation the
+                                       # baggage header carries every entry (BaggagePolicy filters at the edge)
+      tag-fields: [tenant]             # copied onto every span as an attribute
+      correlation:
+        fields: [tenant]               # copied into the logging MDC
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://otel-collector.observability.svc:4318/v1/traces

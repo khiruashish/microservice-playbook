@@ -1,0 +1,16 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "order-history",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/order-history"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "ordering",
+    "system": "foodfleet"
+  }
+}

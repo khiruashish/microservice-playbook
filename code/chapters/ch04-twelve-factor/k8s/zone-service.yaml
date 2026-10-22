@@ -1,0 +1,75 @@
+# The same image, two process types (factor XII), configured entirely from the environment (factor III).
+# Applied in chapter 54; shown here to make the factors concrete.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zone-service-config
+data:
+  FOODFLEET_ZONES_CITY: "Bengaluru"
+  FOODFLEET_ZONES_DEFAULTDELIVERYFEEPAISE: "3500"
+  FOODFLEET_ZONES_MAXDELIVERYKM: "7"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://zones-db.data.svc.cluster.local:5432/zones"
+  SPRING_DATASOURCE_USERNAME: "zone_service"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zone-service
+spec:
+  replicas: 3                                   # VIII. concurrency: scale out with the process model
+  selector:
+    matchLabels: { app: zone-service }
+  template:
+    metadata:
+      labels: { app: zone-service }
+    spec:
+      terminationGracePeriodSeconds: 30         # IX. > spring.lifecycle.timeout-per-shutdown-phase (20s)
+      containers:
+        - name: zone-service
+          image: registry.foodfleet.dev/zone-service@sha256:REPLACE_WITH_DIGEST   # V. a release pins a digest
+          ports:
+            - containerPort: 8085
+          envFrom:
+            - configMapRef: { name: zone-service-config }
+          volumeMounts:
+            - name: db-secret                   # read by spring.config.import=configtree:/run/secrets/
+              mountPath: /run/secrets/spring/datasource
+              readOnly: true
+          readinessProbe:
+            httpGet: { path: /actuator/health/readiness, port: 8085 }
+          livenessProbe:
+            httpGet: { path: /actuator/health/liveness, port: 8085 }
+          resources:
+            requests: { cpu: "250m", memory: "512Mi" }
+            limits: { memory: "512Mi" }
+      volumes:
+        - name: db-secret
+          secret:
+            secretName: zone-service-db         # key "password" → spring.datasource.password
+---
+apiVersion: batch/v1
+kind: Job                                       # XII. admin process: same image, one-off, exits
+metadata:
+  name: zone-import-2026-10-01
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: import-zones
+          image: registry.foodfleet.dev/zone-service@sha256:REPLACE_WITH_DIGEST
+          args:
+            - --foodfleet.admin.task=import-zones
+            - --foodfleet.admin.file=/data/zones.csv
+            - --spring.main.web-application-type=none
+          envFrom:
+            - configMapRef: { name: zone-service-config }
+          volumeMounts:
+            - { name: db-secret, mountPath: /run/secrets/spring/datasource, readOnly: true }
+            - { name: zones-file, mountPath: /data, readOnly: true }
+      volumes:
+        - name: db-secret
+          secret: { secretName: zone-service-db }
+        - name: zones-file
+          configMap: { name: zones-2026-10-01 }

@@ -1,0 +1,16 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "api-gateway",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/api-gateway"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "platform",
+    "system": "foodfleet"
+  }
+}

@@ -1,0 +1,159 @@
+# order-service / checkout-availability: 99.9% over 30d; error budget 0.1%, 43.2 minutes of total outage
+# order-service / checkout-latency: 99% over 30d; error budget 1%, 432 minutes of total outage
+groups:
+  - name: slo-order-service-checkout-availability
+    interval: 30s
+    rules:
+      - record: slo:sli_error:ratio_rate5m
+        expr: (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SERVER_ERROR"}[5m])) or vector(0)) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[5m])))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:sli_total:rate5m
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[5m]))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:sli_error:ratio_rate30m
+        expr: (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SERVER_ERROR"}[30m])) or vector(0)) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[30m])))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:sli_total:rate30m
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[30m]))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:sli_error:ratio_rate1h
+        expr: (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SERVER_ERROR"}[1h])) or vector(0)) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[1h])))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:sli_total:rate1h
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[1h]))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:sli_error:ratio_rate2h
+        expr: (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SERVER_ERROR"}[2h])) or vector(0)) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[2h])))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:sli_total:rate2h
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[2h]))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:sli_error:ratio_rate6h
+        expr: (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SERVER_ERROR"}[6h])) or vector(0)) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[6h])))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:sli_total:rate6h
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[6h]))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:sli_error:ratio_rate1d
+        expr: (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SERVER_ERROR"}[1d])) or vector(0)) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[1d])))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:sli_total:rate1d
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[1d]))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:sli_error:ratio_rate3d
+        expr: (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SERVER_ERROR"}[3d])) or vector(0)) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[3d])))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:sli_total:rate3d
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[3d]))
+        labels: {slo: checkout-availability, service: order-service}
+      - record: slo:objective:ratio
+        expr: vector(0.999)
+        labels: {slo: checkout-availability, service: order-service}
+      - alert: CheckoutAvailabilityErrorBudgetBurn
+        expr: |
+          (slo:sli_error:ratio_rate1h{slo="checkout-availability"} > 14.4 * 0.001 and slo:sli_error:ratio_rate5m{slo="checkout-availability"} > 14.4 * 0.001 and slo:sli_total:rate1h{slo="checkout-availability"} * 3600 >= 100)
+          or (slo:sli_error:ratio_rate6h{slo="checkout-availability"} > 6 * 0.001 and slo:sli_error:ratio_rate30m{slo="checkout-availability"} > 6 * 0.001 and slo:sli_total:rate6h{slo="checkout-availability"} * 21600 >= 100)
+        labels:
+          severity: page
+          slo: checkout-availability
+          service: order-service
+        annotations:
+          summary: "order-service checkout-availability is spending its error budget fast"
+          description: "Fires on 2% of the 30d budget in 1h (burn rate 14.4); or 5% of the 30d budget in 6h (burn rate 6). Error ratio over the long window: {{ $value | humanizePercentage }}."
+          runbook_url: https://runbooks.foodfleet.internal/order-service/checkout-slo
+      - alert: CheckoutAvailabilityErrorBudgetBurn
+        expr: |
+          (slo:sli_error:ratio_rate1d{slo="checkout-availability"} > 3 * 0.001 and slo:sli_error:ratio_rate2h{slo="checkout-availability"} > 3 * 0.001 and slo:sli_total:rate1d{slo="checkout-availability"} * 86400 >= 100)
+          or (slo:sli_error:ratio_rate3d{slo="checkout-availability"} > 1 * 0.001 and slo:sli_error:ratio_rate6h{slo="checkout-availability"} > 1 * 0.001 and slo:sli_total:rate3d{slo="checkout-availability"} * 259200 >= 100)
+        labels:
+          severity: ticket
+          slo: checkout-availability
+          service: order-service
+        annotations:
+          summary: "order-service checkout-availability is spending its error budget steadily"
+          description: "Fires on 10% of the 30d budget in 1d (burn rate 3); or 10% of the 30d budget in 3d (burn rate 1). Error ratio over the long window: {{ $value | humanizePercentage }}."
+          runbook_url: https://runbooks.foodfleet.internal/order-service/checkout-slo
+  - name: slo-order-service-checkout-availability-budget
+    interval: 5m
+    rules:
+      - record: slo:error_budget:remaining_ratio
+        expr: 1 - ((sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SERVER_ERROR"}[30d])) or vector(0)) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST"}[30d])))) / 0.001
+        labels: {slo: checkout-availability, service: order-service}
+  - name: slo-order-service-checkout-latency
+    interval: 30s
+    rules:
+      - record: slo:sli_error:ratio_rate5m
+        expr: ((sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[5m])) - sum(rate(http_server_requests_seconds_bucket{job="order-service", uri="/orders", method="POST", outcome="SUCCESS", le="0.3"}[5m])))) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[5m])))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:sli_total:rate5m
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[5m]))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:sli_error:ratio_rate30m
+        expr: ((sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[30m])) - sum(rate(http_server_requests_seconds_bucket{job="order-service", uri="/orders", method="POST", outcome="SUCCESS", le="0.3"}[30m])))) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[30m])))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:sli_total:rate30m
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[30m]))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:sli_error:ratio_rate1h
+        expr: ((sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[1h])) - sum(rate(http_server_requests_seconds_bucket{job="order-service", uri="/orders", method="POST", outcome="SUCCESS", le="0.3"}[1h])))) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[1h])))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:sli_total:rate1h
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[1h]))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:sli_error:ratio_rate2h
+        expr: ((sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[2h])) - sum(rate(http_server_requests_seconds_bucket{job="order-service", uri="/orders", method="POST", outcome="SUCCESS", le="0.3"}[2h])))) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[2h])))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:sli_total:rate2h
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[2h]))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:sli_error:ratio_rate6h
+        expr: ((sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[6h])) - sum(rate(http_server_requests_seconds_bucket{job="order-service", uri="/orders", method="POST", outcome="SUCCESS", le="0.3"}[6h])))) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[6h])))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:sli_total:rate6h
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[6h]))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:sli_error:ratio_rate1d
+        expr: ((sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[1d])) - sum(rate(http_server_requests_seconds_bucket{job="order-service", uri="/orders", method="POST", outcome="SUCCESS", le="0.3"}[1d])))) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[1d])))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:sli_total:rate1d
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[1d]))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:sli_error:ratio_rate3d
+        expr: ((sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[3d])) - sum(rate(http_server_requests_seconds_bucket{job="order-service", uri="/orders", method="POST", outcome="SUCCESS", le="0.3"}[3d])))) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[3d])))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:sli_total:rate3d
+        expr: sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[3d]))
+        labels: {slo: checkout-latency, service: order-service}
+      - record: slo:objective:ratio
+        expr: vector(0.99)
+        labels: {slo: checkout-latency, service: order-service}
+      - alert: CheckoutLatencyErrorBudgetBurn
+        expr: |
+          (slo:sli_error:ratio_rate1h{slo="checkout-latency"} > 14.4 * 0.01 and slo:sli_error:ratio_rate5m{slo="checkout-latency"} > 14.4 * 0.01 and slo:sli_total:rate1h{slo="checkout-latency"} * 3600 >= 100)
+          or (slo:sli_error:ratio_rate6h{slo="checkout-latency"} > 6 * 0.01 and slo:sli_error:ratio_rate30m{slo="checkout-latency"} > 6 * 0.01 and slo:sli_total:rate6h{slo="checkout-latency"} * 21600 >= 100)
+        labels:
+          severity: page
+          slo: checkout-latency
+          service: order-service
+        annotations:
+          summary: "order-service checkout-latency is spending its error budget fast"
+          description: "Fires on 2% of the 30d budget in 1h (burn rate 14.4); or 5% of the 30d budget in 6h (burn rate 6). Error ratio over the long window: {{ $value | humanizePercentage }}."
+          runbook_url: https://runbooks.foodfleet.internal/order-service/checkout-slo
+      - alert: CheckoutLatencyErrorBudgetBurn
+        expr: |
+          (slo:sli_error:ratio_rate1d{slo="checkout-latency"} > 3 * 0.01 and slo:sli_error:ratio_rate2h{slo="checkout-latency"} > 3 * 0.01 and slo:sli_total:rate1d{slo="checkout-latency"} * 86400 >= 100)
+          or (slo:sli_error:ratio_rate3d{slo="checkout-latency"} > 1 * 0.01 and slo:sli_error:ratio_rate6h{slo="checkout-latency"} > 1 * 0.01 and slo:sli_total:rate3d{slo="checkout-latency"} * 259200 >= 100)
+        labels:
+          severity: ticket
+          slo: checkout-latency
+          service: order-service
+        annotations:
+          summary: "order-service checkout-latency is spending its error budget steadily"
+          description: "Fires on 10% of the 30d budget in 1d (burn rate 3); or 10% of the 30d budget in 3d (burn rate 1). Error ratio over the long window: {{ $value | humanizePercentage }}."
+          runbook_url: https://runbooks.foodfleet.internal/order-service/checkout-slo
+  - name: slo-order-service-checkout-latency-budget
+    interval: 5m
+    rules:
+      - record: slo:error_budget:remaining_ratio
+        expr: 1 - (((sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[30d])) - sum(rate(http_server_requests_seconds_bucket{job="order-service", uri="/orders", method="POST", outcome="SUCCESS", le="0.3"}[30d])))) / (sum(rate(http_server_requests_seconds_count{job="order-service", uri="/orders", method="POST", outcome="SUCCESS"}[30d])))) / 0.01
+        labels: {slo: checkout-latency, service: order-service}

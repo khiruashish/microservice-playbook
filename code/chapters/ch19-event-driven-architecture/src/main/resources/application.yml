@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: ordering-service
+  cloud:
+    function:
+      definition: menuItemUpdated                      # the Consumer<MenuItemUpdated> bean
+    stream:
+      bindings:
+        menuItemUpdated-in-0:
+          destination: foodfleet.catalog.menu-items
+          group: ordering-service                      # one consumer group = each event once per service
+          consumer:
+            max-attempts: 3
+        menuItems-out-0:
+          destination: foodfleet.catalog.menu-items
+      kafka:
+        bindings:
+          menuItems-out-0:
+            producer:
+              message-key-expression: payload.itemId   # key = item id: per-item order, compaction works
+          menuItemUpdated-in-0:
+            consumer:
+              enable-dlq: true                         # poison messages go to a dead-letter topic
+        binder:
+          brokers: ${KAFKA_BROKERS:localhost:9092}
+          required-acks: all
+          # The topic is created with cleanup.policy=compact by the platform (chapter 25), so a new
+          # consumer can bootstrap from the latest event per item instead of the full history.

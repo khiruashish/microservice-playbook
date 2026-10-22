@@ -1,0 +1,10 @@
+image:
+  digest: sha256:REPLACE_WITH_PROMOTED_DIGEST
+  pullPolicy: Never
+resources:
+  requests: {cpu: 500m, memory: 512Mi}
+  limits: {memory: 512Mi}
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10

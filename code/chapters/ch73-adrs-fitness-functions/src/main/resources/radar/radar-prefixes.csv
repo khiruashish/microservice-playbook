@@ -1,0 +1,7 @@
+name,prefix
+java.util.Date and SimpleDateFormat,java.util.Date
+java.util.Date and SimpleDateFormat,java.text.SimpleDateFormat
+RestTemplate,org.springframework.web.client.RestTemplate
+HttpURLConnection,java.net.HttpURLConnection
+Java serialization,java.io.ObjectInputStream
+Java serialization,java.io.ObjectOutputStream

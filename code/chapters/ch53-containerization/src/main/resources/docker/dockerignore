@@ -1,0 +1,9 @@
+# copy to .dockerignore next to the Dockerfile: keep the build context small and free of secrets
+target/
+.git/
+.idea/
+*.iml
+.env
+**/*.pem
+**/*.key
+**/application-local.yml

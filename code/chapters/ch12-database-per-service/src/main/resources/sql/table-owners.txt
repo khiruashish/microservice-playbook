@@ -1,0 +1,16 @@
+# table = owning service (FoodFleet target ownership, from chapter 6's decomposition)
+orders = ordering
+order_line = ordering
+cart = ordering
+customer = customer
+address = customer
+restaurant = catalog
+menu_item = catalog
+kitchen_ticket = kitchen
+delivery = delivery
+rider = delivery
+zone = delivery-zones
+coupon = promotions
+coupon_redemption = promotions
+payment = payment
+refund = payment

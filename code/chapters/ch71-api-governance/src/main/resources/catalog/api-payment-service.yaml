@@ -1,0 +1,15 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "API",
+  "metadata": {
+    "name": "payment-service"
+  },
+  "spec": {
+    "type": "openapi",
+    "lifecycle": "production",
+    "owner": "payments",
+    "definition": {
+      "$text": "../openapi/payment-service.json"
+    }
+  }
+}

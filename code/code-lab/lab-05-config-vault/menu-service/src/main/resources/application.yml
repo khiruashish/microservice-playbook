@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: menu-service
+  config:
+    # Settings: Config Server locally (optional, so the service still starts without it).
+    # Secrets: OpenBao's KV engine at secret/menu-service.
+    import:
+      - optional:configserver:http://localhost:8888
+      - optional:vault://
+  cloud:
+    vault:
+      uri: http://127.0.0.1:8200          # bao server -dev; in Kubernetes, https and Kubernetes auth (ADR-039)
+      authentication: TOKEN
+      token: ${BAO_TOKEN:}
+      kv:
+        enabled: true
+        backend: secret
+        default-context: menu-service
+      fail-fast: false
+foodfleet:
+  menu:                                    # defaults if no source overrides them
+    discount-percent: 0
+    max-items-per-order: 50
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh       # POST /actuator/refresh re-reads Config Server

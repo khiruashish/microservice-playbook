@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: order-history
+  threads:
+    virtual:
+      enabled: true
+  http:
+    serviceclient:
+      ordering:
+        base-url: ${ORDERING_SERVICE_URL:http://localhost:8086}
+        read-timeout: 400ms
+      catalog:
+        base-url: ${CATALOG_SERVICE_URL:http://localhost:8082}
+        read-timeout: 400ms
+      delivery:
+        base-url: ${DELIVERY_SERVICE_URL:http://localhost:8092}
+        read-timeout: 400ms
+server:
+  port: ${PORT:8094}

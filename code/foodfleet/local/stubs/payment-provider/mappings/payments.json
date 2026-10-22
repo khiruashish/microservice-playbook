@@ -1,0 +1,10 @@
+{
+  "mappings": [
+    {"request": {"method": "POST", "urlPathPattern": "/v1/payments/[^/]+/authorize"},
+     "response": {"status": 200, "jsonBody": {"status": "AUTHORIZED"}, "headers": {"Content-Type": "application/json"}}},
+    {"request": {"method": "POST", "urlPathPattern": "/v1/payments/[^/]+/capture"},
+     "response": {"status": 200, "jsonBody": {"status": "CAPTURED"}, "headers": {"Content-Type": "application/json"}}},
+    {"request": {"method": "POST", "urlPathPattern": "/v1/payments/[^/]+/void"},
+     "response": {"status": 200, "jsonBody": {"status": "VOIDED"}, "headers": {"Content-Type": "application/json"}}}
+  ]
+}

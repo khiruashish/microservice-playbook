@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: order-service
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true   # Jackson 3 ignores unknown fields by default; a client sending
+                                         # {"status":"REFUNDED"} should hear that it changed nothing
+server:
+  error:
+    include-stacktrace: never
+    include-message: never
+  forward-headers-strategy: framework    # the client address from the edge's X-Forwarded-For (trusted proxy only)
+app:
+  security:
+    token-key: ${TOKEN_KEY}              # base64, at least 32 bytes; no default, so a missing key fails start-up

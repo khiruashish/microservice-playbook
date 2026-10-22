@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 18 — Resilience Patterns (pattern view).
+    resilience/  timeout, retry, bulkhead, circuit breaker, fallback as small composable decorators
+    sim/         a discrete-event model of tracking-service (50 workers) and a browning-out maps provider
+    simulation/  six scenarios, one pattern added at a time: cascading failure, retry storms, recovery
+    app/         the same stack in Spring Boot 4: HTTP client timeouts, @Retryable and @ConcurrencyLimit
+                 (Spring Framework 7), Spring Cloud CircuitBreaker on Resilience4j with a fallback
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch18-resilience-patterns</artifactId>
+    <name>Ch18 :: Resilience Patterns</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <!-- HTTP service clients (RestClient) for the maps provider -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-restclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

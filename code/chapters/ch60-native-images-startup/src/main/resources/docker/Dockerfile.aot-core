@@ -1,0 +1,6 @@
+# The same AOT cache, from a training run that renders menus but never starts the HTTP server: what a cache knows
+# about is what its training run did.
+FROM c60/jre:25
+COPY --chown=10001:10001 app/ /app/
+RUN ["java", "-XX:AOTCacheOutput=/app/app.aot", "-cp", "/app/*", "StartupLab", "--train-core"]
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-XX:AOTCache=/app/app.aot", "-cp", "/app/*", "StartupLab"]

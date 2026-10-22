@@ -1,0 +1,15 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "catalog-importer",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/catalog-importer"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "owner": "menu",
+    "system": "foodfleet"
+  }
+}

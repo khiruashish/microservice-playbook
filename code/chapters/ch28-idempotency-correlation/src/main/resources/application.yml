@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: payment-service
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/payments}
+    username: ${DATABASE_USER:payments}
+    password: ${DATABASE_PASSWORD:payments}
+  threads:
+    virtual:
+      enabled: true
+management:
+  tracing:
+    sampling:
+      probability: 0.1            # the default: traceparent is always propagated, 10% of traces exported
+    baggage:
+      remote-fields: [correlation-id]       # carried across HTTP and Kafka hops (W3C baggage header)
+      correlation:
+        fields: [correlation-id]            # and put in the logging MDC next to traceId and spanId

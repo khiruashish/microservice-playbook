@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: menu-dev
+resources: [../../base]
+patches:
+  - target: {kind: Deployment, name: menu-service}
+    patch: |-
+      - {op: replace, path: /spec/replicas, value: 1}
+      - {op: replace, path: /spec/template/spec/containers/0/imagePullPolicy, value: Never}
+  - target: {kind: PodDisruptionBudget}
+    patch: |-
+      $patch: delete
+      apiVersion: policy/v1
+      kind: PodDisruptionBudget
+      metadata: {name: menu-service}
+configMapGenerator:
+  - name: menu-service-config
+    behavior: merge
+    literals: [discount=50]

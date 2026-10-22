@@ -1,0 +1,23 @@
+# The same limits in Spring Cloud Gateway (WebFlux) 5.0, for teams that enforce them at the gateway instead.
+# RequestRateLimiter with RedisRateLimiter: a token bucket in Redis (two keys per client, hash-tagged for Redis
+# Cluster). Know its behaviour before relying on it (chapter 40, "Choosing"):
+#   - the script reads Redis TIME in whole seconds: tokens refill once a second, not continuously
+#   - any Redis error is logged and the request is ALLOWED (fails open), with remaining = -1
+#   - an empty key (no principal, and denyEmptyKey is true by default) is refused with 403, not 429
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: orders
+              uri: http://order-service.orders.svc:8080
+              predicates:
+                - Path=/api/orders/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    key-resolver: "#{@tenantClientKeyResolver}"   # a KeyResolver bean: tenant + azp claims
+                    redis-rate-limiter.replenishRate: 2       # tokens per second: 120 a minute
+                    redis-rate-limiter.burstCapacity: 20
+                    redis-rate-limiter.requestedTokens: 1

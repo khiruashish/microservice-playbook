@@ -1,0 +1,6 @@
+# menu-service's settings, the same in every environment unless a profile file overrides them.
+# Never secrets: those come from OpenBao (ADR-039).
+foodfleet:
+  menu:
+    discount-percent: 10
+    max-items-per-order: 50

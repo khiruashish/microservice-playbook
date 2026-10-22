@@ -1,0 +1,19 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "rider-tracking",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/rider-tracking"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "delivery",
+    "system": "foodfleet",
+    "providesApis": [
+      "rider-service"
+    ]
+  }
+}

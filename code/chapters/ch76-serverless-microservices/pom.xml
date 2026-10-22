@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 76 — Serverless & Function-Based Services.
+    functions/   FeeQuote (light), Thumbnail (CPU-heavy), FunctionHost (one function behind HTTP, as a FaaS runtime hosts it)
+    platform/    Prices (AWS list prices), Simulation (a day on functions, scale-to-zero containers, always-on containers)
+  verify/run.sh cold-starts the functions in four JVM configurations, then simulates four workloads with those times.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>ch76-serverless-microservices</artifactId>
+    <name>Ch76 :: Serverless &amp; Function-Based Services</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,33 @@
+{
+  "name": "ordering-outbox",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "plugin.name": "pgoutput",
+    "database.hostname": "ordering-db",
+    "database.port": "5432",
+    "database.user": "debezium",
+    "database.password": "${file:/secrets/ordering-db.properties:password}",
+    "database.dbname": "ordering",
+    "topic.prefix": "ordering",
+    "slot.name": "ordering_outbox",
+    "publication.autocreate.mode": "filtered",
+    "table.include.list": "public.outbox",
+    "tombstones.on.delete": "false",
+
+    "transforms": "outbox",
+    "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter",
+    "transforms.outbox.table.field.event.id": "id",
+    "transforms.outbox.table.field.event.key": "aggregate_id",
+    "transforms.outbox.table.field.event.payload": "payload",
+    "transforms.outbox.table.fields.additional.placement": "type:header:eventType,id:header:messageId",
+    "transforms.outbox.route.by.field": "aggregate_type",
+    "transforms.outbox.route.topic.replacement": "foodfleet.${routedByValue}.events",
+    "transforms.outbox.table.expand.json.payload": "true",
+
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+
+    "heartbeat.interval.ms": "10000",
+    "heartbeat.action.query": "insert into debezium_heartbeat (id, ts) values (1, now()) on conflict (id) do update set ts = excluded.ts"
+  }
+}

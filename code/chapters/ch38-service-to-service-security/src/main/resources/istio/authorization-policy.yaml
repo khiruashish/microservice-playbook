@@ -1,0 +1,34 @@
+# Istio allows every request to a workload that has no ALLOW policy. First close the namespace...
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-nothing
+  namespace: payments
+spec: {}
+---
+# ...then open exactly the calls payment-service expects, by peer identity, method and path.
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: payment-service
+  namespace: payments
+spec:
+  selector:
+    matchLabels:
+      app: payment-service
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals: ["cluster.local/ns/orders/sa/order-service"]
+      to:
+        - operation:
+            methods: ["POST"]
+            paths: ["/payments/{*}/capture", "/payments/{*}/refund"]   # {*}: one path segment
+    - from:
+        - source:
+            principals: ["cluster.local/ns/payments/sa/settlement-job"]
+      to:
+        - operation:
+            methods: ["POST"]
+            paths: ["/internal/settlements/run"]

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels: {{- include "ff.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}    # omitted under an HPA, so upgrades don't fight it
+  {{- end }}
+  selector:
+    matchLabels: {app: {{ .Values.name }}}
+  template:
+    metadata:
+      labels: {{- include "ff.labels" . | nindent 8 }}
+      annotations:
+        # a config change changes the pod template, so it rolls out (Helm doesn't do this by itself)
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+        - name: app
+          image: {{ include "ff.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports: [{name: http, containerPort: 8080}]
+          env:
+            - {name: JAVA_TOOL_OPTIONS, value: {{ .Values.javaToolOptions | quote }}}
+            - {name: POD_NAME, valueFrom: {fieldRef: {fieldPath: metadata.name}}}
+            - {name: DISCOUNT, valueFrom: {configMapKeyRef: {name: {{ .Values.name }}-config, key: discount}}}
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          readinessProbe: {httpGet: {path: /menu, port: http}, periodSeconds: 2}
+          volumeMounts: [{name: config, mountPath: /etc/menu-config}]
+      volumes:
+        - name: config
+          configMap: {name: {{ .Values.name }}-config}

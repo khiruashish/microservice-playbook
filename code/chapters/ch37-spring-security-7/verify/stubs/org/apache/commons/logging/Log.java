@@ -1,0 +1,1 @@
+package org.apache.commons.logging; public interface Log { default void warn(Object o){} default boolean isDebugEnabled(){return false;} default void debug(Object o){} default void info(Object o){} default void error(Object o){} default void warn(Object o, Throwable t){} }

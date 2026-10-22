@@ -1,0 +1,11 @@
+# With a service mesh instead of SPIRE in the application: the sidecars do mutual TLS with SPIFFE IDs of the form
+# spiffe://cluster.local/ns/<ns>/sa/<sa>. Without a PeerAuthentication, Istio treats workloads as PERMISSIVE:
+# plaintext from outside the mesh is still accepted. STRICT for the whole mesh, from the root namespace:
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: istio-system
+spec:
+  mtls:
+    mode: STRICT

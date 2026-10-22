@@ -1,0 +1,29 @@
+# id	description	file	find	replace   (several lines per change; \n is a newline; every occurrence is replaced)
+C1	field renamed: available -> inStock	MenuService.java	b.append(",\"available\":")	b.append(",\"inStock\":")
+C1	field renamed: available -> inStock	menu-service.json	"price", "available", "spice"	"price", "inStock", "spice"
+C1	field renamed: available -> inStock	menu-service.json	"available": {"type": "boolean"}	"inStock": {"type": "boolean"}
+C2	optional field removed: description	MenuService.java	        b.append(",\"description\":\"").append(i.description()).append('"');\n	
+C2	optional field removed: description	menu-service.json	          "description": {"type": "string"},\n	
+C3	unused field removed: calories	MenuService.java	        b.append(",\"calories\":").append(i.calories());\n	
+C3	unused field removed: calories	menu-service.json	"spice", "calories"]	"spice"]
+C3	unused field removed: calories	menu-service.json	"description": {"type": "string"},\n          "calories": {"type": "integer"}	"description": {"type": "string"}
+C4	price sent as a number	MenuService.java	return "\"" + i.price().toPlainString() + "\"";	return i.price().toPlainString();
+C4	price sent as a number	menu-service.json	"price": {"type": "string", "description": "in rupees, two decimals"}	"price": {"type": "number", "description": "in rupees"}
+C5	enum value added: spice EXTRA_HOT	MenuService.java	String spice = k == 45 ? "HIGH" : spices[k % 3];	String spice = k == 45 ? "EXTRA_HOT" : spices[k % 3];
+C5	enum value added: spice EXTRA_HOT	menu-service.json	"enum": ["LOW", "MEDIUM", "HIGH"]	"enum": ["LOW", "MEDIUM", "HIGH", "EXTRA_HOT"]
+C6	price null when sold out	MenuService.java	return "\"" + i.price().toPlainString() + "\"";	return i.available() ? "\"" + i.price().toPlainString() + "\"" : "null";
+C6	price null when sold out	menu-service.json	"price": {"type": "string",	"price": {"type": ["string", "null"],
+C7	unknown item: 200 unavailable, not 404	MenuService.java	respond(ex, 404, "{\"error\":\"no such item\"}");	respond(ex, 200, "{\"id\":\"" + p[4] + "\",\"available\":false}");
+C7	unknown item: 200 unavailable, not 404	menu-service.json	,\n          "404": {"description": "no such item", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}}	
+C8	path renamed: /items/ -> /menu-items/	MenuService.java	p[3].equals("items")	p[3].equals("menu-items")
+C8	path renamed: /items/ -> /menu-items/	menu-service.json	"/restaurants/{restaurantId}/items/{itemId}"	"/restaurants/{restaurantId}/menu-items/{itemId}"
+C9	new required header X-Client-Version	MenuService.java	            String[] p = ex.getRequestURI().getPath().split("/");	            if (ex.getRequestHeaders().getFirst("X-Client-Version") == null) {\n                respond(ex, 400, "{\"error\":\"X-Client-Version is required\"}");\n                return;\n            }\n            String[] p = ex.getRequestURI().getPath().split("/");
+C9	new required header X-Client-Version	menu-service.json	{"name": "restaurantId", "in": "path", "required": true, "schema": {"type": "integer"}}	{"name": "restaurantId", "in": "path", "required": true, "schema": {"type": "integer"}},\n          {"name": "X-Client-Version", "in": "header", "required": true, "schema": {"type": "string"}}
+C10	field added: allergens	MenuService.java	        return b.append('}').toString();	        b.append(",\"allergens\":[\"dairy\"]");\n        return b.append('}').toString();
+C10	field added: allergens	menu-service.json	"available": {"type": "boolean"},	"available": {"type": "boolean"},\n          "allergens": {"type": "array", "items": {"type": "string"}},
+C11	price in paise, still a string	MenuService.java	return "\"" + i.price().toPlainString() + "\"";	return "\"" + i.price().movePointRight(2).toBigInteger() + "\"";
+C11	price in paise, still a string	menu-service.json	"in rupees, two decimals"	"in paise"
+C12	menu paged: 20 items and a next link	MenuService.java	List<Item> page = items;	List<Item> page = items.subList(0, Math.min(20, items.size()));
+C12	menu paged: 20 items and a next link	MenuService.java	return b.append("]}").toString();	return b.append("]").append(items.size() > 20 ? ",\"next\":\"/restaurants/" + restaurant + "/menu?page=2\"" : "").append('}').toString();
+C12	menu paged: 20 items and a next link	menu-service.json	{"name": "restaurantId", "in": "path", "required": true, "schema": {"type": "integer"}}\n        ]	{"name": "restaurantId", "in": "path", "required": true, "schema": {"type": "integer"}},\n          {"name": "page", "in": "query", "required": false, "schema": {"type": "integer"}}\n        ]
+C12	menu paged: 20 items and a next link	menu-service.json	"items": {"type": "array", "items": {"$ref": "#/components/schemas/Item"}}	"items": {"type": "array", "items": {"$ref": "#/components/schemas/Item"}},\n          "next": {"type": "string"}

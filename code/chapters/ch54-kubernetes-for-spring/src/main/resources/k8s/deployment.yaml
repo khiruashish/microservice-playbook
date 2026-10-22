@@ -1,0 +1,76 @@
+# menu-service on Kubernetes: sized by requests, memory limited, CPU unthrottled; configuration mounted (watched) rather
+# than in environment variables; the pod's identity and limits from the Downward API; a disruption budget.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: menu-service
+  labels: {app: menu-service}
+spec:
+  replicas: 3
+  selector:
+    matchLabels: {app: menu-service}
+  template:
+    metadata:
+      labels: {app: menu-service}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile: {type: RuntimeDefault}
+      topologySpreadConstraints:                   # one zone or node going away takes a third, not all
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector: {matchLabels: {app: menu-service}}
+      containers:
+        - name: app
+          image: registry.foodfleet.internal/menu-service@sha256:REPLACE_WITH_DIGEST
+          ports: [{name: http, containerPort: 8080}, {name: management, containerPort: 8081}]
+          resources:
+            requests: {cpu: "1", memory: 768Mi}    # what the scheduler reserves: size from measured use
+            limits: {memory: 768Mi}                # memory limit = request; no CPU limit: no CFS throttling
+          env:
+            - {name: JAVA_TOOL_OPTIONS, value: "-XX:MaxRAMPercentage=75 -XX:+ExitOnOutOfMemoryError -XX:ActiveProcessorCount=2"}
+            - {name: POD_NAME, valueFrom: {fieldRef: {fieldPath: metadata.name}}}
+            - {name: POD_NAMESPACE, valueFrom: {fieldRef: {fieldPath: metadata.namespace}}}
+            - {name: NODE_NAME, valueFrom: {fieldRef: {fieldPath: spec.nodeName}}}
+            - {name: CPU_REQUEST_MILLIS, valueFrom: {resourceFieldRef: {resource: requests.cpu, divisor: 1m}}}
+            - {name: SPRING_CONFIG_IMPORT, value: "optional:configtree:/etc/menu-config/"}
+          volumeMounts:
+            - {name: config, mountPath: /etc/menu-config, readOnly: true}    # a directory, never subPath: it updates
+            - {name: tmp, mountPath: /tmp}
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities: {drop: [ALL]}
+          startupProbe: {httpGet: {path: /actuator/health/liveness, port: management}, periodSeconds: 2, failureThreshold: 60}
+          livenessProbe: {httpGet: {path: /actuator/health/liveness, port: management}, periodSeconds: 10}
+          readinessProbe: {httpGet: {path: /actuator/health/readiness, port: management}, periodSeconds: 5}
+          lifecycle:
+            preStop: {sleep: {seconds: 5}}
+      volumes:
+        - {name: config, configMap: {name: menu-config}}
+        - {name: tmp, emptyDir: {medium: Memory, sizeLimit: 64Mi}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: menu-service
+spec:
+  selector: {app: menu-service}
+  ports: [{name: http, port: 80, targetPort: http}]
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: menu-service
+spec:
+  maxUnavailable: 1                                # node drains and upgrades take one pod at a time
+  selector:
+    matchLabels: {app: menu-service}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: menu-config
+data:
+  discount: "10"

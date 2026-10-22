@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels: {{- include "ff.labels" . | nindent 4 }}
+spec:
+  # no replicas: the HPA owns them (ADR-055)
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxUnavailable: 0, maxSurge: 1}     # ADR-055
+  selector:
+    matchLabels: {app: {{ .Values.name }}}
+  template:
+    metadata:
+      labels: {{- include "ff.labels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}   # ADR-055
+    spec:
+      serviceAccountName: {{ .Values.name }}            # one identity per service (ADR-038, ADR-039, ADR-059)
+      automountServiceAccountToken: true
+      terminationGracePeriodSeconds: {{ .Values.shutdown.gracePeriodSeconds }}
+      securityContext:                                   # ADR-053
+        runAsNonRoot: true
+        runAsUser: 65532
+        seccompProfile: {type: RuntimeDefault}
+      topologySpreadConstraints:                         # ADR-054
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels: {app: {{ .Values.name }}}
+      containers:
+        - name: app
+          image: "{{ .Values.image.repository }}/{{ .Values.name }}@{{ required "image.digest is required" .Values.image.digest }}"
+          ports:
+            - {name: http, containerPort: 8080}
+            - {name: management, containerPort: 8081}  # Actuator on its own port (ADR-052)
+            {{- if .Values.grpc }}
+            - {name: grpc, containerPort: 9090}
+            {{- end }}
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: "-XX:MaxRAMPercentage={{ .Values.heapPercent }} -XX:+ExitOnOutOfMemoryError -XX:ActiveProcessorCount={{ include "ff.cpus" . }}{{ if .Values.aotCache }} -XX:AOTCache=/app/app.aot{{ end }}"
+            - {name: SPRING_CONFIG_IMPORT, value: "optional:configtree:/etc/foodfleet/config/"}
+          resources:
+            requests: {cpu: {{ .Values.resources.cpu | quote }}, memory: {{ .Values.resources.memory | quote }}}
+            limits: {memory: {{ .Values.resources.memory | quote }}}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: ["ALL"]}
+          startupProbe:
+            httpGet: {path: /actuator/health/liveness, port: management}
+            periodSeconds: 5
+            failureThreshold: {{ div .Values.startupBudgetSeconds 5 }}
+          livenessProbe:
+            httpGet: {path: /actuator/health/liveness, port: management}
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet: {path: /actuator/health/readiness, port: management}
+            periodSeconds: 5
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              sleep: {seconds: {{ .Values.shutdown.preStopSeconds }}}
+          volumeMounts:
+            - {name: tmp, mountPath: /tmp}
+            - {name: config, mountPath: /etc/foodfleet/config, readOnly: true}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: config
+          configMap: {name: {{ .Values.name }}-config}

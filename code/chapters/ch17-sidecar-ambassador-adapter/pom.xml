@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 17 — Sidecar, Ambassador & Adapter: three helper processes for kitchen-service's pod.
+    ambassador/  local proxy for the payment provider: credentials, per-try timeout, safe retries,
+                 circuit breaker, counters (JDK HttpServer + HttpClient, virtual threads)
+    adapter/     translates the restaurant-tablet gateway's /stats into Prometheus metrics
+    logship/     tails a log file on a shared volume; survives restarts, rotation and sink outages
+    fake/        a flaky payment provider and the tablet gateway, for tests and the experiment
+    experiment/  real HTTP measurements: success rate and latency with/without the ambassador,
+                 and the cost of the extra hop
+  k8s/ holds the Deployment with native sidecar containers (Kubernetes 1.29+).
+  Plain JDK 25; Spring Boot's test starter only for JUnit and AssertJ.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch17-sidecar-ambassador-adapter</artifactId>
+    <name>Ch17 :: Sidecar, Ambassador and Adapter</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

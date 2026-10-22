@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: foodfleet-layered-monolith
+  threads:
+    virtual:
+      enabled: true          # blocking I/O on virtual threads (Java 21+)
+  mvc:
+    problemdetails:
+      enabled: true          # framework errors (400s, 404s) also use RFC 9457
+
+server:
+  port: 8080
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true

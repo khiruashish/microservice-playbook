@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 72 — Platform Engineering & Golden Paths.
+    scaffold/      Template (render FoodFleet's service template), Upgrade (three-way merge to a newer template version)
+    conformance/   Conformance: the platform's twelve checks over a service repository
+  src/main/resources/templates/v1 and v2: two versions of the golden path; backstage/template.yaml: its scaffolder entry.
+  verify/run.sh scaffolds a service to a running pod, checks a drifted fleet and upgrades it.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch72-platform-engineering</artifactId>
+    <name>Ch72 :: Platform Engineering &amp; Golden Paths</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

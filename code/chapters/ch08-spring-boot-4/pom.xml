@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 8 — Spring Boot 4 Essentials: FoodFleet eta-service ("when will my food arrive?").
+  One small service that uses the Boot 4 / Framework 7 features a microservice needs every day:
+    modular starters · Jackson 3 · JSpecify null-safety · virtual threads · HTTP service clients
+    · built-in API versioning with deprecation headers · @Retryable · RestTestClient · AOT cache
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch08-spring-boot-4</artifactId>
+    <name>Ch08 :: Spring Boot 4 Essentials (eta-service)</name>
+
+    <dependencies>
+        <!-- Boot 4 modular starters: one per technology, and nothing you didn't ask for -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>          <!-- Spring MVC + Tomcat + Jackson 3 -->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-restclient</artifactId>      <!-- RestClient + HTTP service clients -->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!-- JSpecify (@NullMarked, @Nullable) arrives transitively with spring-core 7 -->
+
+        <!-- Test starters are per technology too -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

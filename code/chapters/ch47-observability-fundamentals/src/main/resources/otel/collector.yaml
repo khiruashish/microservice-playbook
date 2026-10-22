@@ -1,0 +1,90 @@
+# FoodFleet's gateway OpenTelemetry Collector (otelcol-contrib 0.162.0). Every service sends all of its telemetry here
+# over OTLP, unsampled. This tier:
+#   - strips resource attributes that cost bytes on every batch and can carry secrets (the JVM command line);
+#   - derives RED metrics (rate, errors, duration) from 100% of server spans, before any sampling;
+#   - keeps whole traces after seeing them: every error, everything slower than 300 ms, and 1% of the rest;
+#   - forwards traces, metrics and logs to their backends.
+# Tail sampling needs all spans of a trace on one collector: with several replicas, put a first tier in front that
+# routes by trace ID (the load_balancing exporter).
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 80
+    spike_limit_percentage: 20
+  resource/trim:
+    attributes:
+      - {key: process.command_args, action: delete}
+      - {key: process.command_line, action: delete}
+      - {key: process.executable.path, action: delete}
+  tail_sampling:
+    decision_wait: 10s            # longest expected trace, plus export delays
+    num_traces: 200000            # traces held while waiting: about decision_wait x new traces per second x 2
+    policies:
+      - name: errors
+        type: status_code
+        status_code: {status_codes: [ERROR]}
+      - name: slow
+        type: latency
+        latency: {threshold_ms: 300}
+      - name: baseline
+        type: probabilistic
+        probabilistic: {sampling_percentage: 1}
+  batch: {}
+
+connectors:
+  span_metrics:
+    histogram:
+      explicit:
+        buckets: [5ms, 10ms, 25ms, 50ms, 100ms, 250ms, 500ms, 1s, 2.5s, 5s]
+    dimensions:
+      - name: http.route
+      - name: http.response.status_code
+  forward/sample: {}
+
+exporters:
+  otlp_grpc/traces:
+    endpoint: tempo.observability.svc:4317
+    tls:
+      ca_file: /etc/otel/certs/ca.pem
+  otlp_http/logs:
+    endpoint: https://loki.observability.svc:3100/otlp
+    tls:
+      ca_file: /etc/otel/certs/ca.pem
+  prometheus_remote_write:
+    endpoint: https://prometheus.observability.svc:9090/api/v1/write
+    tls:
+      ca_file: /etc/otel/certs/ca.pem
+    resource_to_telemetry_conversion:
+      enabled: false              # job and instance come from service.name and service.instance.id
+
+service:
+  extensions: [health_check]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resource/trim]
+      exporters: [span_metrics, forward/sample]
+    traces/sampled:
+      receivers: [forward/sample]
+      processors: [tail_sampling, batch]
+      exporters: [otlp_grpc/traces]
+    metrics:
+      receivers: [otlp, span_metrics]
+      processors: [memory_limiter, resource/trim, batch]
+      exporters: [prometheus_remote_write]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, resource/trim, batch]
+      exporters: [otlp_http/logs]

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}-config
+  labels: {{- include "ff.labels" . | nindent 4 }}
+data:
+  discount: {{ .Values.config.discount | quote }}

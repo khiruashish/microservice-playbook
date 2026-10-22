@@ -1,0 +1,11 @@
+# order-service: the timeouts that stop work (chapter 43) sit under the budget this chapter sets.
+# The edge gives order-service 500 ms; order-service gives restaurant-service at most 150 ms per call and admits
+# requests through an adaptive limit that counts anything over 250 ms as "too slow" (OverloadConfig).
+spring:
+  threads:
+    virtual:
+      enabled: true              # no thread-pool bound any more: the admission limit is the bound
+  http:
+    clients:
+      connect-timeout: 100ms
+      read-timeout: 150ms        # a hop's ceiling: a little above the dependency's p99.9, never above the caller's budget

@@ -1,0 +1,53 @@
+{{- if not .Values.autoscaling.kafkaLag }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.name }}
+  labels: {{- include "ff.labels" . | nindent 4 }}
+spec:
+  {{- if eq .Values.autoscaling.target "Rollout" }}
+  scaleTargetRef: {apiVersion: argoproj.io/v1alpha1, kind: Rollout, name: {{ .Values.name }}}   # Argo Rollouts owns the pods
+  {{- else }}
+  scaleTargetRef: {apiVersion: apps/v1, kind: Deployment, name: {{ .Values.name }}}
+  {{- end }}
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource: {name: cpu, target: {type: Utilization, averageUtilization: {{ .Values.autoscaling.targetCPU }}}}
+  behavior:                                              # ADR-056, written out rather than left to defaults
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies: [{type: Percent, value: 50, periodSeconds: 60}]
+{{- else }}
+{{- $lag := .Values.autoscaling.kafkaLag }}
+# A Kafka consumer scales on its lag, and on CPU as a backstop (ADR-056). KEDA creates and owns the HPA, so the chart
+# renders no HorizontalPodAutoscaler of its own: two HPAs on one Deployment fight each other.
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ .Values.name }}
+  labels: {{- include "ff.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef: {name: {{ .Values.name }}}
+  minReplicaCount: {{ .Values.autoscaling.minReplicas }}
+  maxReplicaCount: {{ .Values.autoscaling.maxReplicas }}  # above the topic's partition count, extra consumers idle
+  pollingInterval: 15
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:                                          # the same scale-down as every other service
+        scaleDown:
+          stabilizationWindowSeconds: 300
+          policies: [{type: Percent, value: 50, periodSeconds: 60}]
+  triggers:
+    - type: kafka
+      metadata:
+        bootstrapServers: {{ $lag.bootstrapServers | quote }}
+        consumerGroup: {{ $lag.consumerGroup | quote }}
+        topic: {{ $lag.topic | quote }}
+        lagThreshold: {{ $lag.lagPerReplica | quote }}     # target lag per replica
+        offsetResetPolicy: earliest                        # a new group's backlog counts from the start
+    - type: cpu
+      metricType: Utilization
+      metadata: {value: {{ .Values.autoscaling.targetCPU | quote }}}
+{{- end }}

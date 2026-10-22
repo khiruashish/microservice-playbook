@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 67 — JVM Tuning in Containers.
+    ergonomics/  WhatTheJvmSees: the CPUs, memory, collector, heap and thread counts the JVM chose
+    service/     MenuCache (a live set of small objects), MenuService (open load measured inside), GcEvents (JFR)
+    memory/      NativeMemory: Native Memory Tracking's summary from inside the process
+  verify/run.sh runs every measurement in its own Docker container: ergonomics, collectors, heap share, NMT, JFR.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch67-jvm-tuning-containers</artifactId>
+    <name>Ch67 :: JVM Tuning in Containers</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: quote-mvc
+  threads:
+    virtual:
+      enabled: true              # Tomcat runs each request on a virtual thread; @Async and schedulers use them too
+  http:
+    clients:
+      connect-timeout: 1s
+      read-timeout: 2s           # the budget: a quote never waits longer than this for one call
+
+server:
+  port: 8094
+
+foodfleet:
+  downstream-url: http://localhost:8095
+  max-in-progress: 300

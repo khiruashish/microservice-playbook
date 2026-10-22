@@ -1,0 +1,17 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "geo-cache",
+    "annotations": {}
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "delivery",
+    "system": "foodfleet",
+    "providesApis": [
+      "geo-api"
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+# Only settings that are the same in EVERY environment live here (factor III).
+# Environment-specific values (database URL, city, fees) come from env vars, mounted secrets or a profile.
+spring:
+  application:
+    name: zone-service
+  config:
+    # Kubernetes Secrets mounted as files: /run/secrets/spring/datasource/password → spring.datasource.password
+    import: optional:configtree:/run/secrets/
+  threads:
+    virtual:
+      enabled: true
+  mvc:
+    problemdetails:
+      enabled: true
+  lifecycle:
+    timeout-per-shutdown-phase: 20s   # IX. finish in-flight requests, then exit (pod grace period 30s)
+
+server:
+  port: ${PORT:8085}                  # VII. port binding: the process exports HTTP on a port it is told
+  shutdown: graceful
+
+logging:
+  structured:
+    format:
+      console: ecs                    # XI. one JSON event per line on stdout; the platform ships it
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true                 # /actuator/health/liveness and /readiness for Kubernetes
+  info:
+    env:
+      enabled: false

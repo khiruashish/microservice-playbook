@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: tracking-service
+  threads:
+    virtual:
+      enabled: true
+  http:
+    serviceclient:
+      maps:
+        base-url: ${MAPS_PROVIDER_URL:https://maps.example}
+        connect-timeout: 200ms
+        read-timeout: 300ms           # timeout: below the provider's brownout latency, above its p99.9 when healthy
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      maps:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 50
+        minimum-number-of-calls: 20
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 3
+        slow-call-duration-threshold: 250ms     # slow successes count against the provider too
+        slow-call-rate-threshold: 80
+  timelimiter:
+    instances:
+      maps:
+        # Spring Cloud CircuitBreaker adds a time limiter (default 1 s) around run(). Keep it above
+        # the inner budget: 2 attempts x 300 ms + up to 150 ms backoff.
+        timeout-duration: 1s
+
+server:
+  shutdown: graceful

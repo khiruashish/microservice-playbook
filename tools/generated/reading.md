@@ -1,0 +1,389 @@
+### Foundations
+
+- James Lewis & Martin Fowler, [Microservices](https://martinfowler.com/articles/microservices.html) (2014) · <small>ch. 1, 2</small>
+- Martin Fowler, [MonolithFirst](https://martinfowler.com/bliki/MonolithFirst.html), [Microservice Premium](https://martinfowler.com/bliki/MicroservicePremium.html), [Microservice Prerequisites](https://martinfowler.com/bliki/MicroservicePrerequisites.html) · <small>ch. 1</small>
+- [Spring Modulith reference documentation](https://docs.spring.io/spring-modulith/reference/) · <small>ch. 1</small>
+- Segment Engineering, [Goodbye Microservices](https://segment.com/blog/goodbye-microservices/) (2018) · <small>ch. 1</small>
+- Shopify Engineering, [Deconstructing the Monolith](https://shopify.engineering/deconstructing-monolith-designing-software-maximizes-developer-productivity) (2019) · <small>ch. 1</small>
+- Prime Video Tech, [Scaling up the Prime Video audio/video monitoring service and reducing costs by 90%](https://www.primevideotech.com/video-streaming/scaling-up-the-prime-video-audio-video-monitoring-service-and-reducing-costs-by-90) (2023) · <small>ch. 1</small>
+- Sam Newman, *Building Microservices*, 2nd ed. (O'Reilly, 2021) and *Monolith to Microservices* (O'Reilly, 2019) · <small>ch. 1, 6</small>
+- Chris Richardson, *Microservices Patterns* (Manning) and [microservices.io](https://microservices.io/) · <small>ch. 1, 6</small>
+- Matthew Skelton & Manuel Pais, *Team Topologies* (IT Revolution, 2019) · <small>ch. 1, 6, 7</small>
+- Martin Fowler, [Tolerant Reader](https://martinfowler.com/bliki/TolerantReader.html) · <small>ch. 2</small>
+- Spring Framework reference, [Resilience features](https://docs.spring.io/spring-framework/reference/core/resilience.html) (`@Retryable`, `@ConcurrencyLimit`) · <small>ch. 2</small>
+- Spring blog, [API Versioning in Spring](https://spring.io/blog/2025/09/16/api-versioning-in-spring/) · <small>ch. 2</small>
+- RFC 9745, [The Deprecation HTTP Response Header Field](https://www.rfc-editor.org/rfc/rfc9745), and RFC 8594, [The Sunset HTTP Header Field](https://www.rfc-editor.org/rfc/rfc8594) · <small>ch. 2</small>
+- Amazon Builders' Library, [Timeouts, retries, and backoff with jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/) · <small>ch. 2</small>
+- Michael Nygard, *Release It!*, 2nd ed. (Pragmatic Bookshelf, 2018) · <small>ch. 2</small>
+- [ArchUnit user guide](https://www.archunit.org/userguide/html/000_Index.html) · <small>ch. 2</small>
+- Leslie Lamport, [Time, Clocks, and the Ordering of Events in a Distributed System](https://lamport.azurewebsites.net/pubs/time-clocks.pdf) (1978) · <small>ch. 3</small>
+- Daniel Abadi, [Consistency Tradeoffs in Modern Distributed Database System Design](https://www.cs.umd.edu/~abadi/papers/abadi-pacelc.pdf), IEEE Computer (2012): PACELC · <small>ch. 3</small>
+- Kulkarni et al., [Logical Physical Clocks and Consistent Snapshots in Globally Distributed Databases](https://cse.buffalo.edu/tech-reports/2014-04.pdf) (2014): HLC · <small>ch. 3</small>
+- DeCandia et al., *Dynamo: Amazon's Highly Available Key-value Store*, SOSP 2007 · <small>ch. 3</small>
+- Gilbert & Lynch, *Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services* (2002) · <small>ch. 3</small>
+- [Jepsen: Consistency Models](https://jepsen.io/consistency), a clickable map of the models above · <small>ch. 3</small>
+- IETF HTTPAPI, [The Idempotency-Key HTTP Header Field](https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/) (draft) · <small>ch. 3</small>
+- Martin Kleppmann, *Designing Data-Intensive Applications* (O'Reilly): chapters 5, 8 and 9 · <small>ch. 3</small>
+- [The Twelve-Factor App](https://12factor.net/), and the [open-source announcement](https://12factor.net/blog/open-source-announcement) (November 2024) · <small>ch. 4</small>
+- Kevin Hoffman, *Beyond the Twelve-Factor App* (O'Reilly, 2016) · <small>ch. 4</small>
+- Spring Boot reference: [Externalized Configuration](https://docs.spring.io/spring-boot/reference/features/external-config.html), [Graceful Shutdown](https://docs.spring.io/spring-boot/reference/web/graceful-shutdown.html), [Dockerfiles](https://docs.spring.io/spring-boot/reference/packaging/container-images/dockerfiles.html) · <small>ch. 4</small>
+- [JEP 483: Ahead-of-Time Class Loading & Linking](https://openjdk.org/jeps/483) (JDK 24) and [JEP 514: Ahead-of-Time Command-Line Ergonomics](https://openjdk.org/jeps/514) (JDK 25) · <small>ch. 4</small>
+- Kubernetes documentation: [Pod termination](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination) · <small>ch. 4</small>
+- [Testcontainers for Java](https://java.testcontainers.org/) · <small>ch. 4</small>
+- Eric Evans, *Domain-Driven Design: Tackling Complexity in the Heart of Software* (Addison-Wesley, 2003) · <small>ch. 5</small>
+- Vaughn Vernon, *Implementing Domain-Driven Design* (2013), *Domain-Driven Design Distilled* (2016), and the *Effective Aggregate Design* essays · <small>ch. 5</small>
+- Vlad Khononov, *Learning Domain-Driven Design* (O'Reilly, 2021) · <small>ch. 5</small>
+- Alberto Brandolini, *Introducing EventStorming* (Leanpub) · <small>ch. 5, 6</small>
+- Martin Fowler, [BoundedContext](https://martinfowler.com/bliki/BoundedContext.html) · <small>ch. 5</small>
+- DDD Crew, [Context Mapping](https://github.com/ddd-crew/context-mapping) and the Bounded Context Canvas · <small>ch. 5</small>
+- [jMolecules](https://github.com/xmolecules/jmolecules): architectural and DDD concepts as Java annotations and types · <small>ch. 5</small>
+- David L. Parnas, *On the Criteria To Be Used in Decomposing Systems into Modules*, Communications of the ACM, 1972 · <small>ch. 6</small>
+- Neal Ford, Mark Richards, Pramod Sadalage, Zhamak Dehghani, *Software Architecture: The Hard Parts* (O'Reilly, 2021), chapters on service granularity · <small>ch. 6</small>
+- Adam Tornhill, *Your Code as a Crime Scene*, 2nd ed. (Pragmatic Bookshelf, 2024): change coupling and hotspot analysis · <small>ch. 6</small>
+- Juval Löwy, *Righting Software* (Addison-Wesley, 2019): volatility-based decomposition · <small>ch. 6</small>
+- Melvin E. Conway, [*How Do Committees Invent?*](https://www.melconway.com/Home/Committees_Paper.html), Datamation, April 1968 · <small>ch. 7</small>
+- Marcelo Cataldo, James Herbsleb, Kathleen Carley, *Socio-Technical Congruence* (ESEM 2008) · <small>ch. 7</small>
+- Alan MacCormack, John Rusnak, Carliss Baldwin, *Exploring the Duality between Product and Organizational Architectures* (Research Policy, 2012) · <small>ch. 7</small>
+- Martin Fowler, [CodeOwnership](https://martinfowler.com/bliki/CodeOwnership.html) and [ConwaysLaw](https://martinfowler.com/bliki/ConwaysLaw.html) · <small>ch. 7</small>
+- Nicole Forsgren, Jez Humble, Gene Kim, *Accelerate* (IT Revolution, 2018) · <small>ch. 7</small>
+- GitHub Docs, [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) · <small>ch. 7</small>
+- Backstage, [Descriptor format of catalog entities](https://backstage.io/docs/features/software-catalog/descriptor-format) · <small>ch. 7</small>
+- Spring Boot, [4.0 Migration Guide](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide) and [release notes](https://github.com/spring-projects/spring-boot/wiki) · <small>ch. 8</small>
+- Spring Boot reference: [HTTP service interface clients](https://docs.spring.io/spring-boot/reference/io/rest-client.html), [JSON](https://docs.spring.io/spring-boot/reference/features/json.html), [Spring MVC API versioning](https://docs.spring.io/spring-boot/reference/web/servlet.html) · <small>ch. 8</small>
+- Spring Framework reference: [API versioning](https://docs.spring.io/spring-framework/reference/web/webmvc-versioning.html) · <small>ch. 8</small>
+- Spring blog, [Introducing Jackson 3 support in Spring](https://spring.io/blog/2025/10/07/introducing-jackson-3-support-in-spring/) · <small>ch. 8</small>
+- FasterXML, [Migrating to Jackson 3](https://github.com/FasterXML/jackson/blob/main/jackson3/MIGRATING_TO_JACKSON_3.md) · <small>ch. 8</small>
+- [JSpecify](https://jspecify.dev/) and [NullAway](https://github.com/uber/NullAway) · <small>ch. 8</small>
+- OpenRewrite, [Migrate to Spring Boot 4.0](https://docs.openrewrite.org/recipes/java/spring/boot4/upgradespringboot_4_0-community-edition) · <small>ch. 8</small>
+- JEP 444 (virtual threads), JEP 491 (synchronize without pinning), JEP 483 and JEP 514 (AOT cache) · <small>ch. 8</small>
+
+### Architecture & Patterns
+
+- Alistair Cockburn, [Hexagonal architecture](https://alistair.cockburn.us/hexagonal-architecture/) (2005), and *Hexagonal Architecture Explained* (with Juan Manuel Garrido de Paz, 2024) · <small>ch. 9</small>
+- Jeffrey Palermo, [The Onion Architecture](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/) (2008) · <small>ch. 9</small>
+- Robert C. Martin, [The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) (2012) and *Clean Architecture* (2017) · <small>ch. 9</small>
+- Tom Hombergs, *Get Your Hands Dirty on Clean Architecture*, 2nd ed. (Packt, 2023) · <small>ch. 9</small>
+- Jimmy Bogard, [Vertical Slice Architecture](https://www.jimmybogard.com/vertical-slice-architecture/) (2018) · <small>ch. 9</small>
+- ArchUnit user guide, [Architectures: onion architecture](https://www.archunit.org/userguide/html/000_Index.html#_onion_architecture) · <small>ch. 9</small>
+- Spring Cloud Gateway reference, [Server Web MVC](https://docs.spring.io/spring-cloud-gateway/reference/spring-cloud-gateway-server-webmvc.html): routes, filters, circuit breaker, retry, rate limiter · <small>ch. 10</small>
+- Phil Calçado, [The Back-end for Front-end Pattern (BFF)](https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html) (2015) · <small>ch. 10</small>
+- Microsoft Azure Architecture Center: [Gateway Routing](https://learn.microsoft.com/azure/architecture/patterns/gateway-routing), [Gateway Offloading](https://learn.microsoft.com/azure/architecture/patterns/gateway-offloading), [Gateway Aggregation](https://learn.microsoft.com/azure/architecture/patterns/gateway-aggregation) · <small>ch. 10</small>
+- Kubernetes, [Gateway API](https://gateway-api.sigs.k8s.io/) · <small>ch. 10</small>
+- Spring Cloud Commons reference, [Spring Cloud LoadBalancer](https://docs.spring.io/spring-cloud-commons/reference/spring-cloud-commons/loadbalancer.html) and [common abstractions](https://docs.spring.io/spring-cloud-commons/reference/spring-cloud-commons/common-abstractions.html) · <small>ch. 11</small>
+- Kubernetes documentation: [Service](https://kubernetes.io/docs/concepts/services-networking/service/), [EndpointSlices](https://kubernetes.io/docs/concepts/services-networking/endpoint-slices/), [Configure liveness, readiness and startup probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) · <small>ch. 11</small>
+- Chris Richardson, [microservices.io](https://microservices.io/patterns/client-side-discovery.html): client-side discovery, server-side discovery, self-registration, third-party registration · <small>ch. 11</small>
+- Netflix, [Eureka wiki](https://github.com/Netflix/eureka/wiki) and the Spring Cloud Netflix reference · <small>ch. 11</small>
+- gRPC, [Load balancing](https://grpc.io/blog/grpc-load-balancing/) · <small>ch. 11</small>
+- Sam Newman, *Monolith to Microservices* (O'Reilly, 2019), chapter 4: decomposing the database · <small>ch. 12, 16</small>
+- Martin Fowler, [IntegrationDatabase](https://martinfowler.com/bliki/IntegrationDatabase.html) and [ApplicationDatabase](https://martinfowler.com/bliki/ApplicationDatabase.html) · <small>ch. 12</small>
+- PostgreSQL documentation, [pg_stat_statements](https://www.postgresql.org/docs/current/pgstatstatements.html) and [privileges](https://www.postgresql.org/docs/current/ddl-priv.html) · <small>ch. 12</small>
+- Pramod Sadalage and Scott Ambler, *Refactoring Databases* (Addison-Wesley, 2006) · <small>ch. 12</small>
+- Martin Fowler, [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html) (2005) and [CQRS](https://martinfowler.com/bliki/CQRS.html) (2011) · <small>ch. 13</small>
+- Greg Young, *Versioning in an Event Sourced System* (Leanpub) · <small>ch. 13</small>
+- Jérémie Chassaing, [Functional Event Sourcing Decider](https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider) (2021) · <small>ch. 13</small>
+- Microsoft Azure Architecture Center, [Event Sourcing pattern](https://learn.microsoft.com/azure/architecture/patterns/event-sourcing) and [CQRS pattern](https://learn.microsoft.com/azure/architecture/patterns/cqrs) · <small>ch. 13</small>
+- Axon Framework and EventStoreDB (Kurrent) documentation · <small>ch. 13</small>
+- Hector Garcia-Molina and Kenneth Salem, *Sagas*, ACM SIGMOD 1987 · <small>ch. 14</small>
+- Caitie McCaffrey, *Distributed Sagas: A Protocol for Coordinating Microservices* (talk, 2017) · <small>ch. 14</small>
+- Microsoft Azure Architecture Center, [Saga distributed transactions pattern](https://learn.microsoft.com/azure/architecture/reference-architectures/saga/saga) and [Compensating Transaction pattern](https://learn.microsoft.com/azure/architecture/patterns/compensating-transaction) · <small>ch. 14</small>
+- [Temporal documentation](https://docs.temporal.io/): durable execution and saga examples · <small>ch. 14</small>
+- [Debezium documentation: Outbox Event Router](https://debezium.io/documentation/reference/stable/transformations/outbox-event-router.html) and Gunnar Morling, *Reliable Microservices Data Exchange With the Outbox Pattern* (Debezium blog, 2019) · <small>ch. 15</small>
+- Pat Helland, *Life beyond Distributed Transactions: an Apostate's Opinion* (CIDR 2007) · <small>ch. 15</small>
+- PostgreSQL documentation: [Logical Decoding](https://www.postgresql.org/docs/current/logicaldecoding.html) and [`SELECT … FOR UPDATE SKIP LOCKED`](https://www.postgresql.org/docs/current/sql-select.html#SQL-FOR-UPDATE-SHARE) · <small>ch. 15</small>
+- [Spring Modulith: Event Publication Registry](https://docs.spring.io/spring-modulith/reference/events.html) · <small>ch. 15</small>
+- Martin Fowler, [Strangler Fig Application](https://martinfowler.com/bliki/StranglerFigApplication.html) and [Branch By Abstraction](https://martinfowler.com/bliki/BranchByAbstraction.html) · <small>ch. 16</small>
+- Eric Evans, *Domain-Driven Design* (Addison-Wesley, 2003), "Anti-Corruption Layer" · <small>ch. 16</small>
+- GitHub, [Scientist](https://github.com/github/scientist): a library for comparing old and new code paths in production · <small>ch. 16</small>
+- Danilo Sato, [Parallel Change](https://martinfowler.com/bliki/ParallelChange.html) (martinfowler.com, 2014) · <small>ch. 16</small>
+- Brendan Burns and David Oppenheimer, *Design patterns for container-based distributed systems*, USENIX HotCloud 2016 · <small>ch. 17</small>
+- Brendan Burns, *Designing Distributed Systems* (O'Reilly, 2nd ed. 2024), single-node patterns · <small>ch. 17</small>
+- Kubernetes documentation, [Sidecar Containers](https://kubernetes.io/docs/concepts/workloads/pods/sidecar-containers/) · <small>ch. 17</small>
+- Microsoft Azure Architecture Center, [Sidecar](https://learn.microsoft.com/azure/architecture/patterns/sidecar), [Ambassador](https://learn.microsoft.com/azure/architecture/patterns/ambassador) and [Anti-corruption Layer](https://learn.microsoft.com/azure/architecture/patterns/anti-corruption-layer) patterns · <small>ch. 17</small>
+- [Istio ambient mode overview](https://istio.io/latest/docs/ambient/overview/) and [Dapr documentation](https://docs.dapr.io/) · <small>ch. 17</small>
+- Marc Brooker, [Exponential Backoff And Jitter](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) (AWS Architecture Blog, 2015) and the Amazon Builders' Library article [Timeouts, retries, and backoff with jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/) · <small>ch. 18</small>
+- [Resilience4j documentation](https://resilience4j.readme.io/) and [Spring Cloud CircuitBreaker](https://docs.spring.io/spring-cloud-circuitbreaker/reference/) · <small>ch. 18</small>
+- Google SRE book, [Handling Overload](https://sre.google/sre-book/handling-overload/) and [Addressing Cascading Failures](https://sre.google/sre-book/addressing-cascading-failures/) · <small>ch. 18</small>
+- Martin Fowler, [What do you mean by "Event-Driven"?](https://martinfowler.com/articles/201701-event-driven.html) (2017) · <small>ch. 19</small>
+- Gregor Hohpe and Bobby Woolf, *Enterprise Integration Patterns* (Addison-Wesley, 2003) · <small>ch. 19</small>
+- Ben Stopford, *Designing Event-Driven Systems* (O'Reilly/Confluent, 2018) · <small>ch. 19</small>
+- [CloudEvents specification](https://cloudevents.io/) and [AsyncAPI](https://www.asyncapi.com/) · <small>ch. 19</small>
+- [Spring Cloud Stream reference](https://docs.spring.io/spring-cloud-stream/reference/) and [Apache Kafka documentation: log compaction](https://kafka.apache.org/documentation/#compaction) · <small>ch. 19</small>
+- Neal Ford, Rebecca Parsons, Patrick Kua, Pramod Sadalage, *Building Evolutionary Architectures* (O'Reilly, 2nd ed. 2022): fitness functions · <small>ch. 20</small>
+- Brian Foote and Joseph Yoder, [Big Ball of Mud](http://www.laputan.org/mud/) (1999) · <small>ch. 20</small>
+
+### Communication
+
+- RFC 9110 *HTTP Semantics*, RFC 9457 *Problem Details for HTTP APIs*, RFC 8288 *Web Linking*, RFC 6585 (428) · <small>ch. 21</small>
+- Roy Fielding, *Architectural Styles and the Design of Network-based Software Architectures*, chapter 5 (2000) · <small>ch. 21</small>
+- Markus Winand, [We need tool support for keyset pagination](https://use-the-index-luke.com/no-offset) (Use The Index, Luke) · <small>ch. 21</small>
+- Spring Framework reference: [Error Responses](https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html) and [HTTP Caching](https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-caching.html) · <small>ch. 21</small>
+- Zalando, [RESTful API Guidelines](https://opensource.zalando.com/restful-api-guidelines/) · <small>ch. 21</small>
+- Spring blog, [The state of HTTP clients in Spring](https://spring.io/blog/2025/09/30/the-state-of-http-clients-in-spring/) (2025) and [HTTP Service Client Enhancements](https://spring.io/blog/2025/09/23/http-service-client-enhancements/) (2025) · <small>ch. 22</small>
+- Spring Framework reference, [REST Clients](https://docs.spring.io/spring-framework/reference/integration/rest-clients.html) · <small>ch. 22</small>
+- Spring Cloud OpenFeign reference, [project status note](https://docs.spring.io/spring-cloud-openfeign/reference/spring-cloud-openfeign.html) · <small>ch. 22</small>
+- JDK `java.net.http.HttpClient` API documentation, and JEP 444 (virtual threads) · <small>ch. 22</small>
+- Spring Boot reference, [gRPC](https://docs.spring.io/spring-boot/reference/io/grpc.html), and Spring gRPC reference, [Server](https://docs.spring.io/spring-grpc/reference/server.html) · <small>ch. 23</small>
+- Spring blog, [Spring gRPC 1.0.0 goes GA](https://spring.io/blog/2025/12/04/spring-grpc-1/) (2025) and [Spring gRPC 1.1.0 available now](https://spring.io/blog/2026/06/10/spring-grpc-1-1-0-available-now/) (2026) · <small>ch. 23</small>
+- Protocol Buffers documentation, [Encoding](https://protobuf.dev/programming-guides/encoding/) and [proto3 language guide](https://protobuf.dev/programming-guides/proto3/) · <small>ch. 23</small>
+- gRPC documentation, [Deadlines](https://grpc.io/docs/guides/deadlines/), [Status codes](https://grpc.io/docs/guides/status-codes/) and [gRPC over HTTP/2](https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md) · <small>ch. 23</small>
+- Kubernetes blog, *gRPC Load Balancing on Kubernetes without Tears* (2018) · <small>ch. 23</small>
+- Spring for GraphQL reference: [Annotated Controllers](https://docs.spring.io/spring-graphql/reference/controllers.html), [Request Execution](https://docs.spring.io/spring-graphql/reference/request-execution.html), [Federation](https://docs.spring.io/spring-graphql/reference/federation.html), [Testing](https://docs.spring.io/spring-graphql/reference/testing.html) · <small>ch. 24</small>
+- Spring Boot reference, [Spring for GraphQL](https://docs.spring.io/spring-boot/reference/web/spring-graphql.html) · <small>ch. 24</small>
+- [GraphQL specification](https://spec.graphql.org/) and [GraphQL over HTTP](https://graphql.github.io/graphql-over-http/) · <small>ch. 24</small>
+- graphql-java documentation on [batching with DataLoader](https://www.graphql-java.com/documentation/batching) and [instrumentation](https://www.graphql-java.com/documentation/instrumentation) · <small>ch. 24</small>
+- Apollo, [Federation documentation](https://www.apollographql.com/docs/federation/) · <small>ch. 24</small>
+- Spring for Apache Kafka reference: [Handling Exceptions](https://docs.spring.io/spring-kafka/reference/kafka/annotation-error-handling.html) and [Non-Blocking Retries](https://docs.spring.io/spring-kafka/reference/retrytopic.html) · <small>ch. 25</small>
+- Apache Kafka documentation, [Design: message delivery semantics](https://kafka.apache.org/documentation/#semantics) and [consumer configuration](https://kafka.apache.org/documentation/#consumerconfigs) · <small>ch. 25</small>
+- RabbitMQ, [Quorum queues in 4.0](https://www.rabbitmq.com/blog/2024/08/28/quorum-queues-in-4.0) and [Dead Letter Exchanges](https://www.rabbitmq.com/docs/dlx) · <small>ch. 25</small>
+- KIP-932, *Queues for Kafka* (share groups) · <small>ch. 25</small>
+- HTML Living Standard, [Server-sent events](https://html.spec.whatwg.org/multipage/server-sent-events.html) · <small>ch. 26</small>
+- [RFC 6455: The WebSocket Protocol](https://www.rfc-editor.org/rfc/rfc6455) and [RFC 8441: Bootstrapping WebSockets with HTTP/2](https://www.rfc-editor.org/rfc/rfc8441) · <small>ch. 26</small>
+- Spring Framework reference: [WebSockets](https://docs.spring.io/spring-framework/reference/web/websocket.html) and [Asynchronous Requests (SSE)](https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-async.html) · <small>ch. 26</small>
+- [OpenAPI Specification 3.1](https://spec.openapis.org/oas/v3.1.0) and [AsyncAPI 3.0](https://www.asyncapi.com/docs/reference/specification/v3.0.0) · <small>ch. 27</small>
+- Spring Cloud Contract reference: [Getting started](https://docs.spring.io/spring-cloud-contract/reference/getting-started.html) and [Maven project](https://docs.spring.io/spring-cloud-contract/reference/maven-project.html) · <small>ch. 27</small>
+- Ian Robinson, *Consumer-Driven Contracts: A Service Evolution Pattern* (martinfowler.com, 2006); Martin Fowler, *TolerantReader* (2011) · <small>ch. 27</small>
+- Confluent documentation, *Schema Evolution and Compatibility* · <small>ch. 27</small>
+- [oasdiff](https://github.com/oasdiff/oasdiff) breaking-change checks for OpenAPI · <small>ch. 27</small>
+- W3C, [Trace Context](https://www.w3.org/TR/trace-context/) · <small>ch. 28</small>
+- Brandur Leach, *Implementing Stripe-like Idempotency Keys in Postgres* (2017) · <small>ch. 28</small>
+- Spring Boot reference, [Tracing](https://docs.spring.io/spring-boot/reference/actuator/tracing.html) · <small>ch. 28</small>
+
+### Data
+
+- Martin Fowler, [PolyglotPersistence](https://martinfowler.com/bliki/PolyglotPersistence.html) (2011) · <small>ch. 29</small>
+- PostgreSQL documentation: [Full Text Search](https://www.postgresql.org/docs/16/textsearch.html), [pg_trgm](https://www.postgresql.org/docs/16/pgtrgm.html), [BRIN Indexes](https://www.postgresql.org/docs/16/brin.html), [Table Partitioning](https://www.postgresql.org/docs/16/ddl-partitioning.html) · <small>ch. 29</small>
+- Redis documentation: [Persistence](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/), [GEOSEARCH](https://redis.io/docs/latest/commands/geosearch/) · <small>ch. 29</small>
+- Spring Data Redis reference, [Redis Template and scripting](https://docs.spring.io/spring-data/redis/reference/redis/template.html) · <small>ch. 29</small>
+- Jim Gray and Andreas Reuter, *Transaction Processing: Concepts and Techniques* (1992) · <small>ch. 30</small>
+- PostgreSQL documentation: [PREPARE TRANSACTION](https://www.postgresql.org/docs/16/sql-prepare-transaction.html), [pg_prepared_xacts](https://www.postgresql.org/docs/16/view-pg-prepared-xacts.html) · <small>ch. 30</small>
+- Spring Boot reference, [Distributed Transactions With JTA](https://docs.spring.io/spring-boot/reference/io/jta.html) · <small>ch. 30</small>
+- James C. Corbett et al., *Spanner: Google's Globally-Distributed Database* (OSDI 2012) · <small>ch. 30</small>
+- Douglas Terry et al., *Session Guarantees for Weakly Consistent Replicated Data* (PDIS 1994) · <small>ch. 31</small>
+- Werner Vogels, *Eventually Consistent* (ACM Queue, 2008) · <small>ch. 31</small>
+- Marc Shapiro et al., *Conflict-free Replicated Data Types* (SSS 2011) · <small>ch. 31</small>
+- Sandeep Kulkarni et al., *Logical Physical Clocks* (OPODIS 2014) · <small>ch. 31</small>
+- PostgreSQL documentation: [Hot Standby](https://www.postgresql.org/docs/16/hot-standby.html), [System Administration Functions](https://www.postgresql.org/docs/16/functions-admin.html) · <small>ch. 31</small>
+- Rajesh Nishtala et al., *Scaling Memcache at Facebook* (NSDI 2013) · <small>ch. 32</small>
+- Andrea Vattani, Flavio Chierichetti, Keegan Lowenstein, *Optimal Probabilistic Cache Stampede Prevention* (VLDB 2015) · <small>ch. 32</small>
+- Mark Nottingham, [RFC 5861: HTTP Cache-Control Extensions for Stale Content](https://www.rfc-editor.org/rfc/rfc5861) (2010) · <small>ch. 32</small>
+- Spring Framework reference, [Cache Abstraction](https://docs.spring.io/spring-framework/reference/integration/cache.html) · <small>ch. 32</small>
+- Spring Boot reference, [Caching](https://docs.spring.io/spring-boot/reference/io/caching.html) · <small>ch. 32</small>
+- Redis documentation, [Key eviction](https://redis.io/docs/latest/develop/reference/eviction/) · <small>ch. 32</small>
+- PostgreSQL documentation, [Explicit Locking](https://www.postgresql.org/docs/16/explicit-locking.html), [ALTER TABLE](https://www.postgresql.org/docs/16/sql-altertable.html) and [CREATE INDEX: Building Indexes Concurrently](https://www.postgresql.org/docs/16/sql-createindex.html#SQL-CREATEINDEX-CONCURRENTLY) · <small>ch. 33</small>
+- HikariCP wiki, [About Pool Sizing](https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing) · <small>ch. 33</small>
+- Scott Ambler and Pramod Sadalage, *Refactoring Databases: Evolutionary Database Design* (2006) · <small>ch. 33</small>
+- Danilo Sato, [ParallelChange](https://martinfowler.com/bliki/ParallelChange.html) (martinfowler.com, 2014) · <small>ch. 33</small>
+- Flyway documentation, [PostgreSQL database](https://documentation.red-gate.com/flyway/flyway-concepts/database-support/postgresql) (non-transactional statements and the transactional lock) · <small>ch. 33</small>
+- David Karger et al., *Consistent Hashing and Random Trees* (STOC 1997) · <small>ch. 33</small>
+- Redis documentation, [Redis Cluster specification](https://redis.io/docs/latest/operate/oss_and_stack/reference/cluster-spec/) (hash slots) · <small>ch. 33</small>
+- Ralph Kimball and Margy Ross, *The Data Warehouse Toolkit* (3rd ed., 2013) · <small>ch. 34</small>
+- Jay Kreps, [The Log: What every software engineer should know about real-time data's unifying abstraction](https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying) (2013) · <small>ch. 34</small>
+- Zhamak Dehghani, *Data Mesh: Delivering Data-Driven Value at Scale* (2022) · <small>ch. 34</small>
+- PostgreSQL documentation, [Logical Replication](https://www.postgresql.org/docs/16/logical-replication.html), [Replication Slots](https://www.postgresql.org/docs/16/warm-standby.html#STREAMING-REPLICATION-SLOTS) and [REFRESH MATERIALIZED VIEW](https://www.postgresql.org/docs/16/sql-refreshmaterializedview.html) · <small>ch. 34</small>
+- Debezium documentation, [PostgreSQL connector](https://debezium.io/documentation/reference/stable/connectors/postgresql.html) · <small>ch. 34</small>
+- Apache Iceberg, [Table spec](https://iceberg.apache.org/spec/) · <small>ch. 34</small>
+
+### Security
+
+- OWASP, [API Security Top 10 – 2023](https://api-security.owasp.org/editions/2023/en/0x11-t10/) · <small>ch. 35</small>
+- OWASP Cheat Sheet Series, [Password Storage](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html), [Authorization](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) and [Server-Side Request Forgery Prevention](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html) · <small>ch. 35, 37</small>
+- Adam Shostack, *Threat Modeling: Designing for Security* (2014) · <small>ch. 35</small>
+- [Threat Modeling Manifesto](https://www.threatmodelingmanifesto.org/) (2020) · <small>ch. 35</small>
+- Jerome Saltzer and Michael Schroeder, *The Protection of Information in Computer Systems* (1975) · <small>ch. 35</small>
+- NIST, [SP 800-207: Zero Trust Architecture](https://csrc.nist.gov/pubs/sp/800/207/final) (2020) · <small>ch. 35, 38</small>
+- IETF, [The OAuth 2.1 Authorization Framework (draft-ietf-oauth-v2-1)](https://datatracker.ietf.org/doc/draft-ietf-oauth-v2-1/) · <small>ch. 36</small>
+- [RFC 9700: Best Current Practice for OAuth 2.0 Security](https://www.rfc-editor.org/rfc/rfc9700) (2025) · <small>ch. 36</small>
+- [RFC 8725: JSON Web Token Best Current Practices](https://www.rfc-editor.org/rfc/rfc8725) and [RFC 9068: JWT Profile for OAuth 2.0 Access Tokens](https://www.rfc-editor.org/rfc/rfc9068) · <small>ch. 36</small>
+- [RFC 7636: PKCE](https://www.rfc-editor.org/rfc/rfc7636), [RFC 8693: Token Exchange](https://www.rfc-editor.org/rfc/rfc8693), [RFC 7662: Token Introspection](https://www.rfc-editor.org/rfc/rfc7662) · <small>ch. 36</small>
+- OpenID Foundation, [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html) and [FAPI 2.0 Security Profile](https://openid.net/specs/fapi-security-profile-2_0-final.html) · <small>ch. 36</small>
+- Aaron Parecki, [OAuth 2.0 Simplified](https://www.oauth.com/) · <small>ch. 36</small>
+- Spring Security reference, [OAuth 2.0 Resource Server](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/index.html), [Method Security](https://docs.spring.io/spring-security/reference/servlet/authorization/method-security.html) and [Authorization Server](https://docs.spring.io/spring-security/reference/servlet/oauth2/authorization-server/index.html) · <small>ch. 37</small>
+- Spring Security source, [7.1.1 on GitHub](https://github.com/spring-projects/spring-security/tree/7.1.1) · <small>ch. 37</small>
+- Spring Boot reference, [Security](https://docs.spring.io/spring-boot/reference/web/spring-security.html) · <small>ch. 37</small>
+- Keycloak documentation, [Server Administration Guide](https://www.keycloak.org/docs/latest/server_admin/) and [Token exchange](https://www.keycloak.org/securing-apps/token-exchange) · <small>ch. 37</small>
+- SPIFFE standards, [SPIFFE ID](https://github.com/spiffe/spiffe/blob/main/standards/SPIFFE-ID.md) and [X509-SVID](https://github.com/spiffe/spiffe/blob/main/standards/X509-SVID.md) · <small>ch. 38</small>
+- SPIRE documentation, [server](https://github.com/spiffe/spire/blob/v1.15.3/doc/spire_server.md) and [agent](https://github.com/spiffe/spire/blob/v1.15.3/doc/spire_agent.md) configuration reference · <small>ch. 38</small>
+- Istio, [Authorization Policy](https://istio.io/latest/docs/reference/config/security/authorization-policy/) and [Peer Authentication](https://istio.io/latest/docs/reference/config/security/peer_authentication/) · <small>ch. 38</small>
+- Spring Boot reference, [SSL](https://docs.spring.io/spring-boot/reference/features/ssl.html) · <small>ch. 38</small>
+- IETF, [RFC 8705: OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens](https://www.rfc-editor.org/rfc/rfc8705) · <small>ch. 38</small>
+- OpenBao documentation, [Database secrets engine](https://openbao.org/docs/secrets/databases/) and [Kubernetes auth](https://openbao.org/docs/auth/kubernetes/) · <small>ch. 39</small>
+- Kubernetes documentation, [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/), [Good practices for Kubernetes Secrets](https://kubernetes.io/docs/concepts/security/secrets-good-practices/) and [Encrypting data at rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/) · <small>ch. 39</small>
+- External Secrets Operator, [documentation](https://external-secrets.io/latest/) · <small>ch. 39, 40</small>
+- Spring Cloud Vault, [reference](https://docs.spring.io/spring-cloud-vault/reference/) · <small>ch. 39</small>
+- OWASP Cheat Sheet Series, [Secrets Management](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) · <small>ch. 39</small>
+- OWASP, [API Security Top 10 (2023)](https://owasp.org/API-Security/editions/2023/en/0x11-t10/) and the [Cross-Site Request Forgery Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) · <small>ch. 40</small>
+- IETF HTTPAPI, [RateLimit header fields for HTTP](https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/) (draft) · <small>ch. 40</small>
+- web.dev, [Protect your resources from web attacks with Fetch Metadata](https://web.dev/articles/fetch-metadata) · <small>ch. 40</small>
+- MDN, [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS) · <small>ch. 40</small>
+- PostgreSQL documentation, [Row Security Policies](https://www.postgresql.org/docs/16/ddl-rowsecurity.html) · <small>ch. 40</small>
+- Spring Security reference, [CSRF](https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html) and [CORS](https://docs.spring.io/spring-security/reference/servlet/integrations/cors.html) · <small>ch. 40</small>
+- OpenSSF, [SLSA specification](https://slsa.dev/spec/v1.0/) and Sigstore, [documentation](https://docs.sigstore.dev/) · <small>ch. 41</small>
+- CycloneDX, [specification](https://cyclonedx.org/specification/overview/); OSV, [schema](https://ossf.github.io/osv-schema/); GitHub, [Advisory Database](https://github.com/github/advisory-database) · <small>ch. 41</small>
+- Kyverno, [Verify Images rules](https://kyverno.io/docs/policy-types/cluster-policy/verify-images/) · <small>ch. 41</small>
+- GitHub Docs, [Security hardening for GitHub Actions](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions) · <small>ch. 41</small>
+- Reserve Bank of India, [Storage of Payment System Data: FAQs](https://www.rbi.org.in/Scripts/FAQDisplay.aspx?Id=130) · <small>ch. 41</small>
+- Hogan Lovells, [India's Digital Personal Data Protection Act 2023 brought into force](https://www.hoganlovells.com/en/publications/indias-digital-personal-data-protection-act-2023-brought-into-force-) (the DPDP Rules 2025 and their timeline) · <small>ch. 41</small>
+- PCI Security Standards Council, [PCI DSS v4.0.1](https://www.pcisecuritystandards.org/document_library/) · <small>ch. 41</small>
+
+### Resilience
+
+- N. Bronson et al., [Metastable Failures in Distributed Systems](https://sigops.org/s/conferences/hotos/2021/papers/hotos21-s11-bronson.pdf) (HotOS 2021), and L. Huang et al., [Metastable Failures in the Wild](https://www.usenix.org/conference/osdi22/presentation/huang-lexiang) (OSDI 2022) · <small>ch. 42</small>
+- Google SRE book, [Addressing Cascading Failures](https://sre.google/sre-book/addressing-cascading-failures/) and [Handling Overload](https://sre.google/sre-book/handling-overload/) · <small>ch. 42</small>
+- J. Dean and L. A. Barroso, [The Tail at Scale](https://research.google/pubs/the-tail-at-scale/) (CACM 2013) · <small>ch. 42, 44</small>
+- P. Huang et al., [Gray Failure: The Achilles' Heel of Cloud-Scale Systems](https://www.microsoft.com/en-us/research/publication/gray-failure-achilles-heel-cloud-scale-systems/) (HotOS 2017) · <small>ch. 42</small>
+- [Spring Cloud CircuitBreaker](https://docs.spring.io/spring-cloud-circuitbreaker/reference/) · <small>ch. 43</small>
+- Netflix, [concurrency-limits](https://github.com/Netflix/concurrency-limits): the library and the README describing its algorithms · <small>ch. 44</small>
+- K. Nichols and V. Jacobson, [Controlling Queue Delay](https://queue.acm.org/detail.cfm?id=2209336) (ACM Queue, 2012) · <small>ch. 44</small>
+- [Reactive Streams](https://www.reactive-streams.org/) and the `java.util.concurrent.Flow` Javadoc · <small>ch. 44</small>
+- [Principles of Chaos Engineering](https://principlesofchaos.org/) · <small>ch. 45</small>
+- C. Rosenthal and N. Jones, *Chaos Engineering: System Resiliency in Practice* (O'Reilly, 2020) · <small>ch. 45</small>
+- [Toxiproxy](https://github.com/Shopify/toxiproxy), [Chaos Mesh documentation](https://chaos-mesh.org/docs/), [LitmusChaos documentation](https://docs.litmuschaos.io/) · <small>ch. 45</small>
+- [Chaos Monkey for Spring Boot](https://codecentric.github.io/chaos-monkey-spring-boot/) · <small>ch. 45</small>
+- OpenJDK bug [JDK-8208693](https://bugs.openjdk.org/browse/JDK-8208693): HttpClient's request timeout and the response body · <small>ch. 45</small>
+- PostgreSQL documentation, [High Availability, Load Balancing, and Replication](https://www.postgresql.org/docs/16/high-availability.html) and [Continuous Archiving and Point-in-Time Recovery](https://www.postgresql.org/docs/16/continuous-archiving.html) · <small>ch. 46</small>
+- pgJDBC, [connection properties](https://jdbc.postgresql.org/documentation/use/) (`targetServerType`, `hostRecheckSeconds`, timeouts) · <small>ch. 46</small>
+- AWS Builders' Library, [Workload isolation using shuffle-sharding](https://aws.amazon.com/builders-library/workload-isolation-using-shuffle-sharding/) · <small>ch. 46</small>
+- AWS Well-Architected, [Reducing the scope of impact with cell-based architecture](https://docs.aws.amazon.com/wellarchitected/latest/reducing-scope-of-impact-with-cell-based-architecture/reducing-scope-of-impact-with-cell-based-architecture.html) · <small>ch. 46</small>
+- Google SRE book, [Data Integrity: What You Read Is What You Wrote](https://sre.google/sre-book/data-integrity/) · <small>ch. 46</small>
+
+### Observability
+
+- OpenTelemetry, [Observability primer](https://opentelemetry.io/docs/concepts/observability-primer/) and [Sampling](https://opentelemetry.io/docs/concepts/sampling/) · <small>ch. 47</small>
+- Sigelman et al., [Dapper, a Large-Scale Distributed Systems Tracing Infrastructure](https://research.google/pubs/dapper-a-large-scale-distributed-systems-tracing-infrastructure/) (2010) · <small>ch. 47</small>
+- Prometheus documentation, [Metric and label naming](https://prometheus.io/docs/practices/naming/) and [Instrumentation](https://prometheus.io/docs/practices/instrumentation/) · <small>ch. 47</small>
+- Majors, Fong-Jones and Miranda, *Observability Engineering* (O'Reilly, 2022) · <small>ch. 47</small>
+- Micrometer documentation, [Concepts](https://docs.micrometer.io/micrometer/reference/concepts.html) and [Observation](https://docs.micrometer.io/micrometer/reference/observation.html) · <small>ch. 48</small>
+- Spring Boot reference, [Metrics](https://docs.spring.io/spring-boot/reference/actuator/metrics.html) and [Observability](https://docs.spring.io/spring-boot/reference/actuator/observability.html) · <small>ch. 48</small>
+- Prometheus documentation, [Histograms and summaries](https://prometheus.io/docs/practices/histograms/) · <small>ch. 48</small>
+- Brendan Gregg, [The USE Method](https://www.brendangregg.com/usemethod.html); Tom Wilkie, [The RED Method](https://grafana.com/blog/2018/08/02/the-red-method-how-to-instrument-your-services/) · <small>ch. 48</small>
+- Google SRE book, [Monitoring Distributed Systems](https://sre.google/sre-book/monitoring-distributed-systems/) · <small>ch. 48</small>
+- OpenTelemetry, [Context propagation](https://opentelemetry.io/docs/concepts/context-propagation/) and [Semantic conventions for messaging spans](https://opentelemetry.io/docs/specs/semconv/messaging/messaging-spans/) · <small>ch. 49</small>
+- OpenTelemetry Java instrumentation, [Kafka instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/kafka) · <small>ch. 49</small>
+- Sigelman et al., [Dapper](https://research.google/pubs/dapper-a-large-scale-distributed-systems-tracing-infrastructure/) · <small>ch. 49</small>
+- Spring Boot reference, [Structured logging](https://docs.spring.io/spring-boot/reference/features/logging.html#features.logging.structured) · <small>ch. 50</small>
+- Logback manual, [Appenders: AsyncAppender](https://logback.qos.ch/manual/appenders.html#AsyncAppender) and [Encoders: JsonEncoder](https://logback.qos.ch/manual/encoders.html#JsonEncoder) · <small>ch. 50</small>
+- SLF4J, [Fluent logging API](https://www.slf4j.org/manual.html#fluent) · <small>ch. 50</small>
+- Elastic, [Elastic Common Schema reference](https://www.elastic.co/guide/en/ecs/current/index.html) · <small>ch. 50</small>
+- OpenTelemetry Java instrumentation, [Logback MDC instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/logback/logback-mdc-1.0) · <small>ch. 50</small>
+- OWASP, [Logging Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html) · <small>ch. 50</small>
+- Google, [Site Reliability Engineering: Service Level Objectives](https://sre.google/sre-book/service-level-objectives/) · <small>ch. 51</small>
+- Google, [The Site Reliability Workbook: Alerting on SLOs](https://sre.google/workbook/alerting-on-slos/) and [Implementing SLOs](https://sre.google/workbook/implementing-slos/) · <small>ch. 51</small>
+- Prometheus, [Alerting rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) and [Unit testing for rules](https://prometheus.io/docs/prometheus/latest/configuration/unit_testing_rules/) · <small>ch. 51</small>
+- Alertmanager, [Configuration: routes and inhibition](https://prometheus.io/docs/alerting/latest/configuration/) · <small>ch. 51</small>
+- [Sloth](https://github.com/slok/sloth), [Pyrra](https://github.com/pyrra-dev/pyrra) and the [OpenSLO specification](https://github.com/OpenSLO/OpenSLO) · <small>ch. 51</small>
+- Spring Boot reference, [Metrics: customizing individual meters](https://docs.spring.io/spring-boot/reference/actuator/metrics.html#actuator.metrics.customizing.per-meter-properties) · <small>ch. 51</small>
+- Kubernetes, [Configure liveness, readiness and startup probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) and [Pod lifecycle: termination](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination) · <small>ch. 52</small>
+- Spring Boot reference, [Kubernetes probes](https://docs.spring.io/spring-boot/reference/actuator/endpoints.html#actuator.endpoints.kubernetes-probes) and [Graceful shutdown](https://docs.spring.io/spring-boot/reference/web/graceful-shutdown.html) · <small>ch. 52</small>
+- Spring Boot reference, [Securing HTTP endpoints](https://docs.spring.io/spring-boot/reference/actuator/endpoints.html#actuator.endpoints.security) · <small>ch. 52</small>
+- Kubernetes, [Network policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/) · <small>ch. 52</small>
+- Colin Breck, [Kubernetes liveness and readiness probes: how to avoid shooting yourself in the foot](https://blog.colinbreck.com/kubernetes-liveness-and-readiness-probes-how-to-avoid-shooting-yourself-in-the-foot/) · <small>ch. 52</small>
+
+### Deployment & Platform
+
+- Docker docs, [Multi-stage builds](https://docs.docker.com/build/building/multi-stage/) and [Dockerfile reference: ENTRYPOINT](https://docs.docker.com/reference/dockerfile/#entrypoint) · <small>ch. 53</small>
+- Spring Boot reference, [Efficient container images](https://docs.spring.io/spring-boot/reference/packaging/container-images/efficient-images.html) · <small>ch. 53</small>
+- Google, [Jib](https://github.com/GoogleContainerTools/jib) and [Distroless images](https://github.com/GoogleContainerTools/distroless) · <small>ch. 53</small>
+- Cloud Native Buildpacks, [Paketo Java buildpack](https://paketo.io/docs/howto/java/) · <small>ch. 53</small>
+- Kubernetes, [Resource management for pods and containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) and [ConfigMaps: mounted ConfigMaps are updated automatically](https://kubernetes.io/docs/concepts/configuration/configmap/#mounted-configmaps-are-updated-automatically) · <small>ch. 54</small>
+- Kubernetes, [Disruptions and PodDisruptionBudgets](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/) and [Downward API](https://kubernetes.io/docs/concepts/workloads/pods/downward-api/) · <small>ch. 54</small>
+- Spring Boot reference, [Configuration trees](https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.files.configtree) and [Deploying to Kubernetes](https://docs.spring.io/spring-boot/how-to/deployment/cloud.html#howto.deployment.cloud.kubernetes) · <small>ch. 54</small>
+- Linux kernel, [CFS bandwidth control](https://docs.kernel.org/scheduler/sched-bwc.html) · <small>ch. 54</small>
+- Helm, [Helm 4 overview](https://helm.sh/docs/overview/) and [Chart template guide: automatically roll deployments](https://helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments) · <small>ch. 55</small>
+- Kubernetes, [Server-side apply](https://kubernetes.io/docs/reference/using-api/server-side-apply/) and [Declarative management with kustomize](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/) · <small>ch. 55</small>
+- kustomize, [configMapGenerator and generatorOptions](https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/configmapgenerator/) · <small>ch. 55</small>
+- Kubernetes, [Deployments: rolling update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) · <small>ch. 55</small>
+- OCI, [Image specification: content addressing by digest](https://github.com/opencontainers/image-spec/blob/main/descriptor.md#digests) · <small>ch. 55</small>
+- Kubernetes, [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) (algorithm details and configurable scaling behavior) · <small>ch. 56</small>
+- Kubernetes, [Resource metrics pipeline](https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/) and [metrics-server](https://github.com/kubernetes-sigs/metrics-server) · <small>ch. 56</small>
+- KEDA, [Scaling deployments](https://keda.sh/docs/latest/concepts/scaling-deployments/) · <small>ch. 56</small>
+- Kubernetes autoscaler, [Vertical Pod Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler) and [Cluster Autoscaler FAQ](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md) · <small>ch. 56</small>
+- Envoy, [Outlier detection](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/outlier) and [Automatic retries](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_routing#retry-semantics) · <small>ch. 57</small>
+- SPIFFE, [SPIFFE concepts](https://spiffe.io/docs/latest/spiffe-about/spiffe-concepts/) · <small>ch. 57</small>
+- Istio, [Ambient mode overview](https://istio.io/latest/docs/ambient/overview/) and [Mutual TLS migration](https://istio.io/latest/docs/tasks/security/authentication/mtls-migration/) · <small>ch. 57</small>
+- Linkerd, [Automatic mTLS](https://linkerd.io/2/features/automatic-mtls/) · <small>ch. 57</small>
+- OpenGitOps, [GitOps principles](https://opengitops.dev/) · <small>ch. 58</small>
+- Argo CD, [Automated sync policy](https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/), and Flux, [Kustomization reconciliation](https://fluxcd.io/flux/components/kustomize/kustomizations/) · <small>ch. 58</small>
+- Argo Rollouts, [Canary strategy](https://argoproj.github.io/argo-rollouts/features/canary/) and [Analysis](https://argoproj.github.io/argo-rollouts/features/analysis/) · <small>ch. 58</small>
+- Kubernetes Gateway API, [Traffic splitting](https://gateway-api.sigs.k8s.io/guides/traffic-splitting/) · <small>ch. 58</small>
+- Humble & Farley, *Continuous Delivery* (Addison-Wesley, 2010) · <small>ch. 58</small>
+- AWS, [IAM roles for service accounts](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) and [EKS Pod Identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html) · <small>ch. 59</small>
+- Google Cloud, [Workload Identity Federation for GKE](https://cloud.google.com/kubernetes-engine/docs/concepts/workload-identity); Microsoft, [Workload identity on AKS](https://learn.microsoft.com/azure/aks/workload-identity-overview) · <small>ch. 59</small>
+- Kubernetes, [Service account token volume projection](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#serviceaccount-token-volume-projection) · <small>ch. 59</small>
+- AWS SDKs and Tools, [Retry behavior](https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html); Marc Brooker, [Exponential backoff and jitter](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) · <small>ch. 59</small>
+- AWS, [Lambda pricing](https://aws.amazon.com/lambda/pricing/) and [Fargate pricing](https://aws.amazon.com/fargate/pricing/) · <small>ch. 59</small>
+- Oracle, [Class Data Sharing](https://docs.oracle.com/en/java/javase/25/vm/class-data-sharing.html) · <small>ch. 60</small>
+- GraalVM, [Native Image](https://www.graalvm.org/latest/reference-manual/native-image/) and its [build output reference](https://www.graalvm.org/latest/reference-manual/native-image/overview/BuildOutput/) · <small>ch. 60</small>
+- OpenJDK, [Project CRaC](https://openjdk.org/projects/crac/); AWS, [Lambda SnapStart](https://docs.aws.amazon.com/lambda/latest/dg/snapstart.html) · <small>ch. 60</small>
+- Spring, [JVM checkpoint restore](https://docs.spring.io/spring-framework/reference/integration/checkpoint-restore.html) and [GraalVM native images in Spring Boot](https://docs.spring.io/spring-boot/reference/packaging/native-image/index.html) · <small>ch. 60</small>
+
+### Testing
+
+- Martin Fowler, [TestPyramid](https://martinfowler.com/bliki/TestPyramid.html); Ham Vocke, [The Practical Test Pyramid](https://martinfowler.com/articles/practical-test-pyramid.html) · <small>ch. 61</small>
+- Toby Clemson, [Testing Strategies in a Microservice Architecture](https://martinfowler.com/articles/microservice-testing/) · <small>ch. 61, 64</small>
+- André Schaffer, [Testing of Microservices](https://engineering.atspotify.com/2018/01/testing-of-microservices) (Spotify's honeycomb) · <small>ch. 61</small>
+- JUnit, [User Guide: tagging and filtering](https://docs.junit.org/current/user-guide/#writing-tests-tagging-and-filtering) · <small>ch. 61</small>
+- PIT, [mutation testing for Java](https://pitest.org/) · <small>ch. 61</small>
+- Testcontainers, [Singleton containers](https://java.testcontainers.org/test_framework_integration/manual_lifecycle_control/) and [JUnit 5 integration](https://java.testcontainers.org/test_framework_integration/junit_5/) · <small>ch. 62</small>
+- Spring Boot, [Testing](https://docs.spring.io/spring-boot/reference/testing/index.html), including test slices and Testcontainers service connections · <small>ch. 62</small>
+- Spring Framework, [Context caching](https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/ctx-management/caching.html) · <small>ch. 62</small>
+- PostgreSQL, [INSERT … ON CONFLICT](https://www.postgresql.org/docs/16/sql-insert.html#SQL-ON-CONFLICT) · <small>ch. 62</small>
+- H2, [Compatibility](https://www.h2database.com/html/features.html#compatibility) · <small>ch. 62</small>
+- Spring Cloud Contract, [reference documentation](https://docs.spring.io/spring-cloud-contract/reference/) · <small>ch. 63</small>
+- oasdiff, [breaking changes](https://github.com/oasdiff/oasdiff/blob/main/docs/BREAKING-CHANGES.md) · <small>ch. 63</small>
+- Awaitility, [usage](https://github.com/awaitility/awaitility/wiki/Usage) · <small>ch. 64</small>
+- Argo CD, [ApplicationSet pull request generator](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators-Pull-Request/) · <small>ch. 64</small>
+- Google Testing Blog, [Flaky tests at Google and how we mitigate them](https://testing.googleblog.com/2016/05/flaky-tests-at-google-and-how-we.html) · <small>ch. 64</small>
+- Martin Fowler, [Eradicating non-determinism in tests](https://martinfowler.com/articles/nonDeterminism.html) · <small>ch. 64</small>
+- Gil Tene, [How NOT to Measure Latency](https://www.infoq.com/presentations/latency-response-time/) and [HdrHistogram](http://hdrhistogram.org/) · <small>ch. 65</small>
+- k6, [Open and closed models](https://grafana.com/docs/k6/latest/using-k6/scenarios/concepts/open-vs-closed/); Gatling, [Injection](https://docs.gatling.io/reference/script/core/injection/) · <small>ch. 65</small>
+- ArchUnit, [User Guide](https://www.archunit.org/userguide/html/000_Index.html) · <small>ch. 65</small>
+
+### Performance & Scalability
+
+- [JEP 444: Virtual Threads](https://openjdk.org/jeps/444) and [JEP 491: Synchronize Virtual Threads without Pinning](https://openjdk.org/jeps/491) · <small>ch. 66</small>
+- Spring Boot, [Virtual threads](https://docs.spring.io/spring-boot/reference/features/spring-application.html#features.spring-application.virtual-threads) · <small>ch. 66</small>
+- Reactor, [Threading and Schedulers](https://projectreactor.io/docs/core/release/reference/coreFeatures/schedulers.html) · <small>ch. 66</small>
+- Brendan Gregg, *Systems Performance* (2nd ed., 2020), on queueing and Little's law · <small>ch. 66</small>
+- JDK 25, [HotSpot GC Tuning Guide](https://docs.oracle.com/en/java/javase/25/gctuning/) · <small>ch. 67</small>
+- [JEP 439: Generational ZGC](https://openjdk.org/jeps/439) and [JEP 519: Compact Object Headers](https://openjdk.org/jeps/519) · <small>ch. 67</small>
+- JDK 25, [Native Memory Tracking](https://docs.oracle.com/en/java/javase/25/vm/native-memory-tracking.html) · <small>ch. 67</small>
+- JDK 25, [Flight Recorder API Programmer's Guide](https://docs.oracle.com/en/java/javase/25/jfapi/) · <small>ch. 67</small>
+- Kubernetes, [Virtual IPs and Service Proxies](https://kubernetes.io/docs/reference/networking/virtual-ips/) · <small>ch. 68</small>
+- Neil Gunther, *Guerrilla Capacity Planning* (2007), on the Universal Scalability Law · <small>ch. 68</small>
+- Apache Kafka, [Producer Configs](https://kafka.apache.org/documentation/#producerconfigs) and [Consumer Configs](https://kafka.apache.org/documentation/#consumerconfigs) · <small>ch. 69</small>
+- [KIP-1030: Change constraints and default values for various configurations](https://cwiki.apache.org/confluence/display/KAFKA/KIP-1030%3A+Change+constraints+and+default+values+for+various+configurations) · <small>ch. 69</small>
+- Confluent, [Parallel Consumer](https://github.com/confluentinc/parallel-consumer) · <small>ch. 69</small>
+- Spring for Apache Kafka, [Batch listeners](https://docs.spring.io/spring-kafka/reference/kafka/receiving-messages/listener-annotation.html) · <small>ch. 69</small>
+- PostgreSQL, [Populating a Database](https://www.postgresql.org/docs/16/populate.html) · <small>ch. 69</small>
+- FinOps Foundation, [FinOps Framework](https://www.finops.org/framework/) · <small>ch. 70</small>
+- Krzysztof Rzadca et al., *Autopilot: Workload Autoscaling at Google Scale* (EuroSys 2020) · <small>ch. 70</small>
+- J.R. Storment, Mike Fuller, *Cloud FinOps* (2nd ed., 2023) · <small>ch. 70</small>
+
+### Governance & Organization
+
+- Zalando, [RESTful API and Event Guidelines](https://opensource.zalando.com/restful-api-guidelines/) · <small>ch. 71</small>
+- Stoplight, [Spectral documentation](https://docs.stoplight.io/docs/spectral/) · <small>ch. 71</small>
+- [RFC 9745: The Deprecation HTTP Response Header Field](https://www.rfc-editor.org/rfc/rfc9745) and [RFC 8594: The Sunset HTTP Header Field](https://www.rfc-editor.org/rfc/rfc8594) · <small>ch. 71</small>
+- Backstage, [Software Catalog](https://backstage.io/docs/features/software-catalog/) · <small>ch. 71</small>
+- James Higginbotham, *Principles of Web API Design* (2021) · <small>ch. 71</small>
+- CNCF TAG App Delivery, [Platforms White Paper](https://tag-app-delivery.cncf.io/whitepapers/platforms/) · <small>ch. 72</small>
+- Backstage, [Software Templates](https://backstage.io/docs/features/software-templates/) · <small>ch. 72</small>
+- Copier, [Updating a project](https://copier.readthedocs.io/en/stable/updating/) · <small>ch. 72</small>
+- Camille Fournier, Ian Nowland, *Platform Engineering* (2024) · <small>ch. 72</small>
+- Michael Nygard, [Documenting Architecture Decisions](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) (2011) · <small>ch. 73</small>
+- [adr-tools](https://github.com/npryce/adr-tools) and [MADR](https://adr.github.io/madr/) · <small>ch. 73</small>
+- Thoughtworks, [Build Your Own Radar](https://www.thoughtworks.com/radar/byor) · <small>ch. 73</small>
+- JEP 484, [Class-File API](https://openjdk.org/jeps/484) · <small>ch. 73</small>
+- Martin Fowler, [StranglerFigApplication](https://martinfowler.com/bliki/StranglerFigApplication.html) · <small>ch. 74</small>
+- [Broadleaf Commerce](https://github.com/BroadleafCommerce/BroadleafCommerce), the codebase measured here · <small>ch. 74</small>
+- AWS, [SaaS Tenant Isolation Strategies](https://docs.aws.amazon.com/whitepapers/latest/saas-tenant-isolation-strategies/saas-tenant-isolation-strategies.html) · <small>ch. 75</small>
+- GDPR, [Article 17: Right to erasure](https://gdpr-info.eu/art-17-gdpr/) · <small>ch. 75</small>
+- India, [Digital Personal Data Protection Act, 2023](https://www.meity.gov.in/data-protection-framework) · <small>ch. 75</small>
+- AWS, [Configure Lambda function memory](https://docs.aws.amazon.com/lambda/latest/dg/configuration-memory.html) · <small>ch. 76</small>
+- AWS, [Fargate pricing](https://aws.amazon.com/fargate/pricing/) · <small>ch. 76</small>
+- [Spring Cloud Function](https://spring.io/projects/spring-cloud-function) and Knative, [Configuring scale to zero](https://knative.dev/docs/serving/autoscaling/scale-to-zero/) · <small>ch. 76</small>
+- JEP 514, [Ahead-of-Time Command-Line Ergonomics](https://openjdk.org/jeps/514) · <small>ch. 76</small>
+- Model Context Protocol, [Specification 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28) and its [key changes](https://modelcontextprotocol.io/specification/2026-07-28/changelog) · <small>ch. 77</small>
+- [Spring AI reference](https://docs.spring.io/spring-ai/reference/) · <small>ch. 77</small>
+- OWASP, [Top 10 for LLM Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/) · <small>ch. 77</small>
+- Simon Willison, [Prompt injection](https://simonwillison.net/series/prompt-injection/) (series) · <small>ch. 77</small>

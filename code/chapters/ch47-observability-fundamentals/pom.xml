@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 47 — Observability Fundamentals.
+    events/       WideEvent and WideEventWriter: one structured event per request, every field that might explain it
+    correlation/  TraceParent: the W3C traceparent header that joins spans, logs, events and exemplars
+    sampling/     TraceIdRatio (head sampling, as the OpenTelemetry SDK decides) and TailPolicy (after the fact)
+    analysis/     BubbleUp: what differs about the bad requests, from any fields, without knowing in advance
+    resources/    the gateway OpenTelemetry Collector, Prometheus with RED recording rules, the Java agent's
+                  settings and a Spring Boot 4 service's OpenTelemetry export
+  verify/run.sh runs FoodFleet's checkout services under the OpenTelemetry Java agent 2.32.0 with a Collector 0.162.0,
+  Prometheus 3.15.0 and JDK Flight Recorder: finding a gray failure with each signal, what each costs, instrumentation
+  overhead, profiling, and cardinality.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch47-observability-fundamentals</artifactId>
+    <name>Ch47 :: Observability Fundamentals</name>
+
+    <!-- The signal model needs only the JDK; the agent, Collector and Prometheus run as their own processes. -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

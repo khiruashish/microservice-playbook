@@ -1,0 +1,25 @@
+# An old coupon service still pulling a public image, settling refunds with card tokens.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coupon-legacy
+  namespace: promotions
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app.kubernetes.io/name: coupon-legacy}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: coupon-legacy
+        foodfleet.in/data-class: payment
+      annotations:
+        foodfleet.in/region: ap-south-1
+    spec:
+      initContainers:
+        - name: migrate
+          image: docker.io/library/flyway:9
+      containers:
+        - name: app
+          image: docker.io/foodfleet/coupon:2.3@sha256:d68fca6c7b19330d65e574d4bd3c5538d65c3435f6b30034637ba72ed0b79875
+          securityContext: {runAsNonRoot: true}

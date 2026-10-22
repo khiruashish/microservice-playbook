@@ -1,0 +1,15 @@
+# kube-apiserver --encryption-provider-config: Secrets are stored unencrypted in etcd unless this is set.
+# KMS v2 keeps the key encryption key in the cloud KMS; identity last so existing plaintext Secrets stay readable
+# until they are rewritten (kubectl get secrets -A -o json | kubectl replace -f -).
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+      - secrets
+    providers:
+      - kms:
+          apiVersion: v2
+          name: aws-kms
+          endpoint: unix:///var/run/kmsplugin/socket.sock
+          timeout: 3s
+      - identity: {}

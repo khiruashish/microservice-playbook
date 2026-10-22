@@ -1,0 +1,97 @@
+# FoodFleet, 2023: one service per entity ("decomposition A", chapter 6).
+# The model the platform team reconstructed from service catalogs, traces, database audit logs,
+# dependency manifests and the deploy history of September-October 2023.
+system foodfleet-2023-entity-services
+
+service cart-service               team=orders    endpoints=4  loc=5200
+service order-service              team=orders    endpoints=14 loc=38000
+service order-line-service         team=orders    endpoints=2  loc=1400
+service customer-profile-service   team=growth    endpoints=6  loc=9800
+service address-book-service       team=growth    endpoints=2  loc=1900
+service restaurant-profile-service team=catalog   endpoints=7  loc=11000
+service menu-service               team=catalog   endpoints=9  loc=16000
+service menu-item-pricing-service  team=catalog   endpoints=2  loc=2600
+service kitchen-ticket-service     team=kitchen   endpoints=8  loc=19000
+service zone-service               team=logistics endpoints=4  loc=6100
+service rider-assignment-service   team=logistics endpoints=9  loc=27000
+service coupon-service             team=growth    endpoints=5  loc=8300
+service notification-service       team=platform  endpoints=4  loc=7200
+service payment-service            team=payments  endpoints=11 loc=24000
+
+# place order (per user request)
+call order-service -> cart-service               per-request=1  sync
+call order-service -> customer-profile-service   per-request=1  sync
+call order-service -> address-book-service       per-request=1  sync
+call order-service -> zone-service               per-request=1  sync
+call order-service -> restaurant-profile-service per-request=1  sync
+call order-service -> menu-service               per-request=3  sync
+call order-service -> coupon-service             per-request=1  sync
+call order-service -> order-line-service         per-request=3  sync
+call order-service -> payment-service            per-request=1  sync
+call order-service -> kitchen-ticket-service     per-request=1  async
+call order-service -> notification-service       per-request=1  async
+call order-service -> rider-assignment-service   per-request=1  async
+call customer-profile-service -> address-book-service per-request=1 sync
+# "coupon eligibility needs the customer's tier; the tier needs this month's order count"
+call coupon-service -> customer-profile-service  per-request=1  sync
+call customer-profile-service -> order-service   per-request=1  sync
+# browse menu
+call menu-service -> restaurant-profile-service  per-request=1  sync
+call menu-service -> menu-item-pricing-service   per-request=10 sync
+call menu-item-pricing-service -> zone-service   per-request=1  sync
+
+table orders        owner=order-service             readers=customer-profile-service,coupon-service
+table order_lines   owner=order-line-service        writers=order-service
+table customers     owner=customer-profile-service  writers=address-book-service
+table menu_items    owner=menu-service              readers=menu-item-pricing-service
+table zones         owner=zone-service
+
+library foodfleet-domain kind=domain cart-service=3.4.0 order-service=3.4.0 order-line-service=3.4.0 customer-profile-service=3.3.1 address-book-service=3.3.1 coupon-service=3.2.0 menu-service=3.1.0 menu-item-pricing-service=3.1.0 kitchen-ticket-service=2.8.5 payment-service=2.7.0
+library foodfleet-http   kind=utility order-service=1.6.0 menu-service=1.6.0 payment-service=1.5.2 kitchen-ticket-service=1.6.0
+
+deploy 2023-09-03T19:00 zone-service
+deploy 2023-09-05T02:00 kitchen-ticket-service
+deploy 2023-09-06T13:00 address-book-service,cart-service,coupon-service,customer-profile-service,order-line-service,order-service
+deploy 2023-09-07T16:00 menu-item-pricing-service,menu-service,restaurant-profile-service
+deploy 2023-09-09T08:00 address-book-service,cart-service,coupon-service,customer-profile-service,kitchen-ticket-service,order-line-service,order-service
+deploy 2023-09-10T00:00 address-book-service,cart-service,coupon-service,customer-profile-service,menu-service,order-line-service,order-service
+deploy 2023-09-11T12:00 menu-item-pricing-service,menu-service,restaurant-profile-service
+deploy 2023-09-12T13:00 address-book-service,coupon-service,customer-profile-service,order-line-service,order-service
+deploy 2023-09-14T07:00 address-book-service,cart-service,coupon-service,customer-profile-service,order-line-service,order-service
+deploy 2023-09-16T03:00 address-book-service,cart-service,coupon-service,customer-profile-service,order-line-service,order-service,rider-assignment-service
+deploy 2023-09-17T10:00 menu-service
+deploy 2023-09-18T20:00 kitchen-ticket-service
+deploy 2023-09-19T23:00 address-book-service,cart-service,coupon-service,customer-profile-service,order-line-service,order-service
+deploy 2023-09-20T20:00 address-book-service,cart-service,coupon-service,customer-profile-service,notification-service,order-line-service,order-service
+deploy 2023-09-21T11:00 menu-item-pricing-service,menu-service,restaurant-profile-service,rider-assignment-service
+deploy 2023-09-23T17:00 cart-service,coupon-service,customer-profile-service,order-line-service,order-service
+deploy 2023-09-24T14:00 menu-item-pricing-service,menu-service,restaurant-profile-service
+deploy 2023-09-26T16:00 rider-assignment-service
+deploy 2023-09-29T04:00 menu-item-pricing-service,menu-service,restaurant-profile-service
+deploy 2023-09-29T21:00 address-book-service,cart-service,coupon-service,customer-profile-service,menu-service,order-line-service,order-service
+deploy 2023-09-30T20:00 notification-service
+deploy 2023-10-02T22:00 menu-item-pricing-service,menu-service,restaurant-profile-service
+deploy 2023-10-04T20:00 address-book-service,coupon-service,customer-profile-service,order-line-service,order-service,rider-assignment-service
+deploy 2023-10-05T12:00 notification-service
+deploy 2023-10-06T18:00 menu-item-pricing-service,menu-service,restaurant-profile-service
+deploy 2023-10-07T18:00 menu-item-pricing-service,menu-service,restaurant-profile-service
+deploy 2023-10-09T19:00 rider-assignment-service
+deploy 2023-10-11T18:00 menu-service
+deploy 2023-10-13T03:00 kitchen-ticket-service
+deploy 2023-10-15T11:00 menu-item-pricing-service,menu-service,restaurant-profile-service,zone-service
+deploy 2023-10-17T00:00 rider-assignment-service
+deploy 2023-10-19T07:00 zone-service
+deploy 2023-10-21T14:00 menu-service
+deploy 2023-10-24T00:00 kitchen-ticket-service
+deploy 2023-10-25T08:00 payment-service
+deploy 2023-10-26T11:00 address-book-service,cart-service,coupon-service,customer-profile-service,kitchen-ticket-service,order-line-service,order-service
+deploy 2023-10-28T14:00 kitchen-ticket-service
+deploy 2023-10-29T15:00 address-book-service,cart-service,coupon-service,customer-profile-service,kitchen-ticket-service,order-line-service
+deploy 2023-10-31T14:00 menu-item-pricing-service,menu-service,restaurant-profile-service,zone-service
+deploy 2023-11-03T02:00 menu-item-pricing-service,menu-service,restaurant-profile-service
+deploy 2023-11-05T02:00 address-book-service,cart-service,coupon-service,customer-profile-service,order-line-service,order-service
+deploy 2023-11-06T12:00 kitchen-ticket-service
+deploy 2023-11-07T16:00 zone-service
+deploy 2023-11-09T02:00 zone-service
+deploy 2023-11-11T01:00 menu-item-pricing-service,menu-service,restaurant-profile-service
+deploy 2023-11-12T03:00 menu-item-pricing-service,menu-service,restaurant-profile-service

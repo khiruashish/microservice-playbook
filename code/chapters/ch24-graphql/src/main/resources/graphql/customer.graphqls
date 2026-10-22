@@ -1,0 +1,54 @@
+# The customer app's graph (FoodFleet mobile BFF). Each type is owned by one service behind it:
+# Order by order-service, Restaurant by restaurant-service, Rider by rider-service, Review by review-service.
+
+type Query {
+  "The signed-in customer's most recent orders, newest first (at most 50)."
+  myOrders(first: Int = 10): [Order!]!
+  restaurant(id: ID!): Restaurant
+}
+
+type Order {
+  id: ID!
+  status: OrderStatus!
+  totalPaise: Int!
+  placedAt: String!
+  restaurant: Restaurant!
+  "Null until a rider is assigned, and for cancelled orders."
+  rider: Rider
+  items: [OrderItem!]!
+}
+
+type OrderItem {
+  name: String!
+  quantity: Int!
+  pricePaise: Int!
+}
+
+type Restaurant {
+  id: ID!
+  name: String!
+  area: String!
+  rating: Float
+  reviews(first: Int = 10): [Review!]!
+}
+
+type Rider {
+  id: ID!
+  name: String!
+  vehicle: String
+}
+
+type Review {
+  id: ID!
+  rating: Int!
+  text: String!
+  restaurant: Restaurant!
+}
+
+enum OrderStatus {
+  PLACED
+  PREPARING
+  PICKED_UP
+  DELIVERED
+  CANCELLED
+}

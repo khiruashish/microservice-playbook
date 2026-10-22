@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: order-service
+  jackson:
+    datatype:
+      enum:
+        # Consumers' side of the tolerant reader: an enum value this build doesn't know maps to the
+        # constant marked @JsonEnumDefaultValue instead of failing (Jackson's default is to fail).
+        read-unknown-enum-values-using-default-value: true

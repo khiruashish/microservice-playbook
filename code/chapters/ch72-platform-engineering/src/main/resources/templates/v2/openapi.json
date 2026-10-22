@@ -1,0 +1,12 @@
+{
+  "openapi": "3.1.0",
+  "info": {"title": "{{name}}", "version": "1.0.0", "contact": {"name": "{{team}}"}, "x-owner": "{{team}}"},
+  "servers": [{"url": "https://api.foodfleet.dev"}],
+  "tags": [{"name": "{{name}}"}],
+  "paths": {
+    "/hello": {
+      "get": {"operationId": "hello", "description": "Says which service answered.", "tags": ["{{name}}"],
+              "responses": {"200": {"description": "OK"}, "503": {"description": "Unavailable", "content": {"application/problem+json": {}}}}}
+    }
+  }
+}

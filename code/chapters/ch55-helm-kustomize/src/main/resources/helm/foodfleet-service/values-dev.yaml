@@ -1,0 +1,7 @@
+replicaCount: 1
+image:
+  tag: ch54
+  pullPolicy: Never
+config:
+  discount: "50"
+pdb: null

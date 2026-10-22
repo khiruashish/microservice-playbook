@@ -1,0 +1,151 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "promotions-service",
+    "version": "1.4.0",
+    "contact": {
+      "name": "growth",
+      "url": "https://backstage.foodfleet.dev/catalog/default/group/growth"
+    },
+    "x-owner": "growth"
+  },
+  "servers": [
+    {
+      "url": "https://api.foodfleet.dev"
+    }
+  ],
+  "tags": [
+    {
+      "name": "promotions",
+      "description": "promotions"
+    }
+  ],
+  "paths": {
+    "/promotions": {
+      "get": {
+        "operationId": "listPromotions",
+        "description": "Active promotions.",
+        "tags": [
+          "promotions"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Promotion"
+                      }
+                    },
+                    "nextCursor": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 100
+            }
+          }
+        ]
+      }
+    },
+    "/promotions/{promotionId}/redemptions": {
+      "post": {
+        "operationId": "redeemPromotion",
+        "description": "Redeems a promotion for an order. Answers 200 with {\"ok\": false} when the code is invalid.",
+        "tags": [
+          "promotions"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "promotionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Promotion": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "couponCode": {
+            "type": "string"
+          },
+          "discount": {
+            "type": "number"
+          },
+          "validUntil": {
+            "type": "string"
+          }
+        }
+      },
+      "Problem": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

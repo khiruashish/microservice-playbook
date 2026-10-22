@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: order-service
+  http:
+    serviceclient:
+      menu:
+        base-url: http://localhost:8080
+        connect-timeout: 500ms
+        read-timeout: 1s                       # the timeout that stops the work; the breaker's slow-call threshold assumes it
+  threads:
+    virtual:
+      enabled: true
+
+# FoodFleet's measured defaults (ADR-043), as in chapter 43's order-service.yml
+resilience4j:
+  circuitbreaker:
+    instances:
+      menu:
+        sliding-window-type: TIME_BASED
+        sliding-window-size: 5                 # seconds: opens on quiet and busy endpoints alike
+        minimum-number-of-calls: 20
+        failure-rate-threshold: 50
+        slow-call-duration-threshold: 1s       # library default: 60 s
+        slow-call-rate-threshold: 50
+        wait-duration-in-open-state: 5s        # library default: 60 s
+        permitted-number-of-calls-in-half-open-state: 5
+        ignore-exceptions:
+          - org.springframework.web.client.HttpClientErrorException   # a 404 isn't menu-service failing
+        register-health-indicator: false       # an open breaker must not fail this service's readiness (ADR-052)
+  retry:
+    instances:
+      menu:
+        max-attempts: 3
+        wait-duration: 100ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        enable-randomized-wait: true
+        randomized-wait-factor: 1.0            # full jitter: retries from many callers don't line up
+        retry-exception-predicate: dev.foodfleet.lab06.TransientFailure
+        ignore-exceptions:
+          - io.github.resilience4j.circuitbreaker.CallNotPermittedException
+          - io.github.resilience4j.bulkhead.BulkheadFullException
+  bulkhead:
+    instances:
+      menu:
+        max-concurrent-calls: 32               # Little's law: calls/s x seconds per call, with headroom
+        max-wait-duration: 0                   # reject instead of queueing
+
+server:
+  port: 8090
+management:
+  server:
+    port: 8091
+  endpoints:
+    web:
+      exposure:
+        include: health,circuitbreakers,circuitbreakerevents,retries,metrics

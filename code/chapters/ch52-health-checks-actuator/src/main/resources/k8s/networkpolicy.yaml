@@ -1,0 +1,16 @@
+# The application port from anywhere in the cluster; the management port only from the monitoring namespace
+# (Prometheus). Kubelet probes come from the node and aren't affected.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: order-service-ingress
+spec:
+  podSelector:
+    matchLabels: {app: order-service}
+  policyTypes: [Ingress]
+  ingress:
+    - ports: [{port: 8080}]
+    - from:
+        - namespaceSelector:
+            matchLabels: {team: observability}
+      ports: [{port: 8081}]

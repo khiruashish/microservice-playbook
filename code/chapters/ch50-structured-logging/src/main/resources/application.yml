@@ -1,0 +1,26 @@
+# order-service logging (Spring Boot 4.1.1): one JSON object per line on stdout, collected by the node's agent.
+spring:
+  application:
+    name: order-service
+
+logging:
+  structured:
+    format:
+      console: ecs                      # Elastic Common Schema; also logstash, gelf
+    ecs:
+      service:
+        version: ${APP_VERSION:dev}
+        environment: ${ENVIRONMENT:local}
+    json:
+      add:
+        region: ${REGION:ap-south-1}    # a constant field on every line
+      exclude: process.thread.name      # fields nobody queries cost bytes on every line
+  level:
+    root: info
+    dev.foodfleet: info
+
+management:
+  tracing:
+    baggage:
+      correlation:
+        fields: [tenant]                # baggage entries copied into the MDC (chapter 49)

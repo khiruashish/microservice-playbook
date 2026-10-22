@@ -1,0 +1,41 @@
+# order-service: calls payment-service with its SVID (mutual TLS) and a client-credentials token
+server:
+  port: 8443
+  ssl:
+    bundle: svid
+    client-auth: need
+spring:
+  application:
+    name: order-service
+  ssl:
+    bundle:
+      pem:
+        svid:
+          reload-on-update: true
+          keystore:
+            certificate: file:/run/spiffe/svid.pem
+            private-key: file:/run/spiffe/svid_key.pem
+          truststore:
+            certificate: file:/run/spiffe/svid_bundle.pem
+          options:
+            enabled-protocols: TLSv1.3
+      watch:
+        file:
+          quiet-period: 2s
+  security:
+    oauth2:
+      client:
+        registration:
+          payments:
+            provider: foodfleet
+            client-id: order-service
+            client-secret: ${ORDER_SERVICE_CLIENT_SECRET}      # from the secret store (chapter 39)
+            authorization-grant-type: client_credentials
+            scope: payments:capture, payments:refund
+        provider:
+          foodfleet:
+            issuer-uri: ${OAUTH_ISSUER:https://id.foodfleet.internal/realms/foodfleet}
+app:
+  payments:
+    # the SVID carries this DNS name too (spire/entries.sh -dns), so the HTTP client's hostname check passes
+    base-url: https://payment-service.payments.svc:8443

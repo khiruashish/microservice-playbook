@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: strangler-gateway
+  threads:
+    virtual:
+      enabled: true
+
+server:
+  port: ${PORT:8080}
+  shutdown: graceful
+
+foodfleet:
+  strangler:
+    monolith: ${MONOLITH_URL:http://localhost:8000}
+    pricing-service: ${PRICING_SERVICE_URL:http://localhost:8091}
+    order-history-service: ${ORDER_HISTORY_URL:http://localhost:8092}
+    # The rollout dial: 0 (all monolith) -> 1 -> 5 -> 25 -> 50 -> 100. Shadowing happens in the
+    # monolith's facade (StranglerFacade) or with service-mesh mirroring (chapter 57), not here.
+    pricing-canary-percent: ${PRICING_CANARY_PERCENT:0}

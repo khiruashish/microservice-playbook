@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: edge-gateway
+  threads:
+    virtual:
+      enabled: true
+  cloud:
+    discovery:
+      client:
+        simple:
+          # Locally there's no registry: instances are listed here, and the load balancer round-robins over them.
+          # In Kubernetes, delete this block: a Service's DNS name is the discovery (ADR-011), or use
+          # spring-cloud-kubernetes' DiscoveryClient for per-instance balancing in the gateway.
+          instances:
+            menu-service:
+              - uri: http://localhost:8080
+              - uri: http://localhost:8082
+            order-service:
+              - uri: http://localhost:8090
+server:
+  port: 8000
+management:
+  server:
+    port: 8001
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway

@@ -1,0 +1,253 @@
+# FoodFleet's platform as decided in the handbook's 77 ADRs: one machine-readable model that the FoodFleet pages are
+# generated from and that check.py validates. Every fact carries its source: an ADR number (adr) or a chapter (ch).
+# "assumed: true" marks a fact no chapter decided, filled in here so the model is complete; the pages say so.
+
+teams:
+  - {name: Checkout,            type: stream-aligned,        people: 8, ch: 7}
+  - {name: Restaurant Partner,  type: stream-aligned,        people: 7, ch: 7}
+  - {name: Logistics,           type: stream-aligned,        people: 7, ch: 7}
+  - {name: Growth,              type: stream-aligned,        people: 6, ch: 7}
+  - {name: Payments,            type: complicated-subsystem, people: 5, ch: 7}
+  - {name: Dispatch,            type: complicated-subsystem, people: 5, ch: 7}
+  - {name: Platform,            type: platform,              people: 8, ch: 7}
+  - {name: SRE Enablement,      type: enabling,              people: 3, ch: 7}
+
+# Bounded contexts (chapter 5) and the deployables that implement them. namespace: the Kubernetes namespace where a chapter
+# named one (chapter 38); otherwise the service's own name.
+services:
+  # ---- edge
+  - name: edge-gateway
+    kind: edge
+    team: Platform
+    purpose: The only public entry point - routing, token validation, rate limits (GCRA in Redis), size limits, request ids, retries for idempotent reads, circuit breakers. No business logic.
+    tech: Spring Cloud Gateway Server Web MVC
+    stores: [{type: redis, use: "rate-limit counters (copies, ephemeral)"}]
+    adrs: [10, 40, 44]
+  - name: customer-bff
+    kind: bff
+    team: Checkout
+    assumed_owner: true
+    aliases: [mobile-bff]
+    purpose: One GraphQL schema for the iOS, Android and web customer apps, per-screen batching, persisted queries only.
+    tech: Spring for GraphQL
+    adrs: [10, 24]
+  - name: partner-bff
+    kind: bff
+    team: Restaurant Partner
+    purpose: Per-screen endpoints for the restaurant partner portal (REST, session cookie with Fetch Metadata and csrf.spa()).
+    tech: Spring MVC
+    adrs: [10, 40]
+  - name: rider-bff
+    kind: bff
+    team: Logistics
+    purpose: Per-screen endpoints for the rider app.
+    tech: Spring MVC
+    adrs: [10]
+  - name: tracking-gateway
+    kind: edge
+    team: Logistics
+    aliases: [tracking-service]
+    purpose: Live tracking - customers over SSE (replay buffer, heartbeats, 20,000 streams per instance), riders over one WebSocket per shift.
+    tech: Spring MVC on virtual threads, SSE, WebSocket
+    stores: [{type: redis, use: "per-order pub/sub channels and live rider positions (ephemeral)"}]
+    adrs: [26, 29]
+  # ---- core capabilities (ADR-006's nine, as named in chapter 7's CODEOWNERS)
+  - name: order-service
+    kind: service
+    team: Checkout
+    namespace: orders
+    context: Ordering
+    aliases: [ordering, ordering-service]
+    purpose: Cart and orders; runs the place-order saga as its orchestrator (kitchen acceptance is the pivot).
+    stores: [{type: postgresql, use: "orders, order lines, carts, saga log, outbox, inbox"}]
+    adrs: [5, 14, 15, 21, 28, 30, 31]
+  - name: menu-service
+    kind: service
+    team: Restaurant Partner
+    context: Catalog
+    aliases: [catalog, catalog-service, restaurant-service]
+    purpose: Restaurants, menus, availability and item prices; one JSONB menu card per restaurant rebuilt in the same transaction; dish search in PostgreSQL full-text with a trigram fallback.
+    stores: [{type: postgresql, use: "restaurants, menus, menu cards, outbox"}]
+    adrs: [12, 19, 29, 32]
+  - name: kitchen-service
+    kind: service
+    team: Restaurant Partner
+    context: Kitchen
+    purpose: Kitchen tickets - accept or reject orders, prep times; the saga's pivot step.
+    stores: [{type: postgresql, use: "tickets, inbox, outbox"}]
+    adrs: [14, 25]
+  - name: delivery-service
+    kind: service
+    team: Logistics
+    context: Delivery
+    purpose: Rider assignment requests and rider wallets (event-sourced, read models by projection).
+    stores: [{type: postgresql, use: "assignments, wallet event store and projections, outbox"}]
+    adrs: [13, 14]
+  - name: zone-service
+    kind: service
+    team: Logistics
+    context: Delivery
+    aliases: [delivery-zones]
+    purpose: Delivery zones and serviceability, read on every menu browse; separate from delivery for its scaling profile.
+    stores: [{type: postgresql, use: "zones, outbox"}]
+    adrs: [6, 19]
+  - name: dispatch-optimizer
+    kind: service
+    team: Dispatch
+    context: Delivery
+    aliases: [dispatch-service]
+    purpose: Rider-to-order matching behind a versioned dispatch API.
+    stores: [{type: postgresql, use: "rider history partitioned by day (BRIN)"}, {type: redis, use: "live rider positions (ephemeral)"}]
+    adrs: [7, 23, 29]
+  - name: promotions-service
+    kind: service
+    team: Growth
+    context: Promotions
+    aliases: [promotions, coupon-service]
+    purpose: Coupons and offers; reserves and releases coupons as a saga participant.
+    stores: [{type: postgresql, use: "coupons, redemptions, inbox, outbox"}]
+    adrs: [14]
+  - name: customer-service
+    kind: service
+    team: Growth
+    context: Customer
+    aliases: [customer]
+    purpose: Customer profiles and address books.
+    stores: [{type: postgresql, use: "profiles, addresses"}]
+    adrs: [12]
+  - name: notification-service
+    kind: service
+    team: Growth
+    context: Notification
+    purpose: Push, SMS and email from business events; idempotent per message.
+    stores: [{type: postgresql, use: "notification log, inbox"}]
+    adrs: [25]
+  - name: payment-service
+    kind: service
+    team: Payments
+    namespace: payments
+    context: Payment
+    purpose: Authorize, capture, void and refund through provider adapters (ports and adapters), behind the platform's payment ambassador.
+    stores: [{type: postgresql, use: "payments, idempotency keys, inbox, outbox"}]
+    sidecars: [payment-ambassador]
+    adrs: [3, 9, 17, 28]
+  # ---- extracted or added later
+  - name: pricing-service
+    kind: service
+    team: Checkout
+    assumed_owner: true
+    context: Pricing
+    purpose: Quotes, surcharges and surge multipliers, extracted from the monolith by strangler fig.
+    stores: [{type: postgresql, use: "price rules"}, {type: redis, use: "price cache (version-guarded copies)"}]
+    adrs: [16, 29, 32]
+  - name: eta-service
+    kind: service
+    team: Logistics
+    assumed_owner: true
+    context: Delivery
+    purpose: 'When will my food arrive? Fans out to kitchen and dispatch with deadlines.'
+    adrs: [8, 23]
+  - name: reporting-service
+    kind: service
+    team: Platform
+    assumed_owner: true
+    context: Reporting
+    purpose: Cross-service reports from a reporting store fed by change events; every report returns its as-of time.
+    stores: [{type: postgresql, use: "reporting store (facts by key and version, materialized views)"}]
+    adrs: [34]
+  - name: llm-gateway
+    kind: platform
+    team: Platform
+    purpose: Every model call - stream-aware deadlines, retries with retry-after, per-feature limits, caching, cost accounting.
+    adrs: [77]
+  - name: orders-mcp
+    kind: service
+    team: Checkout
+    assumed_owner: true
+    purpose: MCP server (stateless Streamable HTTP) exposing order tools to assistants; identity from the token.
+    adrs: [77]
+  - name: menus-mcp
+    kind: service
+    team: Restaurant Partner
+    assumed_owner: true
+    purpose: MCP server exposing menu search to assistants.
+    adrs: [77]
+  # ---- functions
+  - name: partner-webhooks
+    kind: function
+    team: Restaurant Partner
+    assumed_owner: true
+    purpose: Partner webhook receiver - acknowledge, then process asynchronously.
+    adrs: [76]
+  - name: menu-photo-processor
+    kind: function
+    team: Restaurant Partner
+    assumed_owner: true
+    purpose: Thumbnails for uploaded menu photos, in bursts.
+    adrs: [76]
+
+# Platform components the services rely on (no business data).
+platform:
+  - {name: keycloak,           team: Platform, purpose: "identity provider for customers, partners, riders and staff", adrs: [37]}
+  - {name: kafka,              team: Platform, purpose: "event bus (KRaft), outbox relays and Debezium for high-volume services", adrs: [15, 19, 25, 69]}
+  - {name: schema-registry,    team: Platform, purpose: "event schemas with backward-compatibility checks", adrs: [19]}
+  - {name: openbao,            team: Platform, purpose: "secrets - dynamic database credentials, KV via External Secrets", adrs: [39]}
+  - {name: spire,              team: Platform, purpose: "workload identities (SPIFFE X.509-SVIDs)", adrs: [38]}
+  - {name: istio-ambient,      team: Platform, purpose: "mesh - mTLS, L4 authorization, waypoints for L7", adrs: [57]}
+  - {name: payment-ambassador, team: Platform, purpose: "sidecar for payment-provider calls (400 ms per try, 3 attempts for idempotent requests, breaker)", adrs: [17]}
+  - {name: otel-collector,     team: Platform, purpose: "OTLP gateway for traces, metrics and logs; tail sampling", adrs: [47, 49]}
+  - {name: argo-cd,            team: Platform, purpose: "GitOps from the environment repository", adrs: [55, 58]}
+  - {name: backstage,          team: Platform, purpose: "catalog, docs, scaffolder (golden paths)", adrs: [71, 72]}
+
+# Synchronous calls. protocol: REST | gRPC | GraphQL | SSE | WebSocket. fallback: what the caller does when it fails.
+calls:
+  - {from: client:customer-app, to: edge-gateway,       protocol: GraphQL,   adr: 10}
+  - {from: client:partner-portal, to: edge-gateway,     protocol: REST,      adr: 10}
+  - {from: client:rider-app,    to: edge-gateway,       protocol: REST,      adr: 10}
+  - {from: client:customer-app, to: tracking-gateway,   protocol: SSE,       adr: 26}
+  - {from: client:rider-app,    to: tracking-gateway,   protocol: WebSocket, adr: 26}
+  - {from: edge-gateway,        to: customer-bff,       protocol: GraphQL,   adr: 24}
+  - {from: edge-gateway,        to: partner-bff,        protocol: REST,      adr: 10}
+  - {from: edge-gateway,        to: rider-bff,          protocol: REST,      adr: 10}
+  - {from: customer-bff,        to: menu-service,       protocol: REST,      adr: 24, journey: [browse-menu]}
+  - {from: customer-bff,        to: zone-service,       protocol: REST,      ch: 6,   journey: [browse-menu], fallback: none - serviceability is required}
+  - {from: customer-bff,        to: eta-service,        protocol: gRPC,      adr: 23, journey: [browse-menu], fallback: hide the ETA}
+  - {from: customer-bff,        to: order-service,      protocol: REST,      adr: 24, journey: [place-order]}
+  - {from: menu-service,        to: pricing-service,    protocol: REST,      ch: 2,   journey: [browse-menu], fallback: last known or base price (fail open)}
+  - {from: order-service,       to: pricing-service,    protocol: REST,      adr: 16, journey: [place-order], fallback: none - no order without a price}
+  - {from: order-service,       to: promotions-service, protocol: REST,      ch: 6,   journey: [place-order], fallback: place the order without the coupon}
+  - {from: eta-service,         to: kitchen-service,    protocol: gRPC,      ch: 8}
+  - {from: eta-service,         to: dispatch-optimizer, protocol: gRPC,      adr: 23}
+  - {from: tracking-gateway,    to: eta-service,        protocol: gRPC,      adr: 23, journey: [track-order], fallback: positions without an ETA}
+  - {from: delivery-service,    to: dispatch-optimizer, protocol: gRPC,      adr: 7}
+  - {from: delivery-service,    to: zone-service,       protocol: REST,      ch: 6,   assumed: true}
+  - {from: payment-service,     to: external:payment-provider, protocol: REST, adr: 17, via: payment-ambassador}
+  - {from: partner-bff,         to: menu-service,       protocol: REST,      adr: 10}
+  - {from: partner-bff,         to: kitchen-service,    protocol: REST,      adr: 10}
+  - {from: rider-bff,           to: delivery-service,   protocol: REST,      adr: 10}
+  - {from: orders-mcp,          to: order-service,      protocol: REST,      adr: 77}
+  - {from: menus-mcp,           to: menu-service,       protocol: REST,      adr: 77}
+
+# Event streams and saga commands (all through outboxes, consumed with inboxes; ADR-015, ADR-025).
+topics:
+  - {name: order-events,        kind: events,  key: order id, partitions: 24, producer: order-service,
+     aliases: ["foodfleet.order.placed.v1 (ch 1)", "foodfleet.order.events (ch 15)", "orders (ADR-069)"],
+     consumers: [kitchen-service, delivery-service, notification-service, reporting-service], adr: 25}
+  - {name: tracking-positions,  kind: events,  key: order id, producer: tracking-gateway, consumers: [tracking-gateway, dispatch-optimizer], adr: 26}
+  - {name: foodfleet.catalog.menu-items, kind: state (compacted), key: menu item id, producer: menu-service,
+     aliases: ["foodfleet.menu.item-availability-changed.v1 (ch 2)"],
+     consumers: [order-service, pricing-service, reporting-service], adr: 19}
+  - {name: foodfleet.zones.zone,     kind: state (compacted), key: zone id, producer: zone-service, consumers: [menu-service, delivery-service], adr: 19, assumed: true}
+  - {name: foodfleet.delivery.rider-status, kind: state (compacted), key: rider id, producer: delivery-service, consumers: [dispatch-optimizer, eta-service], adr: 19, assumed: true}
+  - {name: "saga commands: payment.authorize / capture / void", kind: commands, key: saga id, producer: order-service, consumers: [payment-service], ch: 14}
+  - {name: "saga commands: kitchen.accept",          kind: commands, key: saga id, producer: order-service, consumers: [kitchen-service], ch: 14}
+  - {name: "saga commands: delivery.request-rider",  kind: commands, key: saga id, producer: order-service, consumers: [delivery-service], ch: 14}
+  - {name: "saga commands: coupon reserve / release", kind: commands, key: saga id, producer: order-service, consumers: [promotions-service], ch: 14}
+  - {name: payment-events,      kind: events,  key: payment id, producer: payment-service, consumers: [order-service, reporting-service], adr: 34, assumed: true}
+  - {name: wallet-events,       kind: events (PayoutCompleted), key: rider id, producer: delivery-service, consumers: [notification-service, reporting-service], adr: 13}
+
+# User journeys (ADR-044 marks priority by route; ADR-051 sets SLOs per journey).
+journeys:
+  - {name: browse-menu, via: edge-gateway, entry: customer-bff, priority: sheddable, target: 0.999, slo: "99.9% available, over 30 days", ch: 51}
+  - {name: place-order, via: edge-gateway, entry: customer-bff, priority: critical, target: 0.999, slo: "99.9% of checkout requests succeed and 99% complete within 300 ms, over 30 days", ch: 51}
+  - {name: track-order, entry: tracking-gateway, priority: sheddable, target: 0.995, slo: "99.5% available, over 30 days", ch: 51}

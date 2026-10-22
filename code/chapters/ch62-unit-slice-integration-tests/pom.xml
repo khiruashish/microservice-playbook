@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 62 — Unit, Slice & Testcontainers Tests.
+    coupon/    CouponRedemptions: FIRST20 once per customer, with ON CONFLICT and with the portable check-then-insert
+    testing/   PostgresContainer (start, wait, URL, remove, reuse: what Testcontainers' PostgreSQLContainer does) and
+               Isolation (rollback, truncate, a database per test from a template)
+    test/      PostgresExtension (one container per run in JUnit's root store; a database per test), the coupon rule
+               on PostgreSQL, and H2's limits pinned as tests
+  verify/run.sh measures container lifecycles, isolation strategies and the H2 gap. With Spring Boot, the same
+  patterns are @ServiceConnection containers, @JdbcTest/@DataJpaTest slices and the test context cache.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch62-unit-slice-integration-tests</artifactId>
+    <name>Ch62 :: Unit, Slice &amp; Testcontainers Tests</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

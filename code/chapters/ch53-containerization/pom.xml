@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 53 — Containerization.
+    container/  ContainerLimits: the cgroup's memory and CPU limits (v1 and v2) next to the JVM's processors, heap and GC
+    resources/  docker/Dockerfile (multi-stage: Maven, Boot layers, jlink from jdeps' modules, distroless, AOT cache,
+                exec form) and docker/dockerignore
+  verify/run.sh builds menu-service five ways with Docker and pushes to a local registry, runs the JVM under container
+  limits, times startup with and without the JDK 25 AOT cache, and tests entrypoints, hardening flags and SBOMs.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch53-containerization</artifactId>
+    <name>Ch53 :: Containerization</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

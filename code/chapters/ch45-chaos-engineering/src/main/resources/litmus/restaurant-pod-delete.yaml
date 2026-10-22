@@ -1,0 +1,55 @@
+# The same pod-kill hypothesis with LitmusChaos: pod-delete on restaurant-service for 60 s, with an HTTP probe on the
+# menu SLO that stops the experiment on failure and a Prometheus probe that checks the error rate at the end.
+apiVersion: litmuschaos.io/v1alpha1
+kind: ChaosEngine
+metadata:
+  name: restaurant-pod-delete
+  namespace: foodfleet
+spec:
+  engineState: active
+  appinfo:
+    appns: foodfleet
+    applabel: app.kubernetes.io/name=restaurant-service
+    appkind: deployment
+  chaosServiceAccount: pod-delete-sa
+  jobCleanUpPolicy: retain
+  experiments:
+    - name: pod-delete
+      spec:
+        components:
+          env:
+            - name: TOTAL_CHAOS_DURATION
+              value: "60"
+            - name: CHAOS_INTERVAL
+              value: "15"
+            - name: PODS_AFFECTED_PERC
+              value: "25"
+            - name: FORCE
+              value: "false"
+        probe:
+          - name: menu-slo
+            type: httpProbe
+            mode: Continuous
+            httpProbe/inputs:
+              url: http://slo-probe.foodfleet.svc.cluster.local/menu
+              method:
+                get:
+                  criteria: ==
+                  responseCode: "200"
+            runProperties:
+              probeTimeout: 1s
+              interval: 1s
+              retry: 2
+              stopOnFailure: true
+          - name: menu-error-rate
+            type: promProbe
+            mode: EOT
+            promProbe/inputs:
+              endpoint: http://prometheus.monitoring.svc:9090
+              query: sum(rate(http_server_requests_seconds_count{service="order-service",uri="/menus/{id}",outcome!="SUCCESS"}[2m])) / sum(rate(http_server_requests_seconds_count{service="order-service",uri="/menus/{id}"}[2m]))
+              comparator:
+                criteria: "<="
+                value: "0.01"
+            runProperties:
+              probeTimeout: 5s
+              interval: 5s

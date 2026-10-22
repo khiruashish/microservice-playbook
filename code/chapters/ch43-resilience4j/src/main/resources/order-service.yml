@@ -1,0 +1,60 @@
+# order-service: the same policy as ResiliencePolicies, for the annotations (resilience4j-spring-boot4 2.4.0)
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-type: TIME_BASED
+        sliding-window-size: 5                     # seconds, not calls
+        minimum-number-of-calls: 20
+        failure-rate-threshold: 50
+        slow-call-duration-threshold: 1s           # library default: 60 s
+        slow-call-rate-threshold: 50               # library default: 100%
+        wait-duration-in-open-state: 5s            # library default: 60 s
+        permitted-number-of-calls-in-half-open-state: 5
+        ignore-exceptions:
+          - dev.foodfleet.ch43.policy.ClientErrorException
+        register-health-indicator: false           # an open breaker must not fail this service's readiness
+    instances:
+      restaurant-service:
+        base-config: default
+  retry:
+    configs:
+      default:
+        max-attempts: 3
+        wait-duration: 100ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        exponential-max-wait-duration: 1s
+        enable-randomized-wait: true
+        randomized-wait-factor: 1.0               # 0 .. 2x the delay
+        retry-exception-predicate: dev.foodfleet.ch43.policy.TransientPredicate
+        ignore-exceptions:
+          - io.github.resilience4j.circuitbreaker.CallNotPermittedException
+          - io.github.resilience4j.bulkhead.BulkheadFullException
+          - io.github.resilience4j.ratelimiter.RequestNotPermitted
+          - dev.foodfleet.ch43.policy.ClientErrorException
+    instances:
+      restaurant-service:
+        base-config: default
+  bulkhead:
+    instances:
+      restaurant-service:
+        max-concurrent-calls: 32
+        max-wait-duration: 0
+  # Spring Boot's default aspect order, written out: Retry ( CircuitBreaker ( RateLimiter ( TimeLimiter ( Bulkhead ( call ) ) ) ) )
+  # retry.retry-aspect-order: 2147483642, circuitbreaker.circuit-breaker-aspect-order: 2147483643 (lower runs outside)
+
+spring:
+  threads:
+    virtual:
+      enabled: true
+  http:
+    clients:
+      connect-timeout: 500ms
+      read-timeout: 1s                             # no default; the breaker's slow-call threshold assumes it
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,circuitbreakers,circuitbreakerevents,retries

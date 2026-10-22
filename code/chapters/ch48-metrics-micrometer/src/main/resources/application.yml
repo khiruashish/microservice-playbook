@@ -1,0 +1,33 @@
+# order-service metrics (Spring Boot 4.1.1, Micrometer 1.17.1): what Prometheus scrapes at /actuator/prometheus.
+spring:
+  application:
+    name: order-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+  metrics:
+    tags:
+      region: ${REGION:ap-south-1}              # on every meter; service and pod come from the scrape target
+    web:
+      server:
+        max-uri-tags: 200                       # Boot's cap (default 100); first come, first served
+      client:
+        max-uri-tags: 200
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true              # buckets Prometheus can sum across pods
+        http.client.requests: true
+      slo:
+        http.server.requests: 100ms, 250ms, 500ms, 1s
+      minimum-expected-value:
+        http.server.requests: 1ms
+      maximum-expected-value:
+        http.server.requests: 10s
+    observations:
+      ignored-meters: long-task-timer           # one timer per observation, not two meters
+  observations:
+    key-values:
+      team: checkout                            # low cardinality: added to metrics and spans

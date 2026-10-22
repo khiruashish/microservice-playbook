@@ -1,0 +1,38 @@
+<!-- In order-service's pom.xml (parent: spring-boot-starter-parent 4.1.1, which configures both plugins). -->
+<build>
+    <plugins>
+        <!-- CycloneDX SBOM of the resolved dependencies, written to META-INF/sbom/application.cdx.json in the jar;
+             the parent's pluginManagement binds makeAggregateBom to generate-resources. -->
+        <plugin>
+            <groupId>org.cyclonedx</groupId>
+            <artifactId>cyclonedx-maven-plugin</artifactId>
+        </plugin>
+        <!-- Rules on what may enter the build at all. -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>supply-chain</id>
+                    <goals><goal>enforce</goal></goals>
+                    <configuration>
+                        <rules>
+                            <requireUpperBoundDeps/>          <!-- no silent downgrades by "nearest wins" -->
+                            <dependencyConvergence/>
+                            <bannedDependencies>
+                                <excludes>
+                                    <exclude>org.apache.logging.log4j:log4j-core:[,2.17.1)</exclude>
+                                    <exclude>commons-collections:commons-collections:[,3.2.2)</exclude>
+                                </excludes>
+                            </bannedDependencies>
+                            <requirePluginVersions/>          <!-- every plugin version pinned -->
+                        </rules>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+<!-- Beyond this: resolve only through the company repository manager (a proxy of Maven Central with quarantine for
+     new versions), and record what you trust: Maven 3.9's resolver can check downloads against committed trusted
+     checksums, Gradle has dependency verification (gradle/verification-metadata.xml). -->

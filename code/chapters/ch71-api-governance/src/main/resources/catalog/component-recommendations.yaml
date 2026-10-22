@@ -1,0 +1,16 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "recommendations",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/recommendations"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "prod",
+    "owner": "growth",
+    "system": "foodfleet"
+  }
+}

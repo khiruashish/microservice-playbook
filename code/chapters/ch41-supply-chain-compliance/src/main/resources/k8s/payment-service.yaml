@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+  namespace: cde                                   # the PCI DSS cardholder data environment
+spec:
+  replicas: 4
+  selector:
+    matchLabels: {app.kubernetes.io/name: payment-service}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: payment-service
+        foodfleet.in/data-class: payment
+      annotations:
+        foodfleet.in/region: ap-south-1
+    spec:
+      containers:
+        - name: app
+          image: registry.foodfleet.in/payments/payment-service@sha256:8474c44433d0cfb2a0209307a94479c90a350816d4d09c70372fd6fa3bf01d24
+          securityContext: {runAsNonRoot: true, allowPrivilegeEscalation: false, readOnlyRootFilesystem: true}

@@ -1,0 +1,40 @@
+{
+  "consumer": {"name": "order-service"},
+  "provider": {"name": "menu-service"},
+  "interactions": [
+    {
+      "description": "the price of an available item",
+      "providerStates": [{"name": "restaurant 7 sells paneer-tikka"}],
+      "request": {"method": "GET", "path": "/restaurants/7/items/paneer-tikka", "headers": {"Accept": "application/json"}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json"},
+        "body": {"price": "129.50", "available": true},
+        "matchingRules": {"body": {
+          "$.price": {"matchers": [{"match": "regex", "regex": "^\\d+\\.\\d{2}$"}]},
+          "$.available": {"matchers": [{"match": "type"}]}
+        }}
+      }
+    },
+    {
+      "description": "an item that is sold out",
+      "providerStates": [{"name": "restaurant 7's kulfi is sold out"}],
+      "request": {"method": "GET", "path": "/restaurants/7/items/kulfi", "headers": {"Accept": "application/json"}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json"},
+        "body": {"price": "79.00", "available": false},
+        "matchingRules": {"body": {
+          "$.price": {"matchers": [{"match": "regex", "regex": "^\\d+\\.\\d{2}$"}]}
+        }}
+      }
+    },
+    {
+      "description": "an item the restaurant doesn't sell",
+      "providerStates": [{"name": "restaurant 7 doesn't sell pizza"}],
+      "request": {"method": "GET", "path": "/restaurants/7/items/pizza", "headers": {"Accept": "application/json"}},
+      "response": {"status": 404}
+    }
+  ],
+  "metadata": {"pactSpecification": {"version": "3.0.0"}}
+}

@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: kitchen-service
+  threads:
+    virtual:
+      enabled: true
+  mvc:
+    problemdetails:
+      enabled: true
+
+server:
+  port: 8082
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+foodfleet:
+  kitchen:
+    max-active-tickets: 20
+    # Restaurant onboarding is a restaurant-service concern (later chapters); a static list keeps ch01 self-contained.
+    known-restaurants: rest-biryani-house,rest-dosa-corner,rest-tandoor-express

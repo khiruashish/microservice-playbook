@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: ordering-service
+  threads:
+    virtual:
+      enabled: true
+  mvc:
+    problemdetails:
+      enabled: true
+
+server:
+  port: 8086
+  shutdown: graceful
+
+foodfleet:
+  ordering:
+    flat-delivery-fee-paise: 3500

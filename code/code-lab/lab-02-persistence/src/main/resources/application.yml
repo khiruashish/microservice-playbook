@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: menu-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/foodfleet?currentSchema=menu_service
+    username: menu_service
+    password: ${DB_PASSWORD:local-menu-service}   # locally only; in Kubernetes, dynamic credentials (ADR-039)
+    hikari:
+      maximum-pool-size: 10                         # budgeted fleet-wide, not left at the default (ADR-033)
+  jpa:
+    open-in-view: false                             # no lazy loading during view rendering
+    hibernate:
+      ddl-auto: validate                            # Flyway owns the schema; Hibernate only checks it matches
+    properties:
+      hibernate.default_schema: menu_service        # the service's own schema, also in tests
+  flyway:
+    schemas: menu_service
+  mvc:
+    problemdetails:
+      enabled: true
+  threads:
+    virtual:
+      enabled: true
+management:
+  server:
+    port: 8081

@@ -1,0 +1,6 @@
+# A GraalVM native image: one executable, built ahead of time from the same jars (with configuration recorded by the
+# native-image agent during a training run). The image holds the executable and glibc, nothing else.
+FROM c60/glibc
+COPY menu-service /app/menu-service
+USER 10001
+ENTRYPOINT ["/app/menu-service", "-Xmx384m"]

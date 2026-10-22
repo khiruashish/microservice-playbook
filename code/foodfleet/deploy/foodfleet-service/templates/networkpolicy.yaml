@@ -1,0 +1,17 @@
+# The Actuator port only from the monitoring namespace (ADR-052); the application port is governed by the mesh's
+# AuthorizationPolicy, generated from the platform model (ADR-038, ADR-057).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Values.name }}-management
+  labels: {{- include "ff.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels: {app: {{ .Values.name }}}
+  policyTypes: [Ingress]
+  ingress:
+    - ports: [{port: 8080}{{ if .Values.grpc }}, {port: 9090}{{ end }}]
+    - from:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: {{ .Values.monitoringNamespace }}}
+      ports: [{port: 8081}]

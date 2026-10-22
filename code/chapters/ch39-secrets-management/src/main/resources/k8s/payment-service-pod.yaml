@@ -1,0 +1,35 @@
+# How payment-service receives its secret: a read-only volume (updated in place), not an environment variable
+# (inherited by child processes, readable in /proc, never updated), and not a subPath mount (never updated).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+  namespace: payments
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      serviceAccountName: payment-service
+      automountServiceAccountToken: false          # this pod doesn't call the Kubernetes API
+      containers:
+        - name: app
+          image: registry.foodfleet.internal/payment-service:1.42.0
+          volumeMounts:
+            - name: payment-gateway
+              mountPath: /run/secrets/payment-service
+              readOnly: true
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+      volumes:
+        - name: payment-gateway
+          secret:
+            secretName: payment-gateway
+            defaultMode: 0400

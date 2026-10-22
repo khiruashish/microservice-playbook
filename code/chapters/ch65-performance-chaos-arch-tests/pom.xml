@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 65 — Performance, Chaos & Architecture Tests.
+    load/     LoadModels (closed: looping virtual users; open: requests at a rate, timed from when due), Latencies (with
+              coordinated-omission correction), StallingServer (a service that freezes periodically)
+    chaos/    FaultProxy (latency, errors, a hung dependency), Services (order-service with three client set-ups),
+              Experiment (steady-state hypothesis, fault, abort condition)
+    arch/     ClassGraph (dependencies from bytecode, via the JDK's ClassFile API), Rules (layers, cycles, allowed
+              dependencies, naming, standard streams), Freeze, FoodFleetRules; sample/ the service they guard
+  verify/run.sh runs the load models, the chaos experiment and ten planted architecture violations.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch65-performance-chaos-arch-tests</artifactId>
+    <name>Ch65 :: Performance, Chaos &amp; Architecture Tests</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

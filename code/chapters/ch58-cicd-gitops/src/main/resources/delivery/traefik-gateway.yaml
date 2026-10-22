@@ -1,0 +1,21 @@
+# k3s ships Traefik as a Helm chart; this turns on its Gateway API provider and the Gateway the chart can create
+# (listener "web" on port 8000, routes from every namespace). Put it in /var/lib/rancher/k3s/server/manifests/, or
+# apply it, and k3s's Helm controller upgrades Traefik.
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    providers:
+      kubernetesGateway:
+        enabled: true
+    gateway:
+      enabled: true
+      listeners:
+        web:
+          port: 8000
+          protocol: HTTP
+          namespacePolicy:
+            from: All

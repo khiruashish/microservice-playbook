@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 75 — Multi-Tenancy, Multi-Region & Compliance.
+    tenancy/   Cluster (a throwaway PostgreSQL 16), TenancyModel (shared table + RLS, schema per tenant, database per
+               tenant), TenantScope (the tenant set per transaction, so pooled connections can't leak it)
+    erasure/   CryptoShredder (per-subject AES-GCM keys in a separate store), ByteScan (where erased bytes survive)
+  verify/run.sh compares the three models, provokes tenant leaks, measures a noisy neighbour and traces an erasure.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>ch75-multi-tenancy-multi-region-compliance</artifactId>
+    <name>Ch75 :: Multi-Tenancy, Multi-Region &amp; Compliance</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

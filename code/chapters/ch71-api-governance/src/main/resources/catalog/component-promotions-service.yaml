@@ -1,0 +1,17 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "promotions-service",
+    "annotations": {}
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "growth",
+    "system": "foodfleet",
+    "providesApis": [
+      "promotions-service"
+    ]
+  }
+}

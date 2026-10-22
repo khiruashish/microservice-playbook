@@ -1,0 +1,98 @@
+# One complete FoodFleet test environment in a namespace: PostgreSQL, menu-service, delivery-service and
+# order-service. NAMESPACE is replaced per environment (a pull request's preview, or the shared staging).
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: NAMESPACE
+  labels: {foodfleet.dev/environment: test}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: postgres, namespace: NAMESPACE}
+spec:
+  selector: {matchLabels: {app: postgres}}
+  template:
+    metadata: {labels: {app: postgres}}
+    spec:
+      containers:
+        - name: postgres
+          image: c62/postgres:16
+          imagePullPolicy: Never
+          args: ["-c", "fsync=off"]
+          ports: [{containerPort: 5432}]
+          readinessProbe: {tcpSocket: {port: 5432}, periodSeconds: 1}
+          resources: {requests: {cpu: 50m, memory: 64Mi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: postgres, namespace: NAMESPACE}
+spec: {selector: {app: postgres}, ports: [{port: 5432}]}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: menu, namespace: NAMESPACE}
+spec:
+  selector: {matchLabels: {app: menu}}
+  template:
+    metadata: {labels: {app: menu}}
+    spec:
+      containers:
+        - name: menu
+          image: foodfleet/e2e:ch64
+          imagePullPolicy: Never
+          args: ["menu"]
+          env: [{name: DAILY_STOCK, value: "5"}]
+          readinessProbe: {tcpSocket: {port: 8080}, periodSeconds: 1}
+          resources: {requests: {cpu: 50m, memory: 96Mi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: menu, namespace: NAMESPACE}
+spec: {selector: {app: menu}, ports: [{port: 80, targetPort: 8080}]}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: delivery, namespace: NAMESPACE}
+spec:
+  selector: {matchLabels: {app: delivery}}
+  template:
+    metadata: {labels: {app: delivery}}
+    spec:
+      containers:
+        - name: delivery
+          image: foodfleet/e2e:ch64
+          imagePullPolicy: Never
+          args: ["delivery"]
+          env: [{name: ASSIGN_MEDIAN_MS, value: "300"}, {name: ASSIGN_SIGMA, value: "1.0"}]
+          readinessProbe: {tcpSocket: {port: 8080}, periodSeconds: 1}
+          resources: {requests: {cpu: 50m, memory: 96Mi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: delivery, namespace: NAMESPACE}
+spec: {selector: {app: delivery}, ports: [{port: 80, targetPort: 8080}]}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: order, namespace: NAMESPACE}
+spec:
+  selector: {matchLabels: {app: order}}
+  template:
+    metadata: {labels: {app: order}}
+    spec:
+      containers:
+        - name: order
+          image: foodfleet/e2e:ch64
+          imagePullPolicy: Never
+          args: ["order"]
+          env:
+            - {name: DB_URL, value: "jdbc:postgresql://postgres:5432/postgres"}
+            - {name: MENU_URL, value: "http://menu"}
+            - {name: DELIVERY_URL, value: "http://delivery"}
+          readinessProbe: {tcpSocket: {port: 8080}, periodSeconds: 1}
+          resources: {requests: {cpu: 50m, memory: 96Mi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: order, namespace: NAMESPACE}
+spec: {selector: {app: order}, ports: [{port: 80, targetPort: 8080}]}

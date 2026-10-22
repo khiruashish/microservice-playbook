@@ -1,0 +1,9 @@
+name: ci
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: javac -d build/classes $(find src/main/java -name '*.java')
+      - run: docker build -t foodfleet/{{name}}:${{ github.sha }} .

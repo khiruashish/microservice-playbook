@@ -1,0 +1,10 @@
+# Behaviour a schema diff can't see: an unknown order is a 404 problem, not an empty 200.
+description: tracking-service shows "order not found" for an unknown order
+request:
+  method: GET
+  url: /orders/o-0000
+response:
+  status: 404
+  body:
+    status: 404
+    title: Order not found

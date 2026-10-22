@@ -1,0 +1,92 @@
+# The checkout game day as a Chaos Mesh workflow (2.8). Two faults, each with an SLO guard running beside it: the
+# guard aborts the workflow, and Chaos Mesh removes the fault, after 3 failed checks in a row (chapter 45's rule).
+# The blast radius: the canary cell only (label foodfleet.dev/cell: canary), during the agreed window.
+apiVersion: chaos-mesh.org/v1alpha1
+kind: Workflow
+metadata:
+  name: checkout-gameday
+  namespace: foodfleet
+spec:
+  entry: gameday
+  templates:
+    - name: gameday
+      templateType: Serial
+      deadline: 30m
+      children: [payment-latency-with-guard, settle, menu-pod-kill-with-guard]
+
+    # Experiment 1: payment-service slow on half its calls. Hypothesis: order-service's 2 s budget and its retry
+    # on another pod keep checkout above 99% success; the latency alert (not the availability one) fires.
+    - name: payment-latency-with-guard
+      templateType: Parallel
+      children: [payment-latency, checkout-slo-guard]
+    - name: payment-latency
+      templateType: NetworkChaos
+      deadline: 10m
+      networkChaos:
+        action: delay
+        mode: fixed-percent
+        value: "50"
+        selector:
+          namespaces: [foodfleet]
+          labelSelectors:
+            app.kubernetes.io/name: payment-service
+            foodfleet.dev/cell: canary
+        direction: to
+        delay:
+          latency: 1500ms
+          jitter: 300ms
+    - name: checkout-slo-guard
+      templateType: StatusCheck
+      deadline: 10m
+      abortWithStatusCheck: true
+      statusCheck:
+        mode: Continuous
+        type: HTTP
+        intervalSeconds: 5
+        timeoutSeconds: 2
+        failureThreshold: 3
+        successThreshold: 1
+        http:
+          # 200 while the canary cell's last minute of checkouts meets the abort line (>= 97% success), 503 otherwise
+          url: http://slo-probe.foodfleet.svc.cluster.local/checkout?cell=canary
+          method: GET
+          criteria:
+            statusCode: "200"
+
+    - name: settle
+      templateType: Suspend
+      deadline: 5m
+
+    # Experiment 2: a quarter of menu-service's pods killed. Hypothesis: readiness and the PDB keep browse above
+    # 99.9%; the HPA replaces the pods within its usual minute; nobody is paged.
+    - name: menu-pod-kill-with-guard
+      templateType: Parallel
+      children: [menu-pod-kill, browse-slo-guard]
+    - name: menu-pod-kill
+      templateType: PodChaos
+      deadline: 2m
+      podChaos:
+        action: pod-kill
+        mode: fixed-percent
+        value: "25"
+        selector:
+          namespaces: [foodfleet]
+          labelSelectors:
+            app.kubernetes.io/name: menu-service
+            foodfleet.dev/cell: canary
+    - name: browse-slo-guard
+      templateType: StatusCheck
+      deadline: 2m
+      abortWithStatusCheck: true
+      statusCheck:
+        mode: Continuous
+        type: HTTP
+        intervalSeconds: 5
+        timeoutSeconds: 2
+        failureThreshold: 3
+        successThreshold: 1
+        http:
+          url: http://slo-probe.foodfleet.svc.cluster.local/browse?cell=canary
+          method: GET
+          criteria:
+            statusCode: "200"

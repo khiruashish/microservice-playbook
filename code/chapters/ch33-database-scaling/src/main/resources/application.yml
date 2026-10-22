@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: customer-service
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/customers}
+    username: ${DATABASE_USER:customers}
+    password: ${DATABASE_PASSWORD:customers}
+    hikari:
+      maximum-pool-size: 16          # measured on 2 vCPUs: little gained past 16, much latency added; see PoolSizing
+      minimum-idle: 16               # a fixed-size pool: no connection churn under load
+      connection-timeout: 2s         # wait at most this long for a free connection, then fail fast
+      max-lifetime: 30m              # below any proxy or firewall idle timeout
+  flyway:
+    init-sqls:
+      - SET lock_timeout = '2s'      # a migration that can't get its lock gives up instead of queueing all traffic
+  threads:
+    virtual:
+      enabled: true
+app:
+  address-migration:
+    phase: EXPAND                    # EXPAND -> READ_NEW -> CONTRACT, one rolling deploy per step
+  backfill:
+    enabled: false                   # turn on for one instance once every instance runs EXPAND
+    batch-size: 1000
+    pause: 20ms

@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: order-service
+app:
+  oauth:
+    issuer: ${OAUTH_ISSUER:http://127.0.0.1:9000}   # discovery at <issuer>/.well-known/openid-configuration
+    audience: order-service                          # tokens for other services are refused here
+    client-id: order-service                         # order-service's own identity, for token exchange
+    client-secret: ${OAUTH_CLIENT_SECRET}            # from the secret store (chapter 39); no default
+# Chapter 37 does the same with Spring Security:
+#   spring.security.oauth2.resourceserver.jwt.issuer-uri: ${OAUTH_ISSUER}
+#   spring.security.oauth2.resourceserver.jwt.audiences: order-service
+#   spring.security.oauth2.resourceserver.jwt.jws-algorithms: ES256, RS256

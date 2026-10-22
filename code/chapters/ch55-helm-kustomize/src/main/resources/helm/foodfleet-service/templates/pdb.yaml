@@ -1,0 +1,11 @@
+{{- with .Values.pdb }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ $.Values.name }}
+  labels: {{- include "ff.labels" $ | nindent 4 }}
+spec:
+  maxUnavailable: {{ .maxUnavailable }}
+  selector:
+    matchLabels: {app: {{ $.Values.name }}}
+{{- end }}

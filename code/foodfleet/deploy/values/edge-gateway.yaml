@@ -1,0 +1,9 @@
+# Generated from foodfleet.yaml by generate.py. minReplicas 3: on a journey's required path, one per zone (ADR-054, ADR-056)
+# namespace: edge-gateway
+name: edge-gateway
+team: Platform
+image:
+  digest: sha256:2dd87420c9bf25a76b175c74518d83b440a4432f760021f5d093a213ab0a2359
+autoscaling:
+  minReplicas: 3
+  maxReplicas: 12

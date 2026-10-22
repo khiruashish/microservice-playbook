@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/foodfleet?currentSchema=order_service
+    username: order_service
+    password: ${DB_PASSWORD:local-order-service}
+  flyway:
+    schemas: order_service
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      properties:
+        enable.idempotence: true
+foodfleet:
+  outbox:
+    poll-interval: 500ms
+management:
+  server:
+    port: 8081

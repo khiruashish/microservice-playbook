@@ -1,0 +1,35 @@
+# menu-service's canary with Argo Rollouts. The Deployment stays the shared chart's; the Rollout takes over its pods
+# (workloadRef) and scales the Deployment down as the Rollout scales up.
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: menu-service
+  namespace: menu-service
+spec:
+  workloadRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: menu-service
+    scaleDown: progressively
+  revisionHistoryLimit: 3        # no replicas: the chart's HPA scales the Rollout (autoscaling.target: Rollout)
+  strategy:
+    canary:
+      stableService: menu-service-stable
+      canaryService: menu-service-canary
+      trafficRouting:
+        istio:
+          virtualService:
+            name: menu-service
+            routes: [primary]
+      dynamicStableScale: true          # stable shrinks as the canary grows: no double capacity at 100%
+      analysis:                         # runs for the whole rollout, from the first step
+        templates: [{templateName: menu-service-canary}]
+        startingStep: 1
+      steps:
+        - setCanaryScale: {matchTrafficWeight: true}   # the canary's pods follow its share (chapter 58, run 1)
+        - setWeight: 10
+        - pause: {duration: 5m}
+        - setWeight: 25
+        - pause: {duration: 5m}
+        - setWeight: 50
+        - pause: {duration: 5m}

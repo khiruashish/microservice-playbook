@@ -1,0 +1,11 @@
+# In Kubernetes, the Service is the discovery mechanism (ADR-011): the gateway calls http://menu-service, kube-proxy
+# or the mesh picks a pod. Replace lb("menu-service") with uri("http://menu-service") in Routes for this setup, or keep
+# lb(...) and add spring-cloud-starter-kubernetes-client to discover pods per request.
+apiVersion: v1
+kind: Service
+metadata:
+  name: menu-service
+spec:
+  selector: {app: menu-service}
+  ports:
+    - {name: http, port: 80, targetPort: 8080}

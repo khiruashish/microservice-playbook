@@ -1,0 +1,78 @@
+# Platform discovery for kitchen-service.
+#   kubectl apply -f k8s/kitchen-service.yaml
+#   kubectl get endpointslices -l kubernetes.io/service-name=kitchen-service -o wide
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kitchen-service               # DNS: kitchen-service.foodfleet.svc.cluster.local
+  namespace: foodfleet
+spec:
+  type: ClusterIP                     # one stable virtual IP; kube-proxy spreads *connections* over ready pods
+  selector:
+    app: kitchen-service
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+# Headless twin: DNS returns every ready pod IP instead of one virtual IP. Use it for client-side
+# balancing of long-lived HTTP/2 or gRPC connections, which a ClusterIP would pin to one pod.
+apiVersion: v1
+kind: Service
+metadata:
+  name: kitchen-service-headless
+  namespace: foodfleet
+spec:
+  clusterIP: None
+  selector:
+    app: kitchen-service
+  ports:
+    - name: grpc
+      port: 9090
+      targetPort: grpc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kitchen-service
+  namespace: foodfleet
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: kitchen-service
+  template:
+    metadata:
+      labels:
+        app: kitchen-service
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: kitchen-service
+          image: foodfleet/kitchen-service:1.0.0
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: grpc
+              containerPort: 9090
+          # Only READY pods are in the Service's EndpointSlices. The readiness probe is what removes
+          # a hung pod from discovery: period × failureThreshold = 3 × 5 s here (defaults: 10 s × 3).
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            periodSeconds: 10
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              # Keep serving while the endpoint removal propagates to every node, then shut down.
+              # (The sleep action needs Kubernetes 1.30+; older clusters use exec: sleep 5.)
+              sleep:
+                seconds: 5

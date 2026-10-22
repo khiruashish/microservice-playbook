@@ -1,0 +1,23 @@
+{
+  "consumer": {"name": "app-bff"},
+  "provider": {"name": "menu-service"},
+  "interactions": [
+    {
+      "description": "a restaurant's menu",
+      "providerStates": [{"name": "restaurant 7 has a menu"}],
+      "request": {"method": "GET", "path": "/restaurants/7/menu", "headers": {"Accept": "application/json"}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json"},
+        "body": {"items": [{"id": "paneer-tikka", "name": "Paneer Tikka", "price": "129.50", "spice": "MEDIUM",
+                            "description": "Cottage cheese, charred in the tandoor", "available": true}]},
+        "matchingRules": {"body": {
+          "$.items": {"matchers": [{"match": "type", "min": 1}]},
+          "$.items[*].price": {"matchers": [{"match": "regex", "regex": "^\\d+\\.\\d{2}$"}]},
+          "$.items[*].spice": {"matchers": [{"match": "regex", "regex": "^(LOW|MEDIUM|HIGH)$"}]}
+        }}
+      }
+    }
+  ],
+  "metadata": {"pactSpecification": {"version": "3.0.0"}}
+}

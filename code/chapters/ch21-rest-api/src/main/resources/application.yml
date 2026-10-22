@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: order-history-service
+  threads:
+    virtual:
+      enabled: true
+  mvc:
+    problemdetails:
+      enabled: true          # Spring's own errors (404 route, 405, 415, bad JSON) as RFC 9457 too
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/orders}
+    username: ${DATABASE_USER:orders}
+    password: ${DATABASE_PASSWORD:orders}
+
+server:
+  shutdown: graceful

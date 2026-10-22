@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 39 — Secrets Management.
+    secret/   Secret (a value that doesn't leak through toString, logs or equals; wipeable) and MountedSecrets
+              (a Kubernetes Secret volume followed through the kubelet's atomic ..data swaps)
+    vault/    VaultClient (OpenBao / HashiCorp Vault HTTP API: Kubernetes login, KV v2, database credentials, leases)
+              and DatabaseCredentials (renew until max_ttl, then rotate to new credentials before the old ones end)
+    web/      order-service: configuration from OpenBao/Vault via Spring Cloud Vault, a HikariCP pool whose
+              credentials come from a rotating Spring Vault lease (HikariCredentialsProvider)
+  resources/openbao, eso and k8s hold the OpenBao policy and setup, External Secrets Operator resources, and the
+  Kubernetes encryption-at-rest and pod configuration. verify/run.sh measures everything except web/ against a real
+  OpenBao dev server and PostgreSQL 16.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch39-secrets-management</artifactId>
+    <name>Ch39 :: Secrets Management</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-vault-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

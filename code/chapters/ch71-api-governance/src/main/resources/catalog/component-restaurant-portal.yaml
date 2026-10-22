@@ -1,0 +1,21 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "restaurant-portal",
+    "annotations": {
+      "foodfleet.dev/runbook": "https://runbooks.foodfleet.dev/restaurant-portal"
+    }
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "menu",
+    "system": "foodfleet",
+    "consumesApis": [
+      "menu-service",
+      "payment-service",
+      "promotions-service"
+    ]
+  }
+}

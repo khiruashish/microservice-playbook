@@ -1,0 +1,11 @@
+{
+  "buildDefinition": {
+    "buildType": "https://foodfleet.in/buildtypes/local-maven/v1",
+    "externalParameters": {
+      "workflow": {"ref": "uncommitted", "repository": "file:///Users/dev/order-service", "path": "mvn spring-boot:build-image"}
+    }
+  },
+  "runDetails": {
+    "builder": {"id": "https://foodfleet.in/builders/dev-laptop"}
+  }
+}

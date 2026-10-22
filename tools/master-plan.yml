@@ -1,0 +1,354 @@
+# ---------------------------------------------------------------------------
+# Microservices Enterprise Handbook — MASTER PLAN (single source of truth)
+#
+# Every page in the site is listed here exactly once. `tools/handbook.py`:
+#   * creates a stub for any page that does not exist yet,
+#   * regenerates the `nav:` block inside mkdocs.yml,
+#   * regenerates docs/appendix/roadmap.md (progress tracker).
+#
+# Fields: id · file (relative to the section dir) · title · bands · scope
+# bands: 1=L1 Foundation (0–3y) · 2=L2 Practitioner (3–7y)
+#        3=L3 Senior/Lead (7–11y) · 4=L4 Architect/Principal (11–15+y)
+# ---------------------------------------------------------------------------
+
+sections:
+
+  - tab: Start
+    dir: getting-started
+    pages:
+      - {id: gs-00, file: index.md, title: "How to Use This Handbook", bands: [1,2,3,4], scope: "Learning paths per band, conventions, badges, how chapters are structured"}
+      - {id: gs-01, file: environment-setup.md, title: "Environment Setup", bands: [1,2], scope: "JDK 25, Maven, Docker, kind/minikube, IDE, running the code tree"}
+      - {id: gs-02, file: first-microservice.md, title: "Your First Microservice in 15 Minutes", bands: [1], scope: "Spring Boot 4 REST service, records, validation, Actuator, Docker run"}
+      - {id: gs-03, file: glossary.md, title: "Glossary", bands: [1,2,3,4], scope: "Every term used in the handbook, with links to the defining chapter"}
+
+  - tab: Foundations
+    dir: foundations
+    pages:
+      - {id: p01, file: index.md, title: "Part 1 — Foundations", bands: [1,2,3,4], scope: "Part overview and reading order"}
+      - {id: ch01, file: ch01-architecture-styles.md, title: "1. Monolith vs SOA vs Microservices vs Modular Monolith", bands: [1,2,3,4], scope: "Architecture styles, trade-offs, when microservices are the wrong choice, Spring Modulith, extraction seams"}
+      - {id: ch02, file: ch02-characteristics-principles.md, title: "2. Characteristics & Principles", bands: [1,2,3], scope: "Single responsibility, autonomy, decentralization, smart endpoints/dumb pipes, design for failure"}
+      - {id: ch03, file: ch03-distributed-systems-fundamentals.md, title: "3. Distributed Systems Fundamentals", bands: [2,3,4], scope: "8 fallacies, CAP, PACELC, consistency models, Lamport/vector clocks, idempotency, exactly-once myths"}
+      - {id: ch04, file: ch04-twelve-factor.md, title: "4. Twelve-Factor & Fifteen-Factor Apps", bands: [1,2,3], scope: "Each factor applied to Spring Boot 4 and Kubernetes"}
+      - {id: ch05, file: ch05-domain-driven-design.md, title: "5. Domain-Driven Design", bands: [2,3,4], scope: "Strategic (bounded contexts, context maps, subdomains) and tactical (aggregates, VOs, domain events) DDD"}
+      - {id: ch06, file: ch06-service-decomposition.md, title: "6. Service Decomposition", bands: [2,3,4], scope: "Business capability, subdomain, Event Storming, sizing heuristics, decomposition smells"}
+      - {id: ch07, file: ch07-conways-law-team-topologies.md, title: "7. Conway's Law & Team Topologies", bands: [3,4], scope: "Socio-technical architecture, team types, interaction modes, ownership models"}
+      - {id: ch08, file: ch08-spring-boot-4-essentials.md, title: "8. Spring Boot 4 Essentials for Microservices", bands: [1,2,3], scope: "What's new vs Boot 3, modular starters, Jackson 3, JSpecify, virtual threads, AOT, HTTP interfaces, API versioning"}
+
+  - tab: Patterns
+    dir: architecture-patterns
+    pages:
+      - {id: p02, file: index.md, title: "Part 2 — Architecture & Patterns", bands: [2,3,4], scope: "Pattern map and selection guide"}
+      - {id: ch09, file: ch09-hexagonal-clean-architecture.md, title: "9. Hexagonal, Clean & Onion Architecture", bands: [2,3], scope: "Ports and adapters inside a service, package structure, ArchUnit enforcement"}
+      - {id: ch10, file: ch10-api-gateway-bff.md, title: "10. API Gateway & Backend for Frontend", bands: [2,3], scope: "Routing, aggregation, offloading, BFF per channel"}
+      - {id: ch11, file: ch11-service-discovery-patterns.md, title: "11. Service Discovery Patterns", bands: [2,3], scope: "Client-side, server-side, DNS and platform discovery"}
+      - {id: ch12, file: ch12-database-per-service.md, title: "12. Database per Service & API Composition", bands: [2,3], scope: "Data ownership, shared database anti-pattern, API composition"}
+      - {id: ch13, file: ch13-cqrs-event-sourcing.md, title: "13. CQRS & Event Sourcing", bands: [3,4], scope: "Read/write separation, event stores, projections, snapshots"}
+      - {id: ch14, file: ch14-saga-pattern.md, title: "14. Saga Pattern", bands: [3,4], scope: "Choreography vs orchestration, compensation, semantic locks, countermeasures"}
+      - {id: ch15, file: ch15-outbox-inbox-cdc.md, title: "15. Transactional Outbox, Inbox & CDC", bands: [3,4], scope: "Dual-write problem, polling publisher, Debezium CDC, inbox dedup"}
+      - {id: ch16, file: ch16-strangler-fig-migration.md, title: "16. Strangler Fig, ACL & Monolith Migration", bands: [3,4], scope: "Strangler fig, anti-corruption layer, branch by abstraction, migration playbook"}
+      - {id: ch17, file: ch17-sidecar-ambassador-adapter.md, title: "17. Sidecar, Ambassador & Adapter", bands: [2,3], scope: "Container-level patterns and their mesh-era equivalents"}
+      - {id: ch18, file: ch18-resilience-patterns.md, title: "18. Resilience Patterns", bands: [2,3], scope: "Bulkhead, circuit breaker, retry, timeout, rate limiter, fallback (pattern view)"}
+      - {id: ch19, file: ch19-event-driven-architecture.md, title: "19. Event-Driven Architecture", bands: [2,3,4], scope: "Event notification vs event-carried state transfer vs event sourcing"}
+      - {id: ch20, file: ch20-microservice-anti-patterns.md, title: "20. Microservice Anti-Patterns", bands: [2,3,4], scope: "Distributed monolith, chatty services, nano-services, shared-library hell"}
+
+  - tab: Communication
+    dir: communication
+    pages:
+      - {id: p03, file: index.md, title: "Part 3 — Communication", bands: [1,2,3], scope: "Sync vs async decision guide"}
+      - {id: ch21, file: ch21-rest-api-design.md, title: "21. Synchronous REST", bands: [1,2,3], scope: "Resource design, Boot 4 API versioning, HATEOAS, pagination, RFC 9457 Problem Details"}
+      - {id: ch22, file: ch22-http-clients.md, title: "22. HTTP Clients", bands: [1,2,3], scope: "RestClient, HTTP Service Clients, WebClient, OpenFeign status and migration"}
+      - {id: ch23, file: ch23-grpc.md, title: "23. gRPC & Protocol Buffers", bands: [2,3], scope: "Spring gRPC, streaming, deadlines, interceptors"}
+      - {id: ch24, file: ch24-graphql.md, title: "24. GraphQL", bands: [2,3], scope: "Spring for GraphQL, batching, federation"}
+      - {id: ch25, file: ch25-asynchronous-messaging.md, title: "25. Asynchronous Messaging", bands: [2,3], scope: "Queues vs topics, delivery semantics, ordering, DLQ, poison messages"}
+      - {id: ch26, file: ch26-websockets-sse.md, title: "26. WebSockets & Server-Sent Events", bands: [2,3], scope: "Real-time order tracking, scaling connections, fan-out"}
+      - {id: ch27, file: ch27-api-contracts.md, title: "27. API Contracts & Schema Evolution", bands: [2,3,4], scope: "OpenAPI-first, AsyncAPI, compatibility rules, consumer-driven contracts"}
+      - {id: ch28, file: ch28-idempotency-correlation.md, title: "28. Idempotency, Deduplication & Correlation", bands: [2,3], scope: "Idempotency keys, dedup stores, correlation and causation IDs"}
+
+  - tab: Data
+    dir: data
+    pages:
+      - {id: p04, file: index.md, title: "Part 4 — Data Management", bands: [2,3,4], scope: "Data ownership map"}
+      - {id: ch29, file: ch29-polyglot-persistence.md, title: "29. Polyglot Persistence", bands: [2,3], scope: "Choosing SQL, document, key-value, search and time-series stores per service"}
+      - {id: ch30, file: ch30-distributed-transactions.md, title: "30. Distributed Transactions", bands: [3,4], scope: "2PC vs saga vs outbox; why XA is avoided"}
+      - {id: ch31, file: ch31-data-consistency.md, title: "31. Data Consistency", bands: [3,4], scope: "Eventual consistency, read-your-writes, conflict resolution"}
+      - {id: ch32, file: ch32-caching-strategies.md, title: "32. Caching Strategies", bands: [2,3], scope: "Cache-aside, read/write-through, write-behind, invalidation, stampede protection"}
+      - {id: ch33, file: ch33-database-scaling.md, title: "33. Database Scaling & Zero-Downtime Migrations", bands: [3,4], scope: "Replicas, sharding, partitioning, HikariCP, expand/contract migrations"}
+      - {id: ch34, file: ch34-reporting-analytics.md, title: "34. Reporting & Analytics Across Services", bands: [3,4], scope: "Data lake, CDC pipelines, materialized views, data mesh"}
+
+  - tab: Security
+    dir: security
+    pages:
+      - {id: p05, file: index.md, title: "Part 5 — Security", bands: [2,3,4], scope: "Security architecture overview"}
+      - {id: ch35, file: ch35-security-fundamentals.md, title: "35. Security Fundamentals & Threat Modeling", bands: [2,3], scope: "STRIDE, OWASP API Security Top 10"}
+      - {id: ch36, file: ch36-oauth2-oidc-jwt.md, title: "36. OAuth 2.1, OIDC & JWT", bands: [2,3], scope: "Flows, token relay, token exchange, opaque vs JWT"}
+      - {id: ch37, file: ch37-spring-security-7.md, title: "37. Spring Security 7", bands: [2,3], scope: "Resource servers, method security, Authorization Server, Keycloak"}
+      - {id: ch38, file: ch38-service-to-service-security.md, title: "38. Service-to-Service Security", bands: [3,4], scope: "mTLS, SPIFFE/SPIRE, zero trust, client credentials"}
+      - {id: ch39, file: ch39-secrets-management.md, title: "39. Secrets Management", bands: [2,3], scope: "Vault, Kubernetes Secrets, External Secrets Operator, rotation"}
+      - {id: ch40, file: ch40-api-security.md, title: "40. API Security Hardening", bands: [2,3], scope: "Rate limiting, WAF, validation, CORS, CSRF, multi-tenant isolation"}
+      - {id: ch41, file: ch41-supply-chain-compliance.md, title: "41. Supply-Chain Security & Compliance", bands: [3,4], scope: "SBOM, image signing, scanning, PCI-DSS, GDPR, DPDP Act, RBI data localization"}
+
+  - tab: Resilience
+    dir: resilience
+    pages:
+      - {id: p06, file: index.md, title: "Part 6 — Resilience & Fault Tolerance", bands: [2,3,4], scope: "Failure-thinking primer"}
+      - {id: ch42, file: ch42-failure-modes.md, title: "42. Failure Modes & Cascading Failures", bands: [2,3,4], scope: "Partial failure, retry storms, thundering herds, metastable failures"}
+      - {id: ch43, file: ch43-resilience4j-deep-dive.md, title: "43. Resilience4j & Spring Framework 7 Resilience", bands: [2,3], scope: "All Resilience4j modules plus @Retryable and @ConcurrencyLimit"}
+      - {id: ch44, file: ch44-timeouts-retries-backpressure.md, title: "44. Timeouts, Retries, Backpressure & Load Shedding", bands: [3,4], scope: "Deadline budgets, jittered backoff, load shedding, graceful degradation"}
+      - {id: ch45, file: ch45-chaos-engineering.md, title: "45. Chaos Engineering", bands: [3,4], scope: "Principles, game days, Chaos Mesh, Litmus"}
+      - {id: ch46, file: ch46-disaster-recovery.md, title: "46. Disaster Recovery & Multi-Region", bands: [3,4], scope: "RPO/RTO, active-active vs active-passive, cell-based architecture"}
+
+  - tab: Observability
+    dir: observability
+    pages:
+      - {id: p07, file: index.md, title: "Part 7 — Observability", bands: [2,3,4], scope: "Observability stack map"}
+      - {id: ch47, file: ch47-observability-fundamentals.md, title: "47. Observability Fundamentals", bands: [1,2,3], scope: "Logs, metrics, traces, profiles, events; observability vs monitoring"}
+      - {id: ch48, file: ch48-metrics-micrometer.md, title: "48. Metrics with Micrometer", bands: [2,3], scope: "Observation API, RED/USE/Golden Signals, cardinality"}
+      - {id: ch49, file: ch49-distributed-tracing-otel.md, title: "49. Distributed Tracing with OpenTelemetry", bands: [2,3], scope: "W3C context, sampling, baggage, Kafka propagation"}
+      - {id: ch50, file: ch50-structured-logging.md, title: "50. Structured Logging & Correlation", bands: [1,2,3], scope: "Boot structured logging, MDC with virtual threads, PII masking"}
+      - {id: ch51, file: ch51-slo-alerting.md, title: "51. SLIs, SLOs, Error Budgets & Alerting", bands: [3,4], scope: "SLO design, burn-rate alerts, runbooks"}
+      - {id: ch52, file: ch52-health-checks-actuator.md, title: "52. Health Checks & Actuator Hardening", bands: [1,2], scope: "Liveness, readiness, startup probes, securing Actuator"}
+
+  - tab: Platform
+    dir: deployment
+    pages:
+      - {id: p08, file: index.md, title: "Part 8 — Deployment & Platform", bands: [2,3,4], scope: "Path to production overview"}
+      - {id: ch53, file: ch53-containerization.md, title: "53. Containerization", bands: [1,2,3], scope: "Dockerfiles, layered jars, Buildpacks, Jib, distroless, CVEs"}
+      - {id: ch54, file: ch54-kubernetes-for-spring.md, title: "54. Kubernetes for Spring Developers", bands: [2,3], scope: "Workloads, Services, Gateway API, config, JVM container ergonomics"}
+      - {id: ch55, file: ch55-helm-kustomize.md, title: "55. Helm, Kustomize & Environment Promotion", bands: [2,3], scope: "Charts, overlays, promotion strategies"}
+      - {id: ch56, file: ch56-autoscaling.md, title: "56. Autoscaling", bands: [2,3,4], scope: "HPA, VPA, KEDA on Kafka lag, cluster autoscaler"}
+      - {id: ch57, file: ch57-service-mesh.md, title: "57. Service Mesh", bands: [3,4], scope: "Istio sidecar vs ambient, Linkerd, traffic management, mTLS"}
+      - {id: ch58, file: ch58-cicd-gitops.md, title: "58. CI/CD, GitOps & Progressive Delivery", bands: [2,3,4], scope: "Pipelines, quality gates, Argo CD, canary, blue-green, feature flags"}
+      - {id: ch59, file: ch59-cloud-native-platforms.md, title: "59. Cloud-Native on AWS, Azure & GCP", bands: [3,4], scope: "EKS/AKS/GKE, managed Kafka and databases, serverless trade-offs"}
+      - {id: ch60, file: ch60-native-images-startup.md, title: "60. Native Images, CRaC & Startup Optimization", bands: [3,4], scope: "GraalVM native image, CRaC, AOT cache, Project Leyden"}
+
+  - tab: Testing
+    dir: testing
+    pages:
+      - {id: p09, file: index.md, title: "Part 9 — Testing", bands: [1,2,3], scope: "Testing strategy overview"}
+      - {id: ch61, file: ch61-test-strategy.md, title: "61. Test Pyramid & Honeycomb", bands: [1,2,3], scope: "Choosing test types for microservices"}
+      - {id: ch62, file: ch62-unit-slice-integration-tests.md, title: "62. Unit, Slice & Testcontainers Tests", bands: [1,2], scope: "Boot 4 test starters, slices, Testcontainers, service connections"}
+      - {id: ch63, file: ch63-contract-testing.md, title: "63. Contract Testing", bands: [2,3], scope: "Spring Cloud Contract, Pact"}
+      - {id: ch64, file: ch64-component-e2e-testing.md, title: "64. Component & End-to-End Testing", bands: [2,3], scope: "Component tests, E2E, ephemeral preview environments"}
+      - {id: ch65, file: ch65-performance-chaos-arch-tests.md, title: "65. Performance, Chaos & Architecture Tests", bands: [3,4], scope: "Gatling, k6, chaos tests, ArchUnit fitness functions"}
+
+  - tab: Performance
+    dir: performance-scalability
+    pages:
+      - {id: p10, file: index.md, title: "Part 10 — Performance & Scalability", bands: [3,4], scope: "Performance engineering overview"}
+      - {id: ch66, file: ch66-latency-virtual-threads-reactive.md, title: "66. Latency, Tail Latency, Virtual Threads vs Reactive", bands: [3,4], scope: "Latency budgets, p99/p999, when each concurrency model wins"}
+      - {id: ch67, file: ch67-jvm-tuning-containers.md, title: "67. JVM Tuning in Containers", bands: [3,4], scope: "G1 vs Generational ZGC, heap sizing, JFR"}
+      - {id: ch68, file: ch68-horizontal-scaling.md, title: "68. Horizontal Scaling & Partitioning", bands: [2,3,4], scope: "Statelessness, sticky sessions, partitioning strategies"}
+      - {id: ch69, file: ch69-kafka-throughput-tuning.md, title: "69. High-Throughput Kafka Tuning", bands: [3,4], scope: "Producer/consumer tuning, batching, batch vs stream"}
+      - {id: ch70, file: ch70-finops.md, title: "70. Cost Optimization (FinOps)", bands: [3,4], scope: "Unit economics, right-sizing, spot, cost allocation"}
+
+  - tab: Governance
+    dir: governance-org
+    pages:
+      - {id: p11, file: index.md, title: "Part 11 — Governance & Organization", bands: [3,4], scope: "Governance overview"}
+      - {id: ch71, file: ch71-api-governance.md, title: "71. API Governance & Developer Portals", bands: [3,4], scope: "Versioning policy, deprecation, linting, Backstage"}
+      - {id: ch72, file: ch72-platform-engineering.md, title: "72. Platform Engineering & Golden Paths", bands: [3,4], scope: "Internal developer platforms, templates, paved roads"}
+      - {id: ch73, file: ch73-adrs-fitness-functions.md, title: "73. ADRs, Fitness Functions & Tech Radar", bands: [3,4], scope: "Decision records, evolutionary architecture"}
+      - {id: ch74, file: ch74-maturity-migration-roadmap.md, title: "74. Maturity Model & Migration Roadmap", bands: [4], scope: "Enterprise monolith-to-microservices roadmap"}
+      - {id: ch75, file: ch75-multi-tenancy-multi-region-compliance.md, title: "75. Multi-Tenancy, Multi-Region & Compliance", bands: [3,4], scope: "Tenant isolation models, regulated industries"}
+      - {id: ch76, file: ch76-serverless-microservices.md, title: "76. Serverless & Function-Based Services", bands: [3,4], scope: "FaaS vs containers, Spring Cloud Function, when serverless wins"}
+      - {id: ch77, file: ch77-ai-native-microservices.md, title: "77. AI-Native Microservices", bands: [3,4], scope: "Spring AI services, LLM gateways, MCP servers, cost and latency controls"}
+
+  - tab: Components
+    dir: components-tools
+    groups:
+      - name: Overview
+        pages:
+          - {id: ct-00, file: index.md, title: "Components & Tools Overview", bands: [1,2,3,4], scope: "Reference architecture map of every component"}
+      - name: Edge & Routing
+        pages:
+          - {id: ct-01, file: api-gateway.md, title: "API Gateway", bands: [1,2,3,4], scope: "Spring Cloud Gateway MVC/WebFlux, Kong, NGINX, AWS API Gateway"}
+          - {id: ct-02, file: load-balancing.md, title: "Load Balancing", bands: [2,3], scope: "Spring Cloud LoadBalancer, L4/L7, Kubernetes Services"}
+          - {id: ct-03, file: rate-limiting.md, title: "Rate Limiting", bands: [2,3], scope: "Token bucket in Redis, Bucket4j, gateway limits"}
+          - {id: ct-04, file: bff.md, title: "Backend for Frontend", bands: [2,3], scope: "Per-channel aggregation services"}
+      - name: Discovery & Configuration
+        pages:
+          - {id: ct-05, file: service-discovery.md, title: "Service Discovery", bands: [1,2,3], scope: "Eureka, Consul, Kubernetes DNS"}
+          - {id: ct-06, file: configuration-management.md, title: "Configuration Management", bands: [1,2,3], scope: "Spring Cloud Config, Spring Cloud Kubernetes, Consul KV, Vault, Bus refresh"}
+          - {id: ct-07, file: feature-flags.md, title: "Feature Flags", bands: [2,3], scope: "OpenFeature, Unleash, FF4j"}
+      - name: Communication
+        pages:
+          - {id: ct-08, file: http-service-clients.md, title: "REST Clients & HTTP Interfaces", bands: [1,2,3], scope: "RestClient, @HttpExchange groups, timeouts"}
+          - {id: ct-09, file: grpc.md, title: "gRPC", bands: [2,3], scope: "Spring gRPC server and client"}
+          - {id: ct-10, file: graphql.md, title: "GraphQL", bands: [2,3], scope: "Spring for GraphQL"}
+          - {id: ct-11, file: websockets-sse.md, title: "WebSockets & SSE", bands: [2,3], scope: "STOMP, SSE, scaling with Redis/Kafka"}
+      - name: Messaging & Streaming
+        pages:
+          - {id: ct-12, file: messaging-fundamentals.md, title: "Messaging Fundamentals", bands: [1,2], scope: "Brokers, queues, topics, semantics"}
+          - {id: ct-13, file: kafka.md, title: "Apache Kafka", bands: [1,2,3,4], scope: "KRaft, partitions, consumer groups, EOS, DLT, compaction, Connect, Streams, Schema Registry"}
+          - {id: ct-14, file: rabbitmq.md, title: "RabbitMQ", bands: [2,3], scope: "Exchanges, quorum queues, streams"}
+          - {id: ct-15, file: spring-cloud-stream.md, title: "Spring Cloud Stream", bands: [2,3], scope: "Binder abstraction, functions"}
+          - {id: ct-16, file: debezium-cdc.md, title: "Debezium CDC", bands: [3,4], scope: "Log-based CDC, outbox event router"}
+          - {id: ct-17, file: outbox-implementation.md, title: "Outbox Implementation", bands: [3,4], scope: "Spring Modulith event externalization, polling, CDC"}
+      - name: Resilience
+        pages:
+          - {id: ct-18, file: resilience4j.md, title: "Resilience4j", bands: [2,3], scope: "CircuitBreaker, Retry, RateLimiter, Bulkhead, TimeLimiter"}
+          - {id: ct-19, file: spring-framework-resilience.md, title: "Spring Framework 7 Resilience", bands: [2,3], scope: "@Retryable, @ConcurrencyLimit, RetryTemplate"}
+      - name: Security
+        pages:
+          - {id: ct-20, file: spring-security.md, title: "Spring Security", bands: [2,3], scope: "Resource server, method security"}
+          - {id: ct-21, file: keycloak-authorization-server.md, title: "Keycloak & Spring Authorization Server", bands: [2,3], scope: "Identity providers, realms, clients"}
+          - {id: ct-22, file: jwt-token-relay.md, title: "JWT & Token Relay", bands: [2,3], scope: "Propagation through gateway and clients"}
+          - {id: ct-23, file: mtls-cert-manager.md, title: "mTLS & cert-manager", bands: [3,4], scope: "Certificate lifecycle, mesh mTLS"}
+          - {id: ct-24, file: vault.md, title: "HashiCorp Vault", bands: [2,3], scope: "Dynamic secrets, Spring Cloud Vault"}
+          - {id: ct-25, file: opa.md, title: "Open Policy Agent", bands: [3,4], scope: "Policy as code, authorization decisions"}
+      - name: Data
+        pages:
+          - {id: ct-26, file: postgresql.md, title: "PostgreSQL", bands: [1,2,3], scope: "Schema per service, tuning, HA"}
+          - {id: ct-27, file: mongodb.md, title: "MongoDB", bands: [2,3], scope: "Document modelling, transactions"}
+          - {id: ct-28, file: redis-valkey.md, title: "Redis / Valkey", bands: [2,3], scope: "Caching, locks, rate limits, GEO"}
+          - {id: ct-29, file: elasticsearch-opensearch.md, title: "Elasticsearch / OpenSearch", bands: [2,3], scope: "Search, geo queries, CDC-fed indexes"}
+          - {id: ct-30, file: cassandra.md, title: "Cassandra", bands: [3,4], scope: "Wide-column, write-heavy workloads"}
+          - {id: ct-31, file: flyway-liquibase.md, title: "Flyway & Liquibase", bands: [1,2], scope: "Schema migrations, expand/contract"}
+          - {id: ct-32, file: connection-pooling.md, title: "Connection Pooling", bands: [2,3], scope: "HikariCP sizing, virtual threads"}
+      - name: Caching
+        pages:
+          - {id: ct-33, file: spring-cache.md, title: "Spring Cache Abstraction", bands: [1,2], scope: "Annotations, cache managers"}
+          - {id: ct-34, file: caffeine.md, title: "Caffeine (L1 Cache)", bands: [2,3], scope: "In-process caching"}
+          - {id: ct-35, file: multi-level-caching.md, title: "Multi-Level Caching", bands: [3,4], scope: "L1 + L2, invalidation via events"}
+          - {id: ct-36, file: cdn.md, title: "CDN", bands: [2,3], scope: "Edge caching for APIs and media"}
+      - name: Observability
+        pages:
+          - {id: ct-37, file: monitoring-prometheus-grafana.md, title: "Monitoring: Prometheus, Grafana, Alertmanager", bands: [1,2,3], scope: "Scraping, dashboards, alerts"}
+          - {id: ct-38, file: logging-stack.md, title: "Logging: Loki, ELK, EFK", bands: [1,2,3], scope: "Shipping, indexing, querying logs"}
+          - {id: ct-39, file: distributed-tracing.md, title: "Distributed Tracing: OpenTelemetry, Tempo, Jaeger, Zipkin", bands: [2,3], scope: "Instrumentation and backends"}
+          - {id: ct-40, file: otel-collector-lgtm.md, title: "OpenTelemetry Collector & Grafana LGTM", bands: [2,3,4], scope: "Pipelines, processors, exporters"}
+          - {id: ct-41, file: spring-boot-actuator.md, title: "Spring Boot Actuator", bands: [1,2], scope: "Endpoints, probes, security"}
+          - {id: ct-42, file: apm-tools.md, title: "APM: Datadog, New Relic, Dynatrace", bands: [3,4], scope: "Commercial APM comparison"}
+          - {id: ct-43, file: profiling.md, title: "Profiling: JFR & Pyroscope", bands: [3,4], scope: "Continuous profiling"}
+      - name: Containers & Orchestration
+        pages:
+          - {id: ct-44, file: docker.md, title: "Docker", bands: [1,2], scope: "Images, layers, multi-stage builds"}
+          - {id: ct-45, file: docker-compose.md, title: "Docker Compose", bands: [1,2], scope: "Local stacks, Boot Compose support"}
+          - {id: ct-46, file: kubernetes.md, title: "Kubernetes", bands: [2,3,4], scope: "Core objects for microservices"}
+          - {id: ct-47, file: helm.md, title: "Helm", bands: [2,3], scope: "Charts, umbrella charts"}
+          - {id: ct-48, file: kustomize.md, title: "Kustomize", bands: [2,3], scope: "Overlays"}
+          - {id: ct-49, file: keda.md, title: "KEDA", bands: [3,4], scope: "Event-driven autoscaling"}
+          - {id: ct-50, file: gateway-api-ingress.md, title: "Gateway API & Ingress", bands: [2,3], scope: "North-south traffic in Kubernetes"}
+      - name: Service Mesh
+        pages:
+          - {id: ct-51, file: istio.md, title: "Istio (Sidecar & Ambient)", bands: [3,4], scope: "Traffic, security, telemetry"}
+          - {id: ct-52, file: linkerd.md, title: "Linkerd", bands: [3,4], scope: "Lightweight mesh"}
+          - {id: ct-53, file: envoy.md, title: "Envoy", bands: [3,4], scope: "The data plane underneath"}
+      - name: CI/CD & Quality
+        pages:
+          - {id: ct-54, file: github-actions.md, title: "GitHub Actions", bands: [1,2,3], scope: "Build, test, scan, publish"}
+          - {id: ct-55, file: jenkins-gitlab-ci.md, title: "Jenkins & GitLab CI", bands: [2,3], scope: "Comparison and pipelines"}
+          - {id: ct-56, file: argo-cd.md, title: "Argo CD", bands: [2,3,4], scope: "GitOps, app-of-apps"}
+          - {id: ct-57, file: argo-rollouts.md, title: "Argo Rollouts", bands: [3,4], scope: "Canary, blue-green, analysis"}
+          - {id: ct-58, file: sonarqube.md, title: "SonarQube", bands: [1,2], scope: "Quality gates"}
+          - {id: ct-59, file: security-scanners.md, title: "Trivy, Snyk & OWASP Dependency-Check", bands: [2,3], scope: "Image and dependency scanning"}
+          - {id: ct-60, file: cosign-syft.md, title: "Cosign & Syft (SBOM, Signing)", bands: [3,4], scope: "Supply-chain integrity"}
+      - name: Testing Tools
+        pages:
+          - {id: ct-61, file: testcontainers.md, title: "Testcontainers", bands: [1,2], scope: "Real dependencies in tests"}
+          - {id: ct-62, file: wiremock.md, title: "WireMock", bands: [1,2], scope: "HTTP stubbing"}
+          - {id: ct-63, file: contract-testing-tools.md, title: "Pact & Spring Cloud Contract", bands: [2,3], scope: "Consumer-driven contracts"}
+          - {id: ct-64, file: load-testing-tools.md, title: "Gatling & k6", bands: [2,3], scope: "Load and soak tests"}
+          - {id: ct-65, file: chaos-tools.md, title: "Chaos Mesh & Litmus", bands: [3,4], scope: "Fault injection"}
+      - name: Developer Platform
+        pages:
+          - {id: ct-66, file: backstage.md, title: "Backstage", bands: [3,4], scope: "Developer portal, catalog, templates"}
+          - {id: ct-67, file: openapi-springdoc.md, title: "OpenAPI & springdoc", bands: [1,2], scope: "API documentation"}
+          - {id: ct-68, file: asyncapi.md, title: "AsyncAPI", bands: [2,3], scope: "Event API documentation"}
+          - {id: ct-69, file: terraform.md, title: "Terraform (Infrastructure as Code)", bands: [2,3,4], scope: "Provisioning cloud infrastructure"}
+      - name: Workflow & Orchestration
+        pages:
+          - {id: ct-70, file: temporal-camunda.md, title: "Temporal & Camunda", bands: [3,4], scope: "Durable workflows for sagas"}
+      - name: Scheduling, Locks & Others
+        pages:
+          - {id: ct-71, file: distributed-scheduling.md, title: "Distributed Scheduling", bands: [2,3], scope: "ShedLock, Quartz, Kubernetes CronJobs"}
+          - {id: ct-72, file: distributed-locks.md, title: "Distributed Locks", bands: [3,4], scope: "Redis, database and ZooKeeper-free approaches, fencing tokens"}
+          - {id: ct-73, file: idempotency-store.md, title: "Idempotency Store", bands: [2,3], scope: "Request dedup infrastructure"}
+          - {id: ct-74, file: notification-gateways.md, title: "Notification Gateways", bands: [2,3], scope: "Email, SMS, push providers"}
+
+  - tab: Code Lab
+    dir: code-lab
+    pages:
+      - {id: lab-00, file: index.md, title: "Code Lab Overview", bands: [1,2,3,4], scope: "How the labs build on each other"}
+      - {id: lab-01, file: lab-01-hello-microservice.md, title: "Lab 01 — Hello Microservice", bands: [1], scope: "REST, records, validation, Problem Details"}
+      - {id: lab-02, file: lab-02-persistence.md, title: "Lab 02 — Persistence with JPA, Flyway & Testcontainers", bands: [1], scope: "Data layer done right"}
+      - {id: lab-03, file: lab-03-two-services.md, title: "Lab 03 — Two Services Talking", bands: [1], scope: "RestClient and HTTP Service Clients"}
+      - {id: lab-04, file: lab-04-discovery-gateway.md, title: "Lab 04 — Discovery, Gateway & Load Balancing", bands: [2], scope: "Eureka + Spring Cloud Gateway"}
+      - {id: lab-05, file: lab-05-config-vault.md, title: "Lab 05 — Centralized Config & Vault", bands: [2], scope: "Config Server, refresh, secrets"}
+      - {id: lab-06, file: lab-06-resilience.md, title: "Lab 06 — Resilience4j", bands: [2], scope: "Circuit breaker, retry, bulkhead, fallback"}
+      - {id: lab-07, file: lab-07-kafka.md, title: "Lab 07 — Kafka Producer & Consumer", bands: [2], scope: "DLT, retries, idempotent consumer"}
+      - {id: lab-08, file: lab-08-oauth2-keycloak.md, title: "Lab 08 — OAuth2 with Keycloak", bands: [2], scope: "Resource server, token relay"}
+      - {id: lab-09, file: lab-09-outbox-cdc.md, title: "Lab 09 — Outbox & Debezium", bands: [3], scope: "Reliable event publishing"}
+      - {id: lab-10, file: lab-10-saga.md, title: "Lab 10 — Saga with Compensation", bands: [3], scope: "Orchestration and choreography"}
+      - {id: lab-11, file: lab-11-cqrs-event-sourcing.md, title: "Lab 11 — CQRS & Event Sourcing", bands: [3], scope: "Projections"}
+      - {id: lab-12, file: lab-12-observability.md, title: "Lab 12 — End-to-End Observability", bands: [3], scope: "OTel across HTTP and Kafka"}
+      - {id: lab-13, file: lab-13-redis.md, title: "Lab 13 — Redis Caching, Locks & Rate Limits", bands: [3], scope: "Multi-level caching"}
+      - {id: lab-14, file: lab-14-virtual-threads-vs-webflux.md, title: "Lab 14 — Virtual Threads vs WebFlux", bands: [4], scope: "Benchmark with Gatling"}
+      - {id: lab-15, file: lab-15-kubernetes-helm-keda.md, title: "Lab 15 — Kubernetes, Helm & KEDA", bands: [4], scope: "Deploy and autoscale"}
+      - {id: lab-16, file: lab-16-istio-canary.md, title: "Lab 16 — Istio mTLS & Canary", bands: [4], scope: "Argo Rollouts canary"}
+      - {id: lab-17, file: lab-17-native-crac.md, title: "Lab 17 — Native Image vs CRaC", bands: [4], scope: "Startup comparison"}
+      - {id: lab-18, file: lab-18-multi-tenancy.md, title: "Lab 18 — Multi-Tenant Service", bands: [4], scope: "Row-level isolation, tenant rate limits"}
+      - {id: lab-19, file: lab-19-contracts-archunit.md, title: "Lab 19 — Contracts & Fitness Functions in CI", bands: [4], scope: "Contract tests and ArchUnit"}
+      - {id: lab-20, file: lab-20-chaos-game-day.md, title: "Lab 20 — Chaos Game Day", bands: [4], scope: "Inject failures, verify SLOs"}
+
+  - tab: FoodFleet
+    dir: food-delivery-platform
+    pages:
+      - {id: ff-00, file: index.md, title: "FoodFleet Overview", bands: [1,2,3,4], scope: "Business scope, how to run the platform"}
+      - {id: ff-01, file: architecture.md, title: "Architecture (C4, Context Map, Deployment)", bands: [2,3,4], scope: "C4 diagrams, bounded contexts, data ownership"}
+      - {id: ff-02, file: order-lifecycle.md, title: "Order Lifecycle & Sagas", bands: [2,3,4], scope: "State machine, sequences, compensations"}
+      - {id: ff-03, file: communication-map.md, title: "Service-to-Service Communication", bands: [2,3], scope: "Sync vs async per interaction, timeout budgets"}
+      - {id: ff-04, file: kafka-design.md, title: "Kafka Topic Design", bands: [2,3,4], scope: "Topic catalog, schemas, DLT strategy"}
+      - {id: ff-05, file: api-gateway.md, title: "API Gateway & BFF", bands: [2,3], scope: "Routes, JWT, rate limits, versioning"}
+      - {id: ff-06, file: security.md, title: "Security", bands: [2,3,4], scope: "Keycloak realm, token relay, mTLS, Vault, PII"}
+      - {id: ff-07, file: data-and-caching.md, title: "Data & Caching", bands: [2,3], scope: "Schemas, outbox, CQRS read models, caching"}
+      - {id: ff-08, file: resilience.md, title: "Resilience", bands: [2,3], scope: "Per-dependency policies, degradation"}
+      - {id: ff-09, file: observability.md, title: "Observability & SLOs", bands: [2,3,4], scope: "Collector, dashboards, alerts, SLOs"}
+      - {id: ff-10, file: services.md, title: "Service Catalog", bands: [2,3], scope: "Every service: API, events, store, code walkthrough"}
+      - {id: ff-11, file: docker-local-stack.md, title: "Docker & Local Stack", bands: [1,2], scope: "Dockerfiles, compose, make up"}
+      - {id: ff-12, file: kubernetes.md, title: "Kubernetes & Service Mesh", bands: [3,4], scope: "Helm, HPA, KEDA, Istio, NetworkPolicies"}
+      - {id: ff-13, file: cicd.md, title: "CI/CD & GitOps", bands: [2,3,4], scope: "Pipeline, Argo CD, canary analysis"}
+      - {id: ff-14, file: testing.md, title: "Testing Strategy", bands: [2,3], scope: "Contracts, E2E, load, chaos"}
+      - {id: ff-15, file: adrs.md, title: "Architecture Decision Records", bands: [3,4], scope: "ADR log"}
+      - {id: ff-16, file: runbooks.md, title: "Runbooks", bands: [2,3], scope: "Top incidents and responses"}
+      - {id: ff-17, file: scaling-and-cost.md, title: "Scaling & Cost", bands: [3,4], scope: "Capacity estimates and cost levers"}
+      - {id: ff-18, file: system-design-interview.md, title: "Interview: Design Swiggy/Zomato", bands: [3,4], scope: "System design walkthrough using FoodFleet"}
+
+  - tab: Interview Prep
+    dir: interview-prep
+    groups:
+      - name: Start Here
+        pages:
+          - {id: ip-00, file: index.md, title: "Interview Prep Overview", bands: [1,2,3,4], scope: "How to use, revision plans"}
+          - {id: ip-01, file: revision-plans.md, title: "2-Week & 6-Week Revision Plans", bands: [1,2,3,4], scope: "Structured preparation"}
+          - {id: ip-02, file: cheat-sheet.md, title: "Last-Night Cheat Sheet", bands: [1,2,3,4], scope: "Printable summary"}
+      - name: By Band
+        pages:
+          - {id: ip-03, file: band-l1.md, title: "L1 Questions (0–3 yrs)", bands: [1], scope: "Fundamentals"}
+          - {id: ip-04, file: band-l2.md, title: "L2 Questions (3–7 yrs)", bands: [2], scope: "Practitioner"}
+          - {id: ip-05, file: band-l3.md, title: "L3 Questions (7–11 yrs)", bands: [3], scope: "Senior/Lead"}
+          - {id: ip-06, file: band-l4.md, title: "L4 Questions (11–15+ yrs)", bands: [4], scope: "Architect/Principal"}
+      - name: By Company Style
+        pages:
+          - {id: ip-07, file: amazon.md, title: "Amazon", bands: [2,3,4], scope: "Leadership Principles + scale design"}
+          - {id: ip-08, file: flipkart.md, title: "Flipkart", bands: [2,3,4], scope: "Big Billion Days scale, inventory consistency"}
+          - {id: ip-09, file: goldman-sachs-jpmorgan.md, title: "Goldman Sachs & JP Morgan", bands: [2,3,4], scope: "Consistency, auditability, payments"}
+          - {id: ip-10, file: sap.md, title: "SAP", bands: [2,3,4], scope: "Multi-tenancy, extensibility, integration"}
+          - {id: ip-11, file: service-companies.md, title: "Cognizant, TCS, Infosys, Accenture", bands: [1,2,3], scope: "Implementation and migration scenarios"}
+      - name: Round Types
+        pages:
+          - {id: ip-12, file: system-design-rounds.md, title: "System Design Rounds", bands: [3,4], scope: "Swiggy, Uber matching, payments, notifications, rate limiter"}
+          - {id: ip-13, file: troubleshooting-rounds.md, title: "Scenario & Troubleshooting Rounds", bands: [2,3,4], scope: "Production incident scenarios"}
+          - {id: ip-14, file: coding-rounds.md, title: "Coding Rounds", bands: [2,3], scope: "Circuit breaker, rate limiter, idempotent consumer, saga coordinator"}
+          - {id: ip-15, file: architect-leadership-rounds.md, title: "Architect & Leadership Rounds", bands: [4], scope: "Migration strategy, build vs buy, org design"}
+
+  - tab: Appendix
+    dir: appendix
+    pages:
+      - {id: ap-00, file: index.md, title: "Appendix", bands: [1,2,3,4], scope: "Reference material"}
+      - {id: ap-01, file: roadmap.md, title: "Handbook Roadmap & Progress", bands: [1,2,3,4], scope: "Generated progress tracker"}
+      - {id: ap-02, file: boot-3-to-4-migration.md, title: "Spring Boot 3 → 4 Migration Checklist", bands: [2,3], scope: "Step-by-step upgrade"}
+      - {id: ap-03, file: cheat-sheets.md, title: "Cheat Sheets", bands: [1,2,3], scope: "Kafka, kubectl, Helm, Resilience4j"}
+      - {id: ap-04, file: pattern-decision-trees.md, title: "Pattern Selection Decision Trees", bands: [3,4], scope: "Which pattern when"}
+      - {id: ap-05, file: conventions.md, title: "Port & Naming Conventions", bands: [1,2], scope: "Ports, topics, packages, artifacts"}
+      - {id: ap-06, file: further-reading.md, title: "Books, Papers & Talks", bands: [1,2,3,4], scope: "Curated reading list"}

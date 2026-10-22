@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 42 — Failure Modes & Cascading Failures.
+    resilience/  Backoff (exponential, full jitter), RetryBudget, RetryPolicy, Deadline (propagated as an absolute
+                 time), QueueAgeShedder (refuse work that waited too long or whose caller has given up), P2cBalancer
+    web/         order-service: a deadline filter, deadline propagation and budgeted retries as RestClient
+                 interceptors, Spring Framework 7's @ConcurrencyLimit and @Retryable with non-default settings
+  verify/run.sh runs five experiments against real HTTP services on loopback: queueing near saturation, retry
+  amplification through three tiers, a metastable failure, a reconnect herd, and tail latency at fan-out.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch42-failure-modes</artifactId>
+    <name>Ch42 :: Failure Modes &amp; Cascading Failures</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-restclient</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

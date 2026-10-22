@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: menu-service
+  mvc:
+    problemdetails:
+      enabled: true          # framework errors (400, 405, 415...) as application/problem+json
+  threads:
+    virtual:
+      enabled: true          # one virtual thread per request (chapter 66)
+
+server:
+  shutdown: graceful
+
+management:
+  server:
+    port: 8081               # Actuator on its own port (ADR-052)
+  endpoint:
+    health:
+      probes:
+        enabled: true        # /actuator/health/liveness and /readiness
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus

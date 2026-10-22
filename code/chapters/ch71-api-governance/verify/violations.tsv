@@ -1,0 +1,34 @@
+# Planted design problems in the OpenAPI documents: spec, the rule expected to catch it (- for none: only a review would), JSON pointer, what it is
+order-service	no-url-versioning	/paths/~1v1~1orders	version in the URL
+order-service	cursor-pagination	/paths/~1v1~1orders/get	a collection without cursor and limit
+order-service	operation-operationId	/paths/~1orders/post	no operationId
+order-service	problem-json	/paths/~1orders/post/responses/400	an error body of its own
+order-service	verb-free-urls	/paths/~1orders~1{orderId}~1cancel	an action in the URL
+order-service	money-as-decimal-string	/components/schemas/Order/properties/total	money as a float
+order-service	camel-case-properties	/components/schemas/Order/properties/delivery_fee	snake_case property
+delivery-service	kebab-case-paths	/paths/~1deliveryZones	camelCase path segment
+delivery-service	plural-collections	/paths/~1rider~1{riderId}	singular collection
+delivery-service	operation-tag-defined	/paths/~1rider~1{riderId}/get/tags	a tag not in the document's tags
+delivery-service	operation-description	/paths/~1deliveries~1{deliveryId}/get	an empty description
+delivery-service	path-params	/paths/~1deliveries~1{deliveryId}/get	parameter name differs from the template
+delivery-service	info-contact	/info	no contact
+payment-service	oas3-api-servers		no servers
+payment-service	api-owner	/info	no owning team
+payment-service	problem-json	/paths/~1payments/post/responses/500	an error without a body
+payment-service	operation-operationId-unique	/paths/~1payments~1{paymentId}~1refunds/post/operationId	a copied operationId
+payment-service	deprecation-sunset	/paths/~1payment-methods/get	deprecated with no sunset date
+payment-service	money-as-decimal-string	/components/schemas/Refund/properties/amount	money as a double
+payment-service	-	/paths/~1payments/post	no Idempotency-Key header on a payment POST
+payment-service	-	/paths/~1payment-methods/get	a card number in a query string (it ends up in access logs)
+payment-service	-	/components/schemas/Payment	two booleans (succeeded, failed) for one status
+rider-service	path-keys-no-trailing-slash	/paths/~1riders~1	trailing slash
+rider-service	cursor-pagination	/paths/~1riders~1/get	page and size instead of cursor
+rider-service	verb-free-urls	/paths/~1getRiderLocation	an action in the URL
+rider-service	kebab-case-paths	/paths/~1getRiderLocation	camelCase path segment
+rider-service	operation-success-response	/paths/~1riders~1{riderId}~1shifts/put/responses	no success response
+rider-service	operation-tags	/paths/~1riders~1{riderId}~1shifts/get	no tags
+rider-service	cursor-pagination	/paths/~1riders~1{riderId}~1shifts/get	an unpaginated collection
+rider-service	-	/paths/~1riders~1{riderId}~1shifts/put	PUT to start a shift: not idempotent, so it should be POST
+promotions-service	-	/paths/~1promotions~1{promotionId}~1redemptions/post	errors as 200 with {ok: false}
+promotions-service	-	/components/schemas/Promotion/properties/discount	a discount as a bare number: percent or rupees?
+promotions-service	-	/components/schemas/Promotion/properties/validUntil	a date as a plain string, no format

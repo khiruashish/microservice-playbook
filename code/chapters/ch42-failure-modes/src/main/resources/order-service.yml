@@ -1,0 +1,16 @@
+server:
+  tomcat:
+    threads:
+      max: 200                  # the default; the bound on concurrent work (unless virtual threads are on)
+    accept-count: 100           # the default; connections waiting for a thread, then refused
+    max-connections: 8192       # the default
+    connection-timeout: 5s
+spring:
+  threads:
+    virtual:
+      enabled: true             # Tomcat then runs each request on a new virtual thread: threads.max no longer bounds
+                                # concurrency, so @ConcurrencyLimit(REJECT) and the deadline filter do
+  http:
+    clients:
+      connect-timeout: 1s
+      read-timeout: 2s          # no default: without it, a hung dependency holds the caller forever

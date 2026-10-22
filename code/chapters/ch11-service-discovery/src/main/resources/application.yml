@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: order-service
+  http:
+    serviceclient:
+      kitchen-service:
+        # no base-url: Spring Cloud LoadBalancer resolves "kitchen-service" through the DiscoveryClient
+        connect-timeout: 200ms
+        read-timeout: 500ms
+  cloud:
+    discovery:
+      client:
+        simple:                         # a static "registry" for local runs; Eureka, Consul or
+          instances:                    # Kubernetes provide the real DiscoveryClient in production
+            kitchen-service:
+              - uri: http://localhost:8091
+              - uri: http://localhost:8093
+    loadbalancer:
+      cache:
+        ttl: 35s                        # the default: how stale the instance list may be

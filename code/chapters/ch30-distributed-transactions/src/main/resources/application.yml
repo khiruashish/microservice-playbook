@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: orders-and-payments
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/foodfleet}
+    username: ${DATABASE_USER:foodfleet}
+    password: ${DATABASE_PASSWORD:foodfleet}
+  threads:
+    virtual:
+      enabled: true
+orders:
+  relay:
+    poll-interval: 20ms          # outbox -> payments; the experiment's median from order to decision was 20-30 ms
+indoubt:
+  grace: 30s                     # a prepared transaction with no logged decision is rolled back after this
+  check-interval: 10s

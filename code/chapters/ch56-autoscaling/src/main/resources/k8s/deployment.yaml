@@ -1,0 +1,35 @@
+# menu-service as the HPA sees it: CPU utilization is usage divided by the *request*, so the request is the unit the
+# target is written in. No CPU limit (chapter 54); the readiness probe also tells the HPA when a pod's CPU samples count.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: menu-service
+spec:
+  # no replicas: the HPA owns them (chapter 55)
+  selector:
+    matchLabels: {app: menu-service}
+  template:
+    metadata:
+      labels: {app: menu-service}
+    spec:
+      terminationGracePeriodSeconds: 5
+      containers:
+        - name: app
+          image: foodfleet/menu-service:ch56
+          imagePullPolicy: Never
+          ports: [{name: http, containerPort: 8080}]
+          env:
+            - {name: WARMUP_SECONDS, value: "0"}
+            - {name: READY_AFTER_WARMUP, value: "true"}
+          resources:
+            requests: {cpu: 200m, memory: 128Mi}
+            limits: {memory: 128Mi}
+          readinessProbe: {httpGet: {path: /ready, port: http}, periodSeconds: 2}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: menu-service
+spec:
+  selector: {app: menu-service}
+  ports: [{port: 80, targetPort: http}]

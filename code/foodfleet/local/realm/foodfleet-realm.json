@@ -1,0 +1,12 @@
+{
+  "realm": "foodfleet",
+  "enabled": true,
+  "accessTokenLifespan": 900,
+  "revokeRefreshToken": true,
+  "clients": [
+    {"clientId": "customer-app", "publicClient": true, "standardFlowEnabled": true, "directAccessGrantsEnabled": false,
+     "redirectUris": ["http://localhost:*"], "attributes": {"pkce.code.challenge.method": "S256"}},
+    {"clientId": "order-service", "publicClient": false, "secret": "local-only", "serviceAccountsEnabled": true,
+     "standardFlowEnabled": false, "directAccessGrantsEnabled": false}
+  ]
+}

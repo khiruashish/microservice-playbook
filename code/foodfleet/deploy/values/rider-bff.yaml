@@ -1,0 +1,9 @@
+# Generated from foodfleet.yaml by generate.py. minReplicas 2: not on any journey's required path
+# namespace: rider-bff
+name: rider-bff
+team: Logistics
+image:
+  digest: sha256:8d17ed47d505236767adc56969b6ed22276192a31b66249c8176cac64a996066
+autoscaling:
+  minReplicas: 2
+  maxReplicas: 6

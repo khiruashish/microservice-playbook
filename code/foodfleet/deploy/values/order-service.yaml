@@ -1,0 +1,9 @@
+# Generated from foodfleet.yaml by generate.py. minReplicas 3: on a journey's required path, one per zone (ADR-054, ADR-056)
+# namespace: orders
+name: order-service
+team: Checkout
+image:
+  digest: sha256:c1136991ddae1c23b956e7046e1fc2f4bde2d88edad1bfd02c0c18509daf8a1d
+autoscaling:
+  minReplicas: 3
+  maxReplicas: 12

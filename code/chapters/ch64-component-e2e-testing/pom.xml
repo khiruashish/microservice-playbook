@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Chapter 64 — Component & End-to-End Testing.
+    app/        menu-, delivery- and order-service: three small services in one image, the last on PostgreSQL
+    e2e/        Journeys: the five end-to-end journeys, and how a test waits for asynchronous work (sleep or poll)
+    resources/  k8s/environment.yaml: one complete test environment per namespace
+    test/       component tests of order-service (stubs and PostgreSQL in a container) and unit tests
+  verify/run.sh measures environments per namespace, a shared staging environment against fresh ones, sleeps against
+  polling, and component tests against E2E, on a real cluster.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.foodfleet.handbook</groupId>
+        <artifactId>chapters</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ch64-component-e2e-testing</artifactId>
+    <name>Ch64 :: Component &amp; End-to-End Testing</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

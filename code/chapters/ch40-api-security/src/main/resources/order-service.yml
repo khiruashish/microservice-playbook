@@ -1,0 +1,56 @@
+server:
+  port: 8080
+  # behind the load balancer: trust its X-Forwarded-* (and only its); request.getRemoteAddr() is then the client
+  forward-headers-strategy: native
+  max-http-request-header-size: 16KB         # default 8KB; JWTs with many claims need a little more
+  tomcat:
+    max-http-form-post-size: 64KB            # default 2MB; forms here are small
+    max-swallow-size: 64KB                   # default 2MB; read at most this much of a rejected body
+    max-parameter-count: 100                 # default 1000
+    remoteip:
+      internal-proxies: 10.20.0.0/24         # the ingress pods only; the default trusts all of 10.0.0.0/8 and more
+  servlet:
+    session:
+      cookie:
+        secure: true
+        http-only: true
+        same-site: lax
+spring:
+  mvc:
+    problemdetails:
+      enabled: true                          # validation failures as application/problem+json
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true      # {"price": 1} is an error, not silently dropped
+    factory:
+      constraints:
+        read:
+          max-nesting-depth: 32              # default 500; no FoodFleet document is deeper than 5
+          max-string-length: 100000          # default 100,000,000 characters
+          max-document-length: 1000000       # default unlimited; the body is already capped at the gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.foodfleet.in/realms/foodfleet
+          audiences: order-service
+  data:
+    redis:
+      host: redis-ratelimit.platform.svc
+      timeout: 50ms                          # a rate-limit decision that waits longer than this is a fallback
+  datasource:
+    url: jdbc:postgresql://orders-db.data.svc:5432/orders
+    username: orders_app
+
+foodfleet:
+  edge:
+    instances: 6                             # divides the shared limits for the per-instance fallback
+    cors:
+      allowed-origins: [https://www.foodfleet.in, https://partners.foodfleet.in]
+      allowed-methods: [GET, POST, PUT, PATCH, DELETE]
+      allowed-headers: [authorization, content-type, idempotency-key]
+      exposed-headers: [RateLimit, RateLimit-Policy, Retry-After, Location]
+      max-age: 10m
+    per-client:   { requests: 120, window: 60s, burst: 20 }
+    per-tenant:   { requests: 3000, window: 60s, burst: 300 }
+    anonymous:    { requests: 30, window: 60s, burst: 10 }
