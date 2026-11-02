@@ -1,0 +1,5 @@
+round robin       : abcabc
+smooth weighted   : aabacaa  (weights a=5 b=1 c=1)
+b unhealthy, RR   : acac
+least connections : b (a=10, b=2, c=5 active)
+PASS

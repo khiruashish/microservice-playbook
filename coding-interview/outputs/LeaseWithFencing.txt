@@ -1,0 +1,8 @@
+node-A leader, token 1
+node-B acquire while A holds the lease: false
+A paused 15s, lease expired -> node-B leader, token 2
+node-A wakes up and writes with token 1 -> accepted? false
+storage: token 1: batch part 1
+storage: token 2: batch (rerun by B)
+node-B renews: token stays 2, expires 2025-01-01T00:00:30Z
+PASS

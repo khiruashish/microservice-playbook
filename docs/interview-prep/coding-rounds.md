@@ -122,3 +122,8 @@ all 24 tests passed
 | "How long do you keep processed ids?" | Longer than the longest redelivery window: the broker's retention for replays, or 24 h for idempotency keys as FoodFleet does |
 | "Why not retry inside the breaker?" | Retries go outside the breaker (each attempt is counted) and at one layer only; inside, a retry storm hides from the breaker |
 | "How would you test the breaker without sleeping?" | Inject the clock, as these tests do |
+
+!!! tip "Twelve more building blocks"
+    Retry with backoff and budget, bulkhead, Idempotency-Key, transactional outbox, load balancer, service registry,
+    gateway aggregation, event sourcing, optimistic locking, consistent hashing, trace propagation and lease + fencing
+    tokens are in the [Coding Interview](../coding-interview/index.md) tab, each runnable and self-checking.

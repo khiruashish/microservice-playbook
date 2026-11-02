@@ -1,0 +1,4 @@
+10 concurrent calls to a hung dependency, bulkhead=3: succeeded=3 rejected=7
+max concurrent calls observed inside = 3
+after 3 failing calls the permit is free again: ok
+PASS
