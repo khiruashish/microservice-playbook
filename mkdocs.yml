@@ -76,9 +76,12 @@ theme:
 
 extra_css:
   - assets/stylesheets/extra.css
+  - stylesheets/playbook-theme.css
 
 extra_javascript:
   - assets/javascripts/extra.js
+  - https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js
+  - javascripts/playbook-diagrams.js
 
 markdown_extensions:
   - abbr
@@ -115,8 +118,8 @@ markdown_extensions:
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
+          class: diagram
+          format: !!python/name:pymdownx.superfences.fence_div_format
   - pymdownx.tabbed:
       alternate_style: true
       combine_header_slug: true
