@@ -1,0 +1,6 @@
+events      = 7 -> Account[owner=ana, balance=3500, version=7]
+command rejected, no event stored: insufficient funds: balance 3500
+concurrent writer rejected: expected v1 but was v7
+after snapshot, replayed only 1 event(s) -> Account[owner=ana, balance=3750, version=8]
+balance as of v4 = 3000 (time travel by partial replay)
+PASS

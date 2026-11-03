@@ -1,0 +1,7 @@
+evicted at t=35s: [o-2]
+heartbeat from evicted o-2 accepted? false (must re-register)
+orders now [10.0.0.1:8080]
+orders now [10.0.0.1:8080, 10.0.0.2:8080]
+orders now [10.0.0.1:8080]
+orders now []
+PASS

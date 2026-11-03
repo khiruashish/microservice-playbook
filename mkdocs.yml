@@ -412,6 +412,20 @@ nav:
       - "Runbooks": food-delivery-platform/runbooks.md
       - "Scaling & Cost": food-delivery-platform/scaling-and-cost.md
       - "Interview: Design Swiggy/Zomato": food-delivery-platform/system-design-interview.md
+  - "Coding Interview":
+      - coding-interview/index.md
+      - "1. Retry with Exponential Backoff, Jitter & Budget": coding-interview/01-retry-backoff.md
+      - "2. Bulkhead: Isolate a Slow Dependency": coding-interview/02-bulkhead.md
+      - "3. Idempotency-Key for Safe Retries": coding-interview/03-idempotency-key.md
+      - "4. Transactional Outbox + Relay": coding-interview/04-transactional-outbox.md
+      - "5. Client-Side Load Balancer": coding-interview/05-load-balancer.md
+      - "6. Service Registry with Heartbeats & TTL": coding-interview/06-service-registry.md
+      - "7. API Gateway Aggregation with Timeouts": coding-interview/07-gateway-aggregation.md
+      - "8. Event-Sourced Aggregate with Snapshots": coding-interview/08-event-sourcing.md
+      - "9. Optimistic Locking: No Lost Updates": coding-interview/09-optimistic-locking.md
+      - "10. Consistent Hashing with Virtual Nodes": coding-interview/10-consistent-hashing.md
+      - "11. Distributed Trace Context Propagation": coding-interview/11-trace-context.md
+      - "12. Leader Election: Lease + Fencing Token": coding-interview/12-lease-fencing.md
   - "Interview Prep":
       - "Start Here":
           - "Interview Prep Overview": interview-prep/index.md

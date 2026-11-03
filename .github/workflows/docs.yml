@@ -33,6 +33,21 @@ jobs:
           cache: maven
       - run: mvn -B -ntp verify
 
+  coding-interview:
+    name: Coding-interview solutions (JDK 25)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.HANDBOOK_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "25"
+      - name: Run every solution (each must print PASS; outputs must match the docs)
+        run: coding-interview/run-all.sh --check
+
   docs:
     name: Build site (strict)
     runs-on: ubuntu-latest

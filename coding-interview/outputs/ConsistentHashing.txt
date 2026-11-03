@@ -1,0 +1,5 @@
+load with 150 vnodes/node: {cache-1=2425, cache-2=2324, cache-3=2434, cache-4=2817}
+add cache-5: moved 2064 of 10000 keys (20.6%; ideal 1/5 = 20%), all moves went to cache-5: true
+naive hash % N from 4 to 5 nodes would move 80.1% of keys
+replicas for user-42 = [cache-4, cache-5, cache-1]
+PASS

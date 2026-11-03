@@ -1,0 +1,4 @@
+all healthy : HomePage[profile=profile-data, recommendations=[recommendations-data], offers=[offers-data], degraded=[]]
+degraded    : HomePage[profile=profile-data, recommendations=[bestsellers (fallback)], offers=[], degraded=[offers: offers 500, recommendations: timeout]]
+slow recs (2s) did not make the page slow: answered within the 100 ms budget + margin: true
+PASS

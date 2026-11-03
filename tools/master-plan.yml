@@ -314,6 +314,23 @@ sections:
       - {id: ff-17, file: scaling-and-cost.md, title: "Scaling & Cost", bands: [3,4], scope: "Capacity estimates and cost levers"}
       - {id: ff-18, file: system-design-interview.md, title: "Interview: Design Swiggy/Zomato", bands: [3,4], scope: "System design walkthrough using FoodFleet"}
 
+  - tab: Coding Interview
+    dir: coding-interview
+    pages:
+      - {id: ci-00, file: index.md, title: "Coding Interview", bands: [2,3,4], scope: "Twelve microservice building blocks to code, runnable and self-checking"}
+      - {id: ci-01, file: 01-retry-backoff.md, title: "1. Retry with Exponential Backoff, Jitter & Budget", bands: [2], scope: "Backoff, full jitter, retryable vs permanent errors, retry budget"}
+      - {id: ci-02, file: 02-bulkhead.md, title: "2. Bulkhead: Isolate a Slow Dependency", bands: [2], scope: "`Semaphore`, fail fast, permit release in `finally`"}
+      - {id: ci-03, file: 03-idempotency-key.md, title: "3. Idempotency-Key for Safe Retries", bands: [3], scope: "Atomic claim, in-progress vs completed, payload hash, 409 / 422"}
+      - {id: ci-04, file: 04-transactional-outbox.md, title: "4. Transactional Outbox + Relay", bands: [3], scope: "Dual-write problem, same-transaction event row, at-least-once relay, consumer dedupe"}
+      - {id: ci-05, file: 05-load-balancer.md, title: "5. Client-Side Load Balancer", bands: [2], scope: "Round robin, smooth weighted round robin, least connections, health filtering"}
+      - {id: ci-06, file: 06-service-registry.md, title: "6. Service Registry with Heartbeats & TTL", bands: [2], scope: "Register / heartbeat / evict, watchers, injectable clock"}
+      - {id: ci-07, file: 07-gateway-aggregation.md, title: "7. API Gateway Aggregation with Timeouts", bands: [3], scope: "`CompletableFuture` fan-out/fan-in, `orTimeout`, `completeOnTimeout`, partial responses"}
+      - {id: ci-08, file: 08-event-sourcing.md, title: "8. Event-Sourced Aggregate with Snapshots", bands: [3], scope: "Commands → events, fold to state, optimistic append, snapshots, temporal query"}
+      - {id: ci-09, file: 09-optimistic-locking.md, title: "9. Optimistic Locking: No Lost Updates", bands: [2], scope: "Version column, conditional update, bounded retry, 409/412"}
+      - {id: ci-10, file: 10-consistent-hashing.md, title: "10. Consistent Hashing with Virtual Nodes", bands: [3], scope: "`TreeMap` ring, `ceilingEntry`, virtual nodes, replica selection"}
+      - {id: ci-11, file: 11-trace-context.md, title: "11. Distributed Trace Context Propagation", bands: [2], scope: "W3C `traceparent`, parent/child spans, validation, sampling flag"}
+      - {id: ci-12, file: 12-lease-fencing.md, title: "12. Leader Election: Lease + Fencing Token", bands: [4], scope: "TTL lease, renewal, GC-pause zombie leader, monotonic fencing tokens"}
+
   - tab: Interview Prep
     dir: interview-prep
     groups:

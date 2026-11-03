@@ -1,0 +1,7 @@
+gateway  -> orders   traceparent: 00-bb196868350955a8f7b50127f628f08d-f2e9ef7c65e95828-01
+orders   -> payments traceparent: 00-bb196868350955a8f7b50127f628f08d-4b5e81dd1d8ac595-01
+gateway   GET /checkout  trace=bb196868.. span=f2e9ef7c65e95828 parent=null
+orders    POST /orders   trace=bb196868.. span=4b5e81dd1d8ac595 parent=f2e9ef7c65e95828
+payments  POST /charge   trace=bb196868.. span=a80a28c2609f23e1 parent=4b5e81dd1d8ac595
+orders    GET /orders    trace=b173ce01.. span=93f434469f302f00 parent=null
+PASS

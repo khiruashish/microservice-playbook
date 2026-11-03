@@ -1,0 +1,7 @@
+A-2: crash before commit -> no order, no event
+broker <- OrderPlaced {"id":"A-1","cents":500} seq=1
+broker <- OrderPlaced {"id":"A-1","cents":500} seq=1
+broker <- OrderPlaced {"id":"A-3","cents":900} seq=2
+orders in DB = [A-1, A-3], outbox checkpoint = 2
+consumer after dedupe = [seq=1, seq=2]
+PASS

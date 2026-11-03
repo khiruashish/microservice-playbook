@@ -1,0 +1,4 @@
+without versioning : 10 - 2 sales = 9  <-- one update lost (read, read, write, write)
+with version check : quantity=800, version=200 (200 writers, conflicting ones re-read and retried)
+stale write rejected: version 3 is stale -> HTTP 409/412
+PASS

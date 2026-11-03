@@ -1,0 +1,4 @@
+OK after 4 calls, backoff delays (ms) = [72, 136, 123]
+permanent error not retried: calls=1 (400 bad request)
+50 failing requests -> 59 total calls (without a budget: 250)
+PASS
